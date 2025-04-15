@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, Plus, MoreVertical, Search, MoveLeftIcon } from "lucide-react"
+import { Send, Plus, MoreVertical, Search} from "lucide-react"
 
 // Sample data for conversations
 const conversations = [
