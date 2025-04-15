@@ -35,7 +35,11 @@ export default function LiveChat( {roomId} : {roomId : string} ) {
 		}
 		const fetchMessages = async () => {
 			try {
-			  const res = await fetch(`/api/rooms/${roomId}`)
+			  const res = await fetch(`/api/rooms/${roomId}`,
+				{
+					cache: 'no-store',
+				}
+			  )
 			  const data = await res.json();
 			  if(res.status != 200 ) {
 				console.log(data)

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Input } from "@/components/ui/input"
@@ -22,7 +24,6 @@ interface ROOM {
 
 
 const page = async () => {
-
   await connectDB();
   const cookieStore = await cookies()
   const leader = cookieStore.get('user')
@@ -31,8 +32,9 @@ const page = async () => {
   
   const leaderId = JSON.parse(leader.value)._id;
   const rooms : ROOM[] = await Room.find({ leaderId })
-
   console.log("rooms  :",rooms)
+
+  
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -63,7 +65,7 @@ const page = async () => {
             </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
-          {rooms.map((room) =>
+          {rooms?.map((room) =>
             <Card className="m-4" key={room._id.toString()}>
               <div className="flex h-15 m-4">
                 <div className="w-15">
