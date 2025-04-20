@@ -2,9 +2,13 @@ import mongoose from "mongoose";
 
 
 const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String,
+    name: String ,
+    email: String ,
+    password: String ,
+    rooms: {type : Array, require : true},
+    createdAt : {type : Date , default : Date.now}
+},{
+    versionKey: false, 
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

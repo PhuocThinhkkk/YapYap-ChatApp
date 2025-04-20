@@ -2,10 +2,10 @@ import  Link from 'next/link'
 import React from 'react'
 import { Button } from '@/components/ui/button'
 
-const ButtonJoinRoom = ({roomName} : {roomName: string}) => {
+const ButtonJoinRoom = ({roomId} : {roomId: string}) => {
   return (
     <div>
-        <Link href={`/rooms/${roomName}`} className=''>
+        <Link href={`/rooms/${roomId}`} className=''>
             <Button className='hover:cursor-pointer'>
                 Join
             </Button>

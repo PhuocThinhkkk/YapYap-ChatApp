@@ -1,5 +1,4 @@
 export const dynamic = "force-dynamic";
-
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Input } from "@/components/ui/input"
@@ -13,6 +12,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import ButtonJoinRoom from "./ButtonJoinRoom"
 import { Avatar } from "@radix-ui/react-avatar"
 import { AvatarFallback } from "@/components/ui/avatar"
+import { redirect } from "next/navigation";
 
 
 interface ROOM {
@@ -20,14 +20,17 @@ interface ROOM {
   roomName: string;
   maxPeople: number,
   leaderId: string;
+  users: [];
+  createdAt: Date;
 }
-
 
 const page = async () => {
   await connectDB();
   const cookieStore = await cookies()
   const leader = cookieStore.get('user')
-  if(!leader) return;
+  if(!leader) {
+    redirect('/sign-in'); //
+  }
   console.log("user cookies : ",leader)
   
   const leaderId = JSON.parse(leader.value)._id;
@@ -68,20 +71,19 @@ const page = async () => {
           {rooms?.map((room) =>
             <Card className="m-4" key={room._id.toString()}>
               <div className="flex h-15 m-4">
-                <div className="w-15">
+                <div className="w-15 h-15">
                   <Avatar>
                   <AvatarFallback>{room.roomName.charAt(0)}</AvatarFallback>
-                </Avatar>
+                  </Avatar>
                 </div>
                 
-                <CardHeader className=" items-end text-2xl font-bold" >       
+                <CardHeader  className=" items-end text-2xl font-bold" >       
                   {room.roomName}
                 </CardHeader>
               </div>
-              
               <CardContent >Max people : {room.maxPeople}</CardContent>
               <CardFooter>
-                <ButtonJoinRoom roomName = {room.roomName}></ButtonJoinRoom>
+                <ButtonJoinRoom roomId = {room._id}></ButtonJoinRoom>
               </CardFooter>
             </Card>
           )}

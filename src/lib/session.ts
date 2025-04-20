@@ -32,7 +32,7 @@ export async function getSession() {
 
   return session ? session : null
 }
- 
+
 export async function createSession(userId: string) {
   const expiresAt = new Date(Date.now() +  60 * 60 * 1000)
   const session = await encrypt({ userId, expiresAt })

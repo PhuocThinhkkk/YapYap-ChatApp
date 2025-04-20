@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export async function POST( req : NextRequest ) {
-  try {  
+  try { 
     const room = await req.json()
     room.maxPeople = Number(room.maxPeople)
     console.log(room)
@@ -30,13 +30,18 @@ export async function POST( req : NextRequest ) {
       password: room.password,
       maxPeople: room.maxPeople,
       leaderId,
+      users: [leaderId],
     });
+
+  
     
-    const res = await Room.create({
+      const res = await Room.create({
       roomName : room.roomName,
       password : room.password,
       maxPeople : room.maxPeople,
       leaderId,
+      users: [leaderId],
+
     });
 
     console.log("new room sign up successfully");

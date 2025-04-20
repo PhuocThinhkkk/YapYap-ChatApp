@@ -12,7 +12,8 @@ export const createUser = async (_prevState : unknown ,formData : FormData) =>{
   const validatedFields = {
     name: formData.get('name'),
     email: formData.get('email'),
-    password: formData.get('password')
+    password: formData.get('password'),
+    rooms: [],
   }
 
   console.log(validatedFields);
@@ -32,6 +33,8 @@ export const createUser = async (_prevState : unknown ,formData : FormData) =>{
   console.log("new user sign up successfully");
   const session1 = await getSession();
   console.log("get session:", session1);
+  const cookieStore = await cookies();
+  cookieStore.set('user', user);
   redirect('/')
 }
 
@@ -40,7 +43,7 @@ interface UserForm {
   password : string
 }
 export const signIn = async (_prevState : unknown ,form : FormData) => {
-  "use server";
+
   const userForm : UserForm  = {
     email : form.get("email") as string ,
     password : form.get("password") as string

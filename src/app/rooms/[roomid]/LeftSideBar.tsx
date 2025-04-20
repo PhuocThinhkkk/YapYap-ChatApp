@@ -17,7 +17,9 @@ interface Room {
   password:  string,
   maxPeople: number, 
   leaderId: string,
-  _v?: string | number
+  user: [],
+  createdAt?: Date,
+ 
 }
 
 
@@ -29,7 +31,8 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
   useEffect(()=>{
     const userCookie = Cookie.get("user");
     if (!userCookie) {
-      alert("you need to sign in to continue !")
+      alert("you need to sign in to continue !");
+      route.push('/sign-in');
       return
     }
     const parsed = JSON.parse(userCookie);
@@ -57,14 +60,14 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
       
         <div className="grid-cols-1 h-screen w-full max-w-xs border-r bg-background">
           <Link href="/rooms">
-            <Button className='hover:bg-slate-50 w-15 h-7 bg-background text-black border-0'>
+            <Button className='hover:bg-slate-50 hover:cursor-pointer w-15 h-7 bg-background text-black border-0'>
               <ArrowLeftFromLine/>
             </Button>
           </Link>
           <div className="flex h-16 items-center justify-between px-4">
               <div className='w-5'></div>
               <h2 className="text-lg text-center font-semibold">Messages</h2>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className='hover:bg-slate-50 hover:cursor-pointer' onClick={() => route.push('/rooms/create-room')}>
                   <Plus className="h-5 w-5" />
               </Button>
           </div>
@@ -82,7 +85,7 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
                       className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
                       activeConversation?._id.toString() === conversation?._id.toString() ? "bg-muted" : "hover:bg-muted/50"
                       }`}
-                      onClick={() => route.push(`/rooms/${conversation.roomName}`)}
+                      onClick={() => route.push(`/rooms/${conversation._id}`)}
                       >       
                       <div className="w-10 h-10 flex justify-center items-center border text-xl rounded-full font-bold hover:cursor-pointer">
                         <Avatar>

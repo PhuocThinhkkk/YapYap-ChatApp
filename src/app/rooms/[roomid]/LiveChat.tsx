@@ -12,10 +12,18 @@ interface Message {
 	_id?: string
 	userId: string,
 	roomName: string,
+	roomId: string,
+	createdAt?: Date,
 	info: string;
 }
 
-export default function LiveChat( {roomId} : {roomId : string} ) {
+export default function LiveChat( { 
+	roomId, 
+	roomName,
+  	} : { 
+	roomId : string
+	roomName : string,
+	}) {
 	const [isOpen, setIsOpen] = useState<boolean>(true)
 	const [messages, setMessages] = useState<Message[]>([]);
 	const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
@@ -34,8 +42,9 @@ export default function LiveChat( {roomId} : {roomId : string} ) {
 			console.log("user cookie :", parsed._id);
 		}
 		const fetchMessages = async () => {
+			
 			try {
-			  const res = await fetch(`/api/rooms/${roomId}`,
+			  const res = await fetch(`/api/rooms/${roomId}/messages`,
 				{
 					cache: 'no-store',
 				}
@@ -51,6 +60,7 @@ export default function LiveChat( {roomId} : {roomId : string} ) {
 			}
 		};
 		fetchMessages();
+
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -79,7 +89,7 @@ export default function LiveChat( {roomId} : {roomId : string} ) {
 	const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
 	try{
 		if (!socket) {
-			alert('Socket not connected');
+			alert('Socket not connected'); //
 			return;
 		}
 		
@@ -90,17 +100,18 @@ export default function LiveChat( {roomId} : {roomId : string} ) {
 		if(!info) return;
 		const message : Message = {
 			userId,
-			roomName : roomId,
+			roomId,
 			info,
+			roomName,
 		}
 		console.log(message)
-		const res = await fetch(`/api/rooms/${roomId}`,{
+		const res = await fetch(`/api/rooms/${roomId}/messages`,{
 			method: "POST",
 			body: JSON.stringify(message),
 		});
 		if(res.status !== 200 ) {
 			console.log("there is sth wrong in server! ");
-			return
+			return  //
 		}
 		socket.emit('sendMessage',{roomId, message} );
 		setMessages([...messages, 
@@ -108,10 +119,9 @@ export default function LiveChat( {roomId} : {roomId : string} ) {
 		]);
 
 		form.reset();
-	}
-	catch(err){
+	}catch(err){
 		console.log(err);
-	}
+		}
 	}
 	
 
@@ -119,13 +129,13 @@ export default function LiveChat( {roomId} : {roomId : string} ) {
 		<>
 		 <div className="flex h-screen w-screen">
 			<div className="fixed top-8 left-4 z-30 lg:hidden border rounded-sm">
-				<Button className="bg-white hover:bg-slate-100 text-black text-sm" onClick={()=> setIsOpen(!isOpen)}>
+				<Button className="bg-white hover:bg-slate-100 hover:cursor-pointer text-black text-sm" onClick={()=> setIsOpen(!isOpen)}>
 					<SidebarOpenIcon/>
 				</Button>
 			</div>
 			<LeftSideBar isOpen={isOpen}/>
 			<div className="grid-cols-1 flex-1 h-screen">
-				<h1 className="text-left font-bold p-3 pl-16 mb-5 top-0 sticky bg-white h-12 z-10 border-b text-lg "> Room : {roomId}</h1>
+				<h1 className="text-left font-bold p-3 pl-16 mb-5 top-0 sticky bg-white h-12 z-10 border-b text-lg "> Room : {}</h1>
 				<ScrollArea  className="h-[calc(100vh-200px)] ">
 				<div className="px-20 py-5">
 					<div className="space-y-10 mb-5">
@@ -147,7 +157,7 @@ export default function LiveChat( {roomId} : {roomId : string} ) {
 				</ScrollArea>
 				<form onSubmit={sendMessage} className="flex space-x-2 sticky z-10 bottom-5 px-20 py-5">
 						<Input type="text" name='message' placeholder="Type a message" />
-						<Button size="icon" >
+						<Button size="icon" className="hover:cursor-pointer" >
 							<Send className="h-5 w-5" />
 						</Button>
 				</form>
