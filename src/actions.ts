@@ -1,6 +1,7 @@
 "use server"
 import connectDB from "./lib/mongoDb"
 import User from "@/schema/user";
+import Room from "@/schema/room"
 import { createSession, getSession } from "./lib/session"
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation"
@@ -71,4 +72,59 @@ export const signIn = async (_prevState : unknown ,form : FormData) => {
     
   )
   redirect("/");
+}
+
+export async function SearchRoom (formData: FormData) {
+  
+  if(!formData) return
+  const roomName = formData.get('roomName') as string
+  console.log("Received FormData:", formData)
+  if(!roomName) {
+    console.log("Please enter a room name")
+    return
+  }
+  console.log("roomName:", roomName);
+  
+
+  const cookieStore = await cookies()
+    const user = cookieStore.get('user')
+    if(!user) {
+      console.log("Please sign in to join a room")  //
+      redirect('/sign-in')
+        
+    }
+    const userId = JSON.parse(user.value)._id;
+  console.log("userId:", userId);
+  if(!roomName) {
+    console.log("Please enter a room name")
+    return
+  }
+  const password = formData.get('password') as string
+  await connectDB();
+  const room = await Room.findOne({ roomName })
+  if(!room) {
+      console.log("Room not found")
+      return
+  }
+  console.log("room : ", room);
+  if(room.password !== password) {
+    console.log("Password :", typeof password, password)
+    console.log("Password :", typeof room.password, room.password)
+    console.log("Wrong password")
+    return
+  }
+  if(room.users.length >= room.maxPeople) {
+      console.log("Room is full")
+      return
+  }
+  for (let i = 0; i < room.users.length; i++) {
+    if(room.users[i].toString() === userId.toString()) {
+      console.log("You are already in this room")
+      return
+    }
+  }
+  await Room.updateOne({ roomName }, { $addToSet: { users: userId } })
+  console.log("You have joined the room")
+  redirect('/rooms')
+
 }

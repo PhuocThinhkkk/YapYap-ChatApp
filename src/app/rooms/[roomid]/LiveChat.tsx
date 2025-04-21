@@ -35,32 +35,31 @@ export default function LiveChat( {
 	const [userId, setUserId] = useState<string | null>(null);
 	const socket = useSocket();
 	useEffect(() => {
-		const userCookie = Cookie.get("user");
-		if (userCookie) {
-			const parsed = JSON.parse(userCookie);
-			setUserId(parsed._id);
-			console.log("user cookie :", parsed._id);
-		}
-		const fetchMessages = async () => {
-			
-			try {
-			  const res = await fetch(`/api/rooms/${roomId}/messages`,
-				{
-					cache: 'no-store',
-				}
-			  )
+		try {
+			const userCookie = Cookie.get("user");
+			if (userCookie) {
+				const parsed = JSON.parse(userCookie);
+				setUserId(parsed._id);
+				console.log("user cookie :", parsed._id);
+			}
+			const fetchMessages = async () => {
+			  	const res = await fetch(`/api/rooms/${roomId}/messages`,
+					{
+						cache: 'no-store',
+					}
+			  	);
 			  const data = await res.json();
-			  if(res.status != 200 ) {
-				console.log(data)
-				return;
-			}
+				if(res.status != 200 ) {
+					console.log(data)
+					return;
+				}
 			  setMessages(data); 
-			} catch (err) {
-			  console.error("Failed to fetch messages:", err);
 			}
-		};
-		fetchMessages();
-
+			fetchMessages();
+		}catch (err) {
+			console.error("Failed to fetch messages:", err);
+			return
+		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -135,18 +134,18 @@ export default function LiveChat( {
 			</div>
 			<LeftSideBar isOpen={isOpen}/>
 			<div className="grid-cols-1 flex-1 h-screen">
-				<h1 className="text-left font-bold p-3 pl-16 mb-5 top-0 sticky bg-white h-12 z-10 border-b text-lg "> Room : {}</h1>
+				<h1 className="text-left font-bold p-3 pl-16 mb-5 top-0 sticky bg-white h-12 z-10 border-b text-lg "> Room : {roomName}</h1>
 				<ScrollArea  className="h-[calc(100vh-200px)] ">
 				<div className="px-20 py-5">
 					<div className="space-y-10 mb-5">
-						{messages.map((message, index) => (
-							 <div key={index} className={`flex ${message.userId == userId ? "justify-end" : "justify-start"}`}>
+						{messages?.map((message, index) => (
+							 <div key={index} className={`flex ${message?.userId == userId ? "justify-end" : "justify-start"}`}>
 								<div
 								className={`max-w-[70%] rounded-lg px-4 py-2 ${
-									message.userId == userId ? "bg-primary text-primary-foreground" : "bg-muted"
+									message?.userId == userId ? "bg-primary text-primary-foreground" : "bg-muted"
 								}`}
 								>
-								<p>{message.info}</p>
+								<p>{message?.info}</p>
 								
 								</div>
 							</div>

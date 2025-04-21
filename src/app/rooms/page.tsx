@@ -1,18 +1,20 @@
 export const dynamic = "force-dynamic";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
-import { Input } from "@/components/ui/input"
-import { MessageCircle, LucideSendHorizonal } from "lucide-react"
+
 
 import ButtonCreateRoom from "./ButtonCreateRoom"
 import connectDB from "@/lib/mongoDb"
 import Room from "@/schema/room"
+import User from "@/schema/user"
 import { cookies } from "next/headers"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import ButtonJoinRoom from "./ButtonJoinRoom"
 import { Avatar } from "@radix-ui/react-avatar"
 import { AvatarFallback } from "@/components/ui/avatar"
 import { redirect } from "next/navigation";
+import SearchRoom from "./SearchRoom";
+
 
 
 interface ROOM {
@@ -32,11 +34,38 @@ const page = async () => {
     redirect('/sign-in'); //
   }
   console.log("user cookies : ",leader)
-  
-  const leaderId = JSON.parse(leader.value)._id;
-  const rooms : ROOM[] = await Room.find({ leaderId })
-  console.log("rooms  :",rooms)
 
+  const leaderId = JSON.parse(leader.value)._id;
+
+  const roomIdDb : ROOM[] = await Room.find({ users : leaderId });
+  console.log("roomIdDb :",roomIdDb)
+
+  const roomsId  = JSON.parse(leader.value).rooms;
+  const rooms : ROOM[] = [];
+  for (let i = 0; i < roomsId.length; i++) {
+    const room = await Room.findById(roomsId[i]);
+    if(room) {
+      rooms.push(room);
+    }
+  }
+  console.log("rooms :",rooms)
+
+  let isChange : boolean = false;
+  for (let i = 0; i < roomIdDb.length; i++) {
+    if(!rooms.includes(roomIdDb[i]) ) {
+      rooms.push(roomIdDb[i]);
+      isChange = true;
+    }
+    
+  }
+
+  if(isChange) {
+    await User.updateOne({ _id: leaderId }, { $set: { rooms } });
+    console.log("rooms after update :",rooms)
+  }
+
+
+  
   
   return (
     <SidebarProvider>
@@ -55,21 +84,13 @@ const page = async () => {
          
         <p className="m-4 text-center text-3xl font-bold "> Enter your rooms name:</p>
         <div className="flex justify-center min-w-full">
-            <div className="relative w-2/3 h-12">
-                <MessageCircle className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-muted-foreground" ></MessageCircle>
-                
-                <Input
-                type="text"
-                placeholder="Rooms name: "
-                className="pl-10 w-full h-full"/>
-               
-               
-                <LucideSendHorizonal className="absolute right-3 top-1/2 h-6 w-6 -translate-y-1/2 text-muted-foreground hover:text-blue-800 text-9xl" ></LucideSendHorizonal>
+            <div className="relative w-4/5 lg:w-2/3 h-12 mx-auto">
+               <SearchRoom/>
             </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
-          {rooms?.map((room) =>
-            <Card className="m-4" key={room._id.toString()}>
+          {rooms?.map((room , index) =>
+            <Card className="m-4" key={index}>
               <div className="flex h-15 m-4">
                 <div className="w-15 h-15">
                   <Avatar>

@@ -10,7 +10,7 @@ export async function GET(req : NextRequest) {
 
         await connectDB();
 
-        const rooms = await Room.find({ leaderId : userId })
+        const rooms = await Room.find({ users : userId })
         if(rooms.length == 0) {
             return NextResponse.json({message: 'you dont have any room. '}, {status: 400})
         }

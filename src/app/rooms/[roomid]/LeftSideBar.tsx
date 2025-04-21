@@ -79,7 +79,7 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
           </div>
           <ScrollArea className="h-[calc(100vh-1500px)]">
               <div className="px-2 py-2">
-                  {conversations.map((conversation) => (
+                  {conversations?.map((conversation) => (
                   <button
                       key={conversation._id.toString()}
                       className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
