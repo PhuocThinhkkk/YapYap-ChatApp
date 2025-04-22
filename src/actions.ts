@@ -34,8 +34,13 @@ export const createUser = async (_prevState : unknown ,formData : FormData) =>{
   console.log("new user sign up successfully");
   const session1 = await getSession();
   console.log("get session:", session1);
+
   const cookieStore = await cookies();
-  cookieStore.set('user', user);
+  const UserCookie = ({...user})._doc;
+  UserCookie.roomsLength = UserCookie.rooms.length;
+  delete UserCookie.rooms;
+  delete UserCookie.password;
+  cookieStore.set('user', JSON.stringify(UserCookie));
   redirect('/')
 }
 
@@ -52,25 +57,33 @@ export const signIn = async (_prevState : unknown ,form : FormData) => {
   console.log("form :" , userForm);
 
   await connectDB();
-  const isUserExist = await User.findOne({email : userForm.email});
+  const UserExist = await User.findOne({email : userForm.email});
   
-  if(!isUserExist){
+  if(!UserExist){
     console.log("no user with that email in db");
     return {message: 'Your email is not correct !'};
   }
 
-  const isPassWordCorrect = isUserExist.password === userForm.password;
+  const isPassWordCorrect = UserExist.password === userForm.password;
   if(!isPassWordCorrect){
     console.log("password is not correct");
     return {message: 'Your password is not correct !'};
   }
 
-  await createSession(isUserExist._id);
+  await createSession(UserExist._id);
   console.log("user sign in successfully");
   const cookieStore = await cookies();
-  cookieStore.set('user', JSON.stringify(isUserExist)
-    
-  )
+
+  const UserCookie = ({...UserExist})._doc;
+
+  console.log("UserCookie :", UserCookie);
+  UserCookie.roomsLength = UserCookie.rooms.length;
+  delete UserCookie.rooms;
+  delete UserCookie.password;
+
+
+  cookieStore.set('user', JSON.stringify(UserCookie))
+  console.log("User :", UserCookie);
   redirect("/");
 }
 

@@ -40,7 +40,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 <Input name="password" id="password" type="password" required />
               </div>
               {state?.message ? <p className="text-red-500 h-3">{state.message}</p> : <div className="h-3"/>}
-              <Button disabled={pending} type="submit" className="w-full">
+              <Button disabled={pending} type="submit" className="w-full hover:cursor-pointer">
                 Login
               </Button>
             </div>

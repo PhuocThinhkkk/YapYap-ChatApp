@@ -22,17 +22,19 @@ interface ROOM {
   roomName: string;
   maxPeople: number,
   leaderId: string;
-  users: [];
+  users: string[];
   createdAt: Date;
 }
 
 const page = async () => {
   await connectDB();
   const cookieStore = await cookies()
-  const leader = cookieStore.get('user')
+  const leader = cookieStore.get('user') 
   if(!leader) {
-    redirect('/sign-in'); //
+    console.log("no user in cookies")
+    redirect('/sign-in')
   }
+ 
   console.log("user cookies : ",leader)
 
   const leaderId = JSON.parse(leader.value)._id;
@@ -40,20 +42,23 @@ const page = async () => {
   const roomIdDb : ROOM[] = await Room.find({ users : leaderId });
   console.log("roomIdDb :",roomIdDb)
 
-  const roomsId  = JSON.parse(leader.value).rooms;
-  const rooms : ROOM[] = [];
+  const roomsId  = await User.findById(leaderId).select('rooms');
+  const rooms : string[] = [];
+  const roomsFull : ROOM[] = [];
   for (let i = 0; i < roomsId.length; i++) {
     const room = await Room.findById(roomsId[i]);
     if(room) {
-      rooms.push(room);
+      rooms.push(room._id);
+      roomsFull.push(room);
     }
   }
   console.log("rooms :",rooms)
 
   let isChange : boolean = false;
   for (let i = 0; i < roomIdDb.length; i++) {
-    if(!rooms.includes(roomIdDb[i]) ) {
-      rooms.push(roomIdDb[i]);
+    if(!rooms.includes(roomIdDb[i]._id) ) {
+      rooms.push(roomIdDb[i]._id);
+      roomsFull.push(roomIdDb[i]);
       isChange = true;
     }
     
@@ -63,9 +68,6 @@ const page = async () => {
     await User.updateOne({ _id: leaderId }, { $set: { rooms } });
     console.log("rooms after update :",rooms)
   }
-
-
-  
   
   return (
     <SidebarProvider>
@@ -89,7 +91,7 @@ const page = async () => {
             </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
-          {rooms?.map((room , index) =>
+          {roomsFull?.map((room , index) =>
             <Card className="m-4" key={index}>
               <div className="flex h-15 m-4">
                 <div className="w-15 h-15">
