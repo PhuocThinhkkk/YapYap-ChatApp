@@ -1,14 +1,20 @@
 import  { NextResponse, type NextRequest } from "next/server";
 import MESSAGE from "@/schema/message";
 import connectDB from "@/lib/mongoDb";
-
+import { protectRoom } from "@/lib/protectRoom";
 
 
 export async function GET( req : NextRequest , {params} : {params : Promise<{roomid : string}>}){
   try{
     const { roomid } = await params;
     console.log("room id ", roomid)
-    await connectDB()
+    await connectDB();
+
+    const authorization = await protectRoom(roomid);
+    if(authorization != "success"){
+      return NextResponse.json({message : authorization}, {status : 401});
+    }
+    
     const messages = await MESSAGE.find({ roomId : roomid });
     if(messages.length === 0 ) return NextResponse.json({messages: "no data in this room"}, {status : 400});
     console.log(messages)

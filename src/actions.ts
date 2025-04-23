@@ -30,7 +30,7 @@ export const createUser = async (_prevState : unknown ,formData : FormData) =>{
   console.log("new user : ", user);
 
   await user.save();
-  await createSession(user._id)
+  await createSession(user._id.toString());
   console.log("new user sign up successfully");
   const session1 = await getSession();
   console.log("get session:", session1);
@@ -70,7 +70,7 @@ export const signIn = async (_prevState : unknown ,form : FormData) => {
     return {message: 'Your password is not correct !'};
   }
 
-  await createSession(UserExist._id);
+  await createSession(UserExist._id.toString());
   console.log("user sign in successfully");
   const cookieStore = await cookies();
 

@@ -8,22 +8,19 @@ import { getSession } from './lib/session'
 export async function middleware(request: NextRequest) {
   const isAuth = await getSession();
   if(!isAuth){
+    console.log("no session: ", isAuth)
     return NextResponse.redirect(new URL('/sign-in', request.url))
   }
-  if(request.nextUrl.pathname.startsWith('/rooms/[roomid]')){
-    return
-  }
+  console.log("middleware is running");
   
 }
- 
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
     '/',
     '/dashboard',
     '/rooms',
-    '/api/rooms/create-room',
-    '/rooms/[roomid]',
-    '/rooms/create-room'
+
+    '/rooms/:path*',
     ]
 }
