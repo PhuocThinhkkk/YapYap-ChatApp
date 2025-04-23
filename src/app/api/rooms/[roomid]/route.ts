@@ -10,7 +10,7 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{roo
     console.log("room id ", roomid)
     await connectDB()
     const roomData = await Room.findById(roomid);
-    if( !roomData ) return NextResponse.json({message : "no data in this room"}, {status : 400});
+    if( !roomData ) return NextResponse.json({message : " no room like this "}, {status : 400});
     console.log(roomData)
     return NextResponse.json(roomData, {status: 200})
 
