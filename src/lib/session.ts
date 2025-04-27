@@ -34,6 +34,15 @@ export async function getSession() {
   return session ? session : null
 }
 
+export async function getUserInSession(){
+  const session = await getSession();
+  if(!session) return null
+  const payload = await decrypt(session)
+  if(!payload) return null
+  return payload
+  
+}
+
 export async function createSession(userId: string) {
   const expiresAt = new Date(Date.now() +  60 * 60 * 1000)
   const session = await encrypt({ userId, expiresAt })

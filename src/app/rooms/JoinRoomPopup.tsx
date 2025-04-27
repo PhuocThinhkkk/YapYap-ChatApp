@@ -23,29 +23,34 @@ const JoinRoomPopup = ({
   return (
     <Dialog>
         <DialogTrigger asChild>
-            <Button variant="outline" className='bg-blue-500 text-white px-4 py-2 rounded-md' >Join</Button>
+            <Button variant="outline" className='bg-blue-500 text-white px-4 py-2 rounded-md hover:cursor-pointer' >Join</Button>
         </DialogTrigger>
-        <DialogContent className='sm:max-w-[425px]'>
-            <DialogHeader className='text-center text-2xl font-bold'>
-                <DialogTitle className='text-center'>
-                    Join {roomName} room 
-                </DialogTitle>
-                <DialogDescription className='text-center'>
-                    Enter the password to join the room:
-                </DialogDescription>
+        {roomName ?
+            (
+                <DialogContent className='sm:max-w-[425px]' >
+                <DialogHeader className='text-center text-2xl font-bold'>
+                    <DialogTitle className='text-center'>
+                        Join {roomName} room 
+                    </DialogTitle>
+                    <DialogDescription className='text-center'>
+                        Enter the password to join the room:
+                    </DialogDescription>
 
-            </DialogHeader>
-            
-                <form action={SearchRoom}
-                >
-                    <input type="hidden" name="roomName" value={roomName} />
-                    <div className='flex flex-col items-center justify-center'>
-                        <Input name="password" type="password" placeholder="Password" className='border-2 border-gray-300 rounded-md p-2 mb-4' />
-                        <Button type="submit" className='bg-blue-500 text-white px-4 py-2 rounded-md'>Join Room</Button>
-                    </div>
-                </form>
+                </DialogHeader>
                 
-            </DialogContent>
+                    <form action={SearchRoom}
+                    >
+                        <input type="hidden" name="roomName" value={roomName} />
+                        <div className='flex flex-col items-center justify-center'>
+                            <Input name="password" type="password" placeholder="Password" className='border-2 border-gray-300 rounded-md p-2 mb-4' />
+                            <Button type="submit" className='bg-blue-500 text-white px-4 py-2 rounded-md'>Join Room</Button>
+                        </div>
+                    </form>
+                    
+                </DialogContent>
+            ) : null
+        
+        }
         
     </Dialog>
   )
