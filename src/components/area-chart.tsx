@@ -78,7 +78,7 @@ export function Area_Chart() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} className="h-60 w-full">
           <AreaChart
             accessibilityLayer
             data={chartData}
