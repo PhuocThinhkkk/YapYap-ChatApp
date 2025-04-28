@@ -12,16 +12,15 @@ import { getUserInSession } from "@/lib/session";
 
 
 interface ROOM {
-    _id: string;
-    roomName: string;
-    maxPeople: number,
-    leaderId: string;
-    users: string[];
-    createdAt: Date;
+  _id: string;
+  roomName: string;
+  maxPeople: number,
+  leaderId: string;
+  users: string[];
+  createdAt: Date;
 }
 
 
- 
 
 const AllRooms = async () => {
 
@@ -43,26 +42,31 @@ const AllRooms = async () => {
     if(!user) {
       return
     }
-    const roomsId = user.rooms;
-    const rooms : string[] = [];
+    let isChange : boolean = false;
+    const rooms : string[] = user.rooms;
+    const roomsOwn : string[] = user.roomsOwn;
     const roomsFull : ROOM[] = [];
-    for (let i = 0; i < roomsId.length; i++) {
-      const room = await Room.findById(roomsId[i]);
+    for (let i = 0; i < rooms.length; i++) {
+      const room = await Room.findById(rooms[i]);
       if(room) {
-        rooms.push(room._id);
         roomsFull.push(room);
+      }
+      if(room && room.leaderId == leaderId && !roomsOwn.toString().includes(room._id)){
+        roomsOwn.push(room._id);
+        isChange = true;
       }
     }
     console.log("rooms :",rooms)
+    
   
-    let isChange : boolean = false;
+    
     for (let i = 0; i < roomIdDb.length; i++) {
       if(!rooms.toString().includes(roomIdDb[i]._id.toString()) ) {
         rooms.push(roomIdDb[i]._id);
         roomsFull.push(roomIdDb[i]);
         isChange = true;
       }
-      
+    
     }
   
     for (let i = 0; i < rooms.length; i++) {
@@ -73,11 +77,11 @@ const AllRooms = async () => {
         }
       }
     }
-      
+    
       
   
     if(isChange) {
-      await User.updateOne({ _id: leaderId }, { $set: { rooms } });
+      await User.updateOne({ _id: leaderId }, { $set: { rooms, roomsOwn } });
       console.log("rooms after update :",rooms)
     }
 

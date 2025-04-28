@@ -15,6 +15,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { useEffect, useState } from "react"
+
+
+
+interface roomMessageChartData {
+  date: string,
+  dayInWeek: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday"| "Sunday",
+  yourRoom: number,
+  orthersRoom: number,
+}
+
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
   { month: "February", desktop: 305, mobile: 200 },
@@ -34,6 +45,30 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 export function Area_Chart() {
+  const [dataChart, setDataChart] = useState <roomMessageChartData[] | null> (null)
+
+  useEffect(()=>{
+    const initialFetching = async () =>{
+      const res = await fetch("/api/session")
+      const data = await res.json();
+      if(res.status != 200) {
+        return
+      }
+      console.log("user payload: ",data)
+      if (!data.userId) {
+        return
+      }
+      const res2 = await fetch(`/api/users/${data.userId}/dashboard`)
+      if (res2.status != 200) {
+        console.log("false to fetch area chart data")
+        return
+      }
+      const data2 : roomMessageChartData[] = await res2.json();
+      console.log("area chart data: ", data2)
+    }
+    initialFetching();
+  },[])
+
   return (
     <Card>
       <CardHeader>

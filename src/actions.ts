@@ -14,6 +14,7 @@ export const createUser = async (_prevState : unknown ,formData : FormData) =>{
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
+    roomOwn: [],
     rooms: [],
   }
 
@@ -78,9 +79,10 @@ export const signIn = async (_prevState : unknown ,form : FormData) => {
 
   console.log("UserCookie :", UserCookie);
   UserCookie.roomsLength = UserCookie.rooms.length;
+  UserCookie.roomsOwnLength = UserCookie.roomsOwn.length;
   delete UserCookie.rooms;
   delete UserCookie.password;
-
+  delete UserCookie.roomsOwn;
 
   cookieStore.set('user', JSON.stringify(UserCookie))
   console.log("User :", UserCookie);
