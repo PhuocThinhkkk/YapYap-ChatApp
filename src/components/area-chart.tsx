@@ -26,26 +26,24 @@ interface roomMessageChartData {
   orthersRoom: number,
 }
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+  yourRoom: {
+    label: "your Room",
+    color: "#2563eb",
   },
-  mobile: {
-    label: "Mobile",
+  orthersRoom: {
+    label: "orthers Room",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 export function Area_Chart() {
   const [dataChart, setDataChart] = useState <roomMessageChartData[] | null> (null)
+  const [key, setKey] = useState(0);
+
+  const updateChartData = (newData : roomMessageChartData[]) => {
+    setDataChart(newData);
+    setKey(prevKey => prevKey + 1); 
+  };
 
   useEffect(()=>{
     const initialFetching = async () =>{
@@ -58,61 +56,66 @@ export function Area_Chart() {
       if (!data.userId) {
         return
       }
-      const res2 = await fetch(`/api/users/${data.userId}/dashboard`)
+      const res2 = await fetch(`/api/users/${data.userId}/dashboard`, {
+        cache: 'no-store'
+      })
       if (res2.status != 200) {
         console.log("false to fetch area chart data")
         return
       }
       const data2 : roomMessageChartData[] = await res2.json();
       console.log("area chart data: ", data2)
+      updateChartData(data2)
     }
     initialFetching();
   },[])
 
   return (
-    <Card>
+    <Card key={key}>
       <CardHeader>
-        <CardTitle>Area Chart - Stacked</CardTitle>
+        <CardTitle>Your messages in rooms </CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Showing total messages for the last 7 days
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-60 w-full">
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={dataChart || []}
             margin={{
               left: 12,
               right: 12,
+              top:4,
             }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="dayInWeek"
               tickLine={false}
-              axisLine={false}
+              axisLine={true}
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
-              cursor={false}
+              cursor={true}
               content={<ChartTooltipContent indicator="dot" />}
+              
             />
             <Area
-              dataKey="mobile"
+              dataKey="orthersRoom"
               type="natural"
-              fill="var(--color-mobile)"
+              fill="var(--color-chart-2)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="yourRoom"
               type="natural"
-              fill="var(--color-desktop)"
-              fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              fill="var(--color-chart-1)"
+              fillOpacity={0.7}
+
               stackId="a"
             />
           </AreaChart>
