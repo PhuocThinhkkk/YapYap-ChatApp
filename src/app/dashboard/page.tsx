@@ -25,7 +25,7 @@ const page = () => {
             <Component />
           </div>
           <div>
-            <BigAssChart></BigAssChart>
+            <BigAssChart/>
           </div>
          
         </div>

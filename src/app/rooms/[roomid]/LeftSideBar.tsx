@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback} from '@radix-ui/react-avatar'
 import  Link  from 'next/link'
 import Cookie from 'js-cookie'
 import { useParams, useRouter } from 'next/navigation'
+import { UIError } from '@/components/ui-error'
 
 
 interface Room {
@@ -27,6 +28,7 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
   const [conversations, setConversations] = useState<Room[]>([]);
   const params = useParams<{ roomid: string }>()
   const [activeConversation, setActiveConversation] = useState<Room | null>(null)
+  const [isError, setIsError] = useState(false)
   const route = useRouter();
   useEffect(()=>{
     const userCookie = Cookie.get("user");
@@ -40,6 +42,10 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
     console.log("user cookie :", userId);
     async function fetchData(){
       const res = await fetch(`/api/rooms?userId=${userId}`, { next: { revalidate: 30 } });
+      if( res.status == 400 ) {
+        setIsError(true);
+        return
+      }
       const data = await res.json();
       console.log(data);
       setConversations(data);
@@ -56,8 +62,8 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
   },[])
 
   return (
+
     <div className= {`fixed lg:block lg:static z-20 w-80 h-screen ${isOpen ? '-translate-x-0' : '-translate-x-full' } transition-transform transform duration-300 lg:translate-x-0` }>
-      
         <div className="grid-cols-1 h-screen w-full max-w-xs border-r bg-background">
           <Link href="/rooms">
             <Button className='hover:bg-slate-50 hover:cursor-pointer w-15 h-7 bg-background text-black border-0'>
@@ -77,6 +83,11 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
                   <Input placeholder="Search conversations" className="pl-8" />
               </div>
           </div>
+          { isError ? 
+            <UIError 
+            title="Failed to get rooms" 
+            description="Maybe server is down, please wait and then try again." 
+            /> : 
           <ScrollArea className="h-[calc(100vh-1500px)]">
               <div className="px-2 py-2">
                   {conversations?.map((conversation) => (
@@ -102,6 +113,7 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
                   ))}
               </div>
           </ScrollArea>
+          }
         </div>
     </div>
   )

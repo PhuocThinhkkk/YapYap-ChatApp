@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import connectDB from "@/lib/mongoDb"
 import Room from "@/schema/room"
 import User from "@/schema/user"
-import { getUserInSession } from "@/lib/session";
+import { getUserInSession } from "@/lib/auth";
 
 
 

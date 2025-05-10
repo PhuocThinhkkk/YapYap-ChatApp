@@ -1,8 +1,9 @@
 "use client"
 
-import * as React from "react"
+import { useState, useEffect} from "react"
 import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
+import { Pie, PieChart, Cell } from "recharts"
+
 
 import {
   Card,
@@ -12,49 +13,53 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-]
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig
+
+
+const colors = [
+  "#8884d8", // purple
+  "#82ca9d", // green
+  "#ffc658", // yellow
+  "#ff7f50", // coral
+  "#8dd1e1", // light blue
+  "#a4de6c", // light green
+  "#d0ed57", // lime
+  "#ffc0cb", // pink
+  "#ffbb28", // orange
+  "#00C49F", // teal
+];
+
 
 export function Component() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
+  const [isClient, setIsClient] = useState(false)
+  const [total, setToal] = useState< number | null >(null)
+  const [chartData, setChartData ] = useState<unknown[]>([]);
+  useEffect(() => {
+    setIsClient(true);
+    const initialFetching = async () =>{
+      const res = await fetch("/api/session")
+      const data = await res.json();
+      console.log("hello")
+      if(res.status != 200) {
+        return
+      }
+      console.log("user payload: ",data)
+      if (!data.userId) {
+        return
+      }
+      const res2 = await fetch(`/api/users/${data.userId}/dashboard/pie-chart`, {
+        cache: 'no-store'
+      })
+      if (res2.status != 200) {
+        console.log("false to fetch pie chart data")
+        return
+      }
+      const data2 = await res2.json();
+      console.log("area chart data: ", data2)
+      setChartData(data2)
+    }
+
+    initialFetching();
   }, [])
 
   return (
@@ -63,55 +68,20 @@ export function Component() {
         <CardTitle>Pie Chart - Donut with Text</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
-              innerRadius={60}
-              strokeWidth={5}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
-                        >
-                          {totalVisitors.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Visitors
-                        </tspan>
-                      </text>
-                    )
-                  }
-                }}
-              />
+      <CardContent className="flex-1 pb-0 justify-center items-center flex">
+        { isClient ? 
+          <PieChart width={430} height={250}>
+            <Pie data={chartData} dataKey="count" cx="50%" cy="50%" outerRadius={80} label>
+              {
+                chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={(entry as { color: string }).color}/>
+                ))
+              }
             </Pie>
           </PieChart>
-        </ChartContainer>
+          : null
+        }
+        
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">

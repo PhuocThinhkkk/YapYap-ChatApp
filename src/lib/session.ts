@@ -4,6 +4,7 @@ import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { SessionPayload } from './definitions'
 import { cookies } from 'next/headers'
+
  
 const secretKey = process.env.SESSION_SECRET
 const encodedKey = new TextEncoder().encode(secretKey)
@@ -34,14 +35,6 @@ export async function getSession() {
   return session ? session : null
 }
 
-export async function getUserInSession(){
-  const session = await getSession();
-  if(!session) return null
-  const payload = await decrypt(session)
-  if(!payload) return null
-  return payload
-  
-}
 
 export async function createSession(userId: string) {
   const expiresAt = new Date(Date.now() +  60 * 60 * 1000)

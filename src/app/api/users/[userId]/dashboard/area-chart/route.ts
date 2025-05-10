@@ -5,7 +5,7 @@ import User from "@/schema/user";
 import MESSAGE from "@/schema/message";
 import dayjs from 'dayjs'
 import { NextRequest, NextResponse } from "next/server";
-import { getUserInSession } from "@/lib/session";
+import { getUserInSession } from "@/lib/auth";
 
 
 interface Message {
@@ -30,14 +30,12 @@ const dayWeek = ["Sunday","Monday" , "Tuesday" , "Wednesday" , "Thursday" , "Fri
 
 
 export async function  GET( res : NextRequest, { params } : {params: Promise<{userId: string}>}){
-    const {userId} = await params;
-    if(!userId) return
+    const { userId } = await params;
+    
     const userCookie = await getUserInSession();
-    if (!userCookie) {
-        return
-    }
-    if (!userCookie?.userId || !(userCookie.userId == userId)) {
-        return
+    
+    if ( !userCookie || !userId || !userCookie?.userId || !(userCookie.userId == userId) ) {
+        NextResponse.json({message: "Unauthorized"}, {status: 401});
     }
     await connectDB();
     
@@ -57,7 +55,7 @@ export async function  GET( res : NextRequest, { params } : {params: Promise<{us
     const sevenDaysAgo = dayjs().subtract(7, 'day').toDate();
     const allMessage : Message[] = await MESSAGE.find({userId, createdAt: {$gte : sevenDaysAgo}})
     if (allMessage.length == 0) {
-        return;
+        return NextResponse.json({message: "You havent have any messages in the last 7 days."}, {status: 404});
     }
 
     const chartDataMap : Record<string, roomMessageChartData> = {};

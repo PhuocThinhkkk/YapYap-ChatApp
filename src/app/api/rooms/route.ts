@@ -12,8 +12,10 @@ export async function GET(req : NextRequest) {
 
         const rooms = await Room.find({ users : userId })
         if(rooms.length == 0) {
+            console.log("rooms length 0")
             return NextResponse.json({message: 'you dont have any room. '}, {status: 400})
         }
+        console.log("rooms in route handler",rooms)
         return NextResponse.json(rooms,{status: 200})
     }catch(err){
         return NextResponse.json({message: `something wrong with server ${err}`}, {status: 500})

@@ -1,6 +1,6 @@
 
 import connectDB from "@/lib/mongoDb"
-import { getUserInSession } from "@/lib/session";
+import { getUserInSession } from "@/lib/auth";
 import Room from "@/schema/room";
 import User from "@/schema/user";
 import { NextRequest, NextResponse } from "next/server";

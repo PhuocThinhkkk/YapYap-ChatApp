@@ -4,6 +4,7 @@ import connectDB from "@/lib/mongoDb.js";
 
 import { protectRoom } from "@/lib/protectRoom";
 import Room from "@/schema/room";
+import { Suspense } from "react";
 
 const Page = async ( {params} : {params : Promise<{ roomid : string }>}) => {
 
@@ -23,11 +24,13 @@ const Page = async ( {params} : {params : Promise<{ roomid : string }>}) => {
   console.log("room name: ", roomName)
 
   return (
-    <div>
+    <Suspense fallback={<div>loading</div>}>
+
+    
       <SocketProvider>
         <LiveChat  roomId={roomId} roomName={roomName}></LiveChat>
      </SocketProvider>
-    </div>
+    </Suspense>
    
   )
 }

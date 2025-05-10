@@ -49,6 +49,7 @@ export function Area_Chart() {
     const initialFetching = async () =>{
       const res = await fetch("/api/session")
       const data = await res.json();
+      console.log("hello")
       if(res.status != 200) {
         return
       }
@@ -56,7 +57,7 @@ export function Area_Chart() {
       if (!data.userId) {
         return
       }
-      const res2 = await fetch(`/api/users/${data.userId}/dashboard`, {
+      const res2 = await fetch(`/api/users/${data.userId}/dashboard/area-chart`, {
         cache: 'no-store'
       })
       if (res2.status != 200) {
@@ -98,14 +99,14 @@ export function Area_Chart() {
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
-              cursor={true}
+              cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
               
             />
             <Area
               dataKey="orthersRoom"
               type="natural"
-              fill="var(--color-chart-2)"
+              fill="var(--color-orthersRoom)"
               fillOpacity={0.4}
 
               stackId="a"
@@ -113,9 +114,9 @@ export function Area_Chart() {
             <Area
               dataKey="yourRoom"
               type="natural"
-              fill="var(--color-chart-1)"
-              fillOpacity={0.7}
-
+              fill="var(--color-yourRoom)"
+              fillOpacity={0.6}
+              stroke="var(--color-orthersRoom)"
               stackId="a"
             />
           </AreaChart>
