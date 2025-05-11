@@ -1,5 +1,5 @@
 import { SocketProvider } from "@/components/socketProvider";
-import LiveChat from "./LiveChat";
+import LiveChat from "@/components/LiveChat";
 import connectDB from "@/lib/mongoDb.js";
 
 import { protectRoom } from "@/lib/protectRoom";

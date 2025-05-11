@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import ButtonJoinRoom from "./ButtonJoinRoom"
+import ButtonJoinRoom from "@/components/ButtonJoinRoom"
 import { Avatar } from "@radix-ui/react-avatar"
 import { AvatarFallback } from "@/components/ui/avatar"
 import { redirect } from "next/navigation";

@@ -1,11 +1,11 @@
 
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
-import ButtonCreateRoom from "./ButtonCreateRoom"
-import SearchRoom from "./SearchRoom";
-import AllRooms from "./AllRooms";
+import ButtonCreateRoom from "@/components/ButtonCreateRoom"
+import SearchRoom from "@/components/SearchRoom";
+import AllRooms from "@/components/AllRooms";
 import { Suspense } from "react";
-import { RoomsLoadingSkeleton } from "./RoomsLoadingSkeleton";
+import { RoomsLoadingSkeleton } from "@/components/RoomsLoadingSkeleton";
 
 
 const page = () => {
