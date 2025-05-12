@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Avatar } from "@/components/ui/avatar"
 
-export function RoomsLoadingSkeleton() {
+export default function RoomsLoadingSkeleton() {
   const loadingCards = Array.from({ length: 6 }, (_, i) => i)
 
   return (

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 const ButtonJoinRoom = ({roomId} : {roomId: string}) => {
   return (
     <div>
-        <Link href={`/rooms/${roomId}`} className=''>
+        <Link href={`/chatrooms/${roomId}`} className=''>
             <Button className='hover:cursor-pointer'>
                 Join
             </Button>

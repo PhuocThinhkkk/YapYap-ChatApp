@@ -103,7 +103,7 @@ const AllRooms = async () => {
                 </div>
                 <CardContent >Max people : {room.maxPeople}</CardContent>
                 <CardFooter>
-                <ButtonJoinRoom roomId = {room._id}></ButtonJoinRoom>
+                  <ButtonJoinRoom roomId = {room._id}></ButtonJoinRoom>
                 </CardFooter>
             </Card>
         )}
