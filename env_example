@@ -1,2 +1,6 @@
 MONGODB_URI = 
 SESSION_SECRET =
+
+URL = your url of this app | http://localhost:3000 
+
+SOCKET_SERVER_URL = 

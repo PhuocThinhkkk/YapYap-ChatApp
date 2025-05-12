@@ -6,6 +6,7 @@ import { io, Socket } from 'socket.io-client';
 interface SocketContextType {
   socket: Socket | null;
 }
+const ServerSocketURL = process.env.NEXT_PUBLIC_SOCKET_SERVER_URL
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
@@ -15,8 +16,9 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 
   useEffect(() => {
+    console.log("server url : ",ServerSocketURL)
     // const socketInstance = io("http://localhost:3005");  for different server websocket url
-    const socketInstance = io("http://localhost:3005"); 
+    const socketInstance = io(ServerSocketURL);
 
     setSocket(socketInstance);
 
