@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 
 import connectDB from "@/lib/mongoDb"
 import { getUserInSession } from "@/lib/auth";

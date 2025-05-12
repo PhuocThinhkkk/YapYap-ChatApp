@@ -1,8 +1,11 @@
+export const dynamic = 'force-dynamic'
+
 import { getUserInSession } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/schema/user";
 import MESSAGE from "@/schema/message";
 import Room from "@/schema/room";
+import connectDB from "@/lib/mongoDb";
 
 interface Message {
     _id : string,
@@ -23,7 +26,7 @@ export async function GET (req : NextRequest, {params}:  { params : Promise<{use
         if(!userIdSession || userId != userIdSession.userId) {
             return NextResponse.json({message: "unauthorized "}, {status: 400})
         }
-
+        await connectDB()
         const user = await User.findById(userId);
         const arrUserRooms : string[] = user.roomsOwn;
         if(arrUserRooms.length == 0) return NextResponse.json({message: "create a room to see data."}, {status: 400})

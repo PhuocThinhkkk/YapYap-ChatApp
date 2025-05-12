@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import  { NextResponse, type NextRequest } from "next/server";
 import connectDB from "@/lib/mongoDb";
 import Room from "@/schema/room";

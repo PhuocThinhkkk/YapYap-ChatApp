@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { SocketProvider } from "@/components/socketProvider";
 import LiveChat from "@/components/LiveChat";
 import connectDB from "@/lib/mongoDb.js";
@@ -25,8 +27,6 @@ const Page = async ( {params} : {params : Promise<{ roomid : string }>}) => {
 
   return (
     <Suspense fallback={<div>loading</div>}>
-
-    
       <SocketProvider>
         <LiveChat  roomId={roomId} roomName={roomName}></LiveChat>
      </SocketProvider>

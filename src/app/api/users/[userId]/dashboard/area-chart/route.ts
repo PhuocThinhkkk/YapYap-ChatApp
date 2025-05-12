@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 
 import connectDB from "@/lib/mongoDb";
 import User from "@/schema/user";

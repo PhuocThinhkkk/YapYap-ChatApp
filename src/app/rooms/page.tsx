@@ -1,16 +1,13 @@
-
+export const dynamic = 'force-dynamic'
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import ButtonCreateRoom from "@/components/ButtonCreateRoom"
 import SearchRoom from "@/components/SearchRoom";
 import AllRooms from "@/components/AllRooms";
 import { Suspense } from "react";
-import { RoomsLoadingSkeleton } from "@/components/RoomsLoadingSkeleton";
-
+import { RoomsLoadingSkeleton } from "./loading";
 
 const page = () => {
- 
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -29,7 +26,7 @@ const page = () => {
         <p className="m-4 text-center text-3xl font-bold "> Enter your rooms name:</p>
         <div className="flex justify-center min-w-full">
             <div className="relative w-4/5 lg:w-2/3 h-12 mx-auto">
-               <SearchRoom/>
+              <SearchRoom/>
             </div>
         </div>
         <Suspense fallback={<RoomsLoadingSkeleton/>}>

@@ -1,4 +1,4 @@
-
+export const dynamic = 'force-dynamic'
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import ButtonJoinRoom from "@/components/ButtonJoinRoom"
 import { Avatar } from "@radix-ui/react-avatar"

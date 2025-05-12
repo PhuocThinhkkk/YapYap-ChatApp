@@ -68,7 +68,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
     );
     const res = await response.json();
 
-    console.log("where tf this func run on Server/Client?")
+
     if(response.status !== 200) {
       return alert(`${res.message}`)
     }
