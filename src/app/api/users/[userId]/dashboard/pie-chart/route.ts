@@ -7,7 +7,7 @@ import Room from "@/schema/room";
 interface Message {
     _id : string,
     userId : string,
-    roomNamw : string,
+    roomName : string,
     roomId : string,
     createdAt : Date,
     infor : string,
