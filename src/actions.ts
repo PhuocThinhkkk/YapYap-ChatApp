@@ -140,6 +140,6 @@ export async function SearchRoom (_prevState : unknown , formData: FormData) : P
   }
   await Room.updateOne({ roomName }, { $addToSet: { users: userId } })
   console.log("You have joined the room")
-  return {message: "You have joined the room"}
+  redirect('/rooms')
 
 }

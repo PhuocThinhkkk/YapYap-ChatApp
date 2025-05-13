@@ -1,5 +1,7 @@
 export const dynamic = 'force-dynamic'
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardFooter} from "@/components/ui/card"
+
+import { cn } from "@/lib/utils"
 import ButtonJoinRoom from "@/components/ButtonJoinRoom"
 import { Avatar } from "@radix-ui/react-avatar"
 import { AvatarFallback } from "@/components/ui/avatar"
@@ -96,10 +98,11 @@ const AllRooms = async () => {
                     <AvatarFallback>{room.roomName.charAt(0)}</AvatarFallback>
                     </Avatar>
                 </div>
-                
-                <CardHeader  className=" items-end text-2xl font-bold" >       
+                <span  className={cn(
+                        "m-4 leading-none items-end text-2xl font-bold"
+                      )} >       
                     {room.roomName}
-                </CardHeader>
+                </span>
                 </div>
                 <CardContent >Max people : {room.maxPeople}</CardContent>
                 <CardFooter>

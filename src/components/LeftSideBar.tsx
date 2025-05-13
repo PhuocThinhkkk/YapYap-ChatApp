@@ -96,7 +96,7 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
                       className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
                       activeConversation?._id.toString() === conversation?._id.toString() ? "bg-muted" : "hover:bg-muted/50"
                       }`}
-                      onClick={() => route.push(`/rooms/${conversation._id}`)}
+                      onClick={() => route.push(`/chatrooms/${conversation._id}`)}
                       >       
                       <div className="w-10 h-10 flex justify-center items-center border text-xl rounded-full font-bold hover:cursor-pointer">
                         <Avatar>
