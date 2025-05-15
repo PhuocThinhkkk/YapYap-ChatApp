@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic";
 import { CreateChatForm } from "@/components/create-room"
 
 export default function Home() {

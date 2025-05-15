@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic'
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import ButtonCreateRoom from "@/components/ButtonCreateRoom"
 import SearchRoom from "@/components/SearchRoom";
@@ -6,7 +5,7 @@ import AllRooms from "@/components/AllRooms";
 import { Suspense } from "react";
 import RoomsLoadingSkeleton from "./loading";
 
-const page = () => {
+const Page = () => {
   return (
     <>
     {/* Header with trigger for mobile */}
@@ -36,4 +35,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

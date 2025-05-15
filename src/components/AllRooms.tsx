@@ -1,6 +1,4 @@
-export const dynamic = 'force-dynamic'
 import { Card, CardContent, CardFooter} from "@/components/ui/card"
-
 import { cn } from "@/lib/utils"
 import ButtonJoinRoom from "@/components/ButtonJoinRoom"
 import { Avatar } from "@radix-ui/react-avatar"
@@ -10,6 +8,7 @@ import connectDB from "@/lib/mongoDb"
 import Room from "@/schema/room"
 import User from "@/schema/user"
 import { getUserInSession } from "@/lib/auth";
+import { cookies } from "next/headers"
 
 
 
@@ -25,7 +24,7 @@ interface ROOM {
 
 
 const AllRooms = async () => {
-
+    await cookies();
     await connectDB();
     const leader = await getUserInSession();
     if(!leader) {
