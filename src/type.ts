@@ -1,6 +1,6 @@
 export type UserDB = {
-    id : string;
-    name: string ,
+    _id : string;
+    name: string,
     email: string ,
     roomsOwn?: [],
     rooms?: [],

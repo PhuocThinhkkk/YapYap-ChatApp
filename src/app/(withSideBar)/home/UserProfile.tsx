@@ -1,26 +1,25 @@
-import { CalendarDays, MapPin, Mail, Edit, MoreHorizontal } from "lucide-react"
-
+import { CalendarDays, MapPin, Mail, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, } from "@/components/ui/card"
-
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { getUser } from "./getUser"
 import { getUserInSession } from "@/lib/auth"
+import ButtonEditProfile from "./ButtonEditProfile"
 import Image from "next/image"
 
 
 
 export default async function ProfileComponent() {
     
-    const payload  = await getUserInSession()
-    if (!payload) {
-        return <div> you dont have session. </div>
-    }
-    const userId : string = payload.userId as string
-    const user = await getUser( userId );
-    if(!user) return null
-    console.log(user)
+  const payload  = await getUserInSession()
+  if (!payload) {
+      return <div> you dont have session. </div>
+  }
+  const userId : string = payload.userId as string
+  const user = await getUser( userId );
+  if(!user) return null
+  console.log(user)
     
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -34,21 +33,12 @@ export default async function ProfileComponent() {
                     alt= "user background"
                 /> : null
             }
-            
         </div>
 
         {/* Profile Header */}
         <div className=" px-6">
           <div className="flex flex-col sm:flex-row gap-6 -mt-12 sm:-mt-16">
-            <Avatar className="relative bottom-5 h-24 w-24 sm:h-32 sm:w-32 border-4 border-background">
-              <AvatarImage src={user.avatarUrl} alt={user.name} />
-              <AvatarFallback>
-                {user.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
-            </Avatar>
+            
 
             <div className="flex-1 pt-4 sm:pt-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -59,10 +49,7 @@ export default async function ProfileComponent() {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" className=" hover:cursor-pointer">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit Profile
-                  </Button>
+                  <ButtonEditProfile userId = {userId}/>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button size="icon" variant="ghost"  className=" hover:cursor-pointer">
