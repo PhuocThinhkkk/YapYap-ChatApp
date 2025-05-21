@@ -94,7 +94,7 @@ const AllRooms = async () => {
                 <div className="flex h-15 m-4">
                 <div className="w-15 h-15">
                     <Avatar>
-                    <AvatarFallback>{room.roomName.charAt(0)}</AvatarFallback>
+                      <AvatarFallback>{room.roomName.charAt(0)}</AvatarFallback>
                     </Avatar>
                 </div>
                 <span  className={cn(
