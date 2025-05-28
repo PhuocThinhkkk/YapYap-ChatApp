@@ -56,6 +56,7 @@ export default function ProfileComponent({ userId } : {userId : string}) {
               <AvatarImage
               src={user.avatarUrl}
               alt="user avt"
+              className="object-cover w-full h-full rounded-full"
               />
               <AvatarFallback className="w-full h-full flex justify-center items-center text-3xl">{user.name.charAt(0)}</AvatarFallback>
             </Avatar>

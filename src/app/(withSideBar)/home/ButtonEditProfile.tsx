@@ -28,6 +28,10 @@ import {
 import { Edit } from "lucide-react"
 import { useState } from "react";
 import { toast } from "sonner"
+import { 
+  useMutation
+
+} from "@tanstack/react-query";
 
 
 export default function ButtonEditProfile({ userId } : { userId : string }) {
@@ -77,7 +81,17 @@ export const formSchema = z.object({
 function FormAction({ userId } : { userId : string }){
 
   const [currentImg, setCurrentImg] = useState<ContactFormData["adImage"] | null >(null)
-
+  const mutaion = useMutation(
+    {
+      mutationFn: updateUser,
+      onSuccess: () => {
+        toast.success(`Your changes have been success. `);
+      },
+      onError: (err)=>{
+        toast.error(`${err}`);
+      }
+    }
+  )
 
   const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
@@ -89,35 +103,21 @@ function FormAction({ userId } : { userId : string }){
 
 
   async function onSubmit(data: ContactFormData) {
-    try{
-      if(!data) {
-        toast("please dont do sth stupiz!",{
-        description: "hello.",
-        });
-        return;
-      }
-
-      toast.info("Your changes have been sent.")
-
-      const response = await fetch(`/api/users/${userId}/profile`, {
-        method: "POST",
-          headers: {
-        "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)
+  
+    if(!data) {
+      toast("please dont do sth stupiz!",{
+      description: "hello.",
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      if (response.status !== 200) {
-        const err = (await response.json()).message
-        throw new Error(`${err}`);
-      }
-    }catch(e){
-      console.log("err: ", e);
-      toast.error(`${e}`);
+      return;
     }
+
+    toast.info("Your changes have been sent.");
+
+    const formData = new FormData();
+    formData.append("file", data?.adImage?.[0]);
+    
+    mutaion.mutate({ userId, formData })
+      
   }
   console.log(form)
 
@@ -183,9 +183,31 @@ return(
           <DialogClose asChild>
               <Button variant="outline" className="hover:cursor-pointer">Cancel</Button>
           </DialogClose>
-          <Button type="submit"  className="hover:cursor-pointer" >Save changes</Button>
+          <Button disabled={mutaion.isPending} type="submit"  className="hover:cursor-pointer" >Save changes</Button>
       </DialogFooter>
     </form>
   </Form>
   )
+}
+
+async function updateUser({ 
+  userId,
+  formData 
+} : { 
+  userId : string, 
+  formData: FormData
+}){
+  const response = await fetch(`/api/users/${userId}/profile`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  if (response.status !== 200) {
+    const err = (await response.json()).message
+    throw new Error(`${err}`);
+  }
+  return response;
 }

@@ -8,13 +8,40 @@ import { UserDB, UserProfile } from "@/type";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { getUserInSession } from "@/lib/auth";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, { params } : {params: Promise<{userId: string}>}) {
   try {
-    const data : ContactFormData = await request.json();
-    const userProfileImage : ContactFormData["adImage"] = data.adImage
+    const userIdParams  = (await params).userId
+    await connectDB()
+    const userInParams = await User.findById(userIdParams).select('-password');
+    if (!userInParams) {
+      return NextResponse.json({message: "No user like this. "}, { status: 404 });
+    }
+    const user = await getUserInSession();
+    if (!user || user._id !== userIdParams) {
+      return NextResponse.json({message: "Unathorize! "}, { status: 401 });
+    }
+    const data = await request.formData();
+    const file = data.get("file")
+    console.log("form in route handler: ", data)
+    if (file instanceof File) {
+      console.log("file name: ", file?.name)
+      console.log("file size: ", file?.size)
+      console.log("file type: ", file?.type)
+    } else {
+      console.log("⚠️ Not a File. Type is:", typeof file, file);
+    } 
+   
+    const userProfileImage : ContactFormData["adImage"] = file
     const { cid } = await pinata.upload.public.file(userProfileImage)
     const url = await pinata.gateways.public.convert(cid);
+
+    await User.updateOne(
+      {_id : user._id},
+      {avatarUrl : url}
+    )
+
     return NextResponse.json(url, { status: 200 });
   } catch (e) {
     console.log(e);
