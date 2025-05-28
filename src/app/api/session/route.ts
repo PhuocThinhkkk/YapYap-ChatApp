@@ -10,7 +10,7 @@ export const GET = async () =>{
         const user = await getUserInSession();
         if(!user) return NextResponse.json({ message: "You dont have session!" }, {status: 404})
         await connectDB()
-        const isUserExist = await User.findById(user.userId)
+        const isUserExist = await User.findById(user._id)
         if (!isUserExist) {
             return NextResponse.json({ message: "you didnt have an account!" }, { status: 400 })
         }

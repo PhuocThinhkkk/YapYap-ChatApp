@@ -26,7 +26,7 @@ export async function POST( req : NextRequest ) {
     if(!leader) return NextResponse.json({message: "user dont have session."}, {status: 400})
     
     console.log("user cookie in api route: ",leader)
-    const leaderId = leader.userId;
+    const leaderId = leader._id;
 
     const userdb = await User.findById(leaderId);
     if(!userdb) return NextResponse.json({message: "no user in db. "}, {status: 400})
