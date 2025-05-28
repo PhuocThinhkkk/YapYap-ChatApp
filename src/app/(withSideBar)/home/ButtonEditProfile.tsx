@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button"
 import Image from "next/image";
 import * as z from "zod";
+import { ContactFormData } from "@/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
@@ -49,7 +50,8 @@ export default function ButtonEditProfile({ userId } : { userId : string }) {
   )
 }
 
-const MAX_FILE_SIZE = 1024 * 1024 * 5;  // 5MB
+
+const MAX_FILE_SIZE = 1024 * 1024 * 10;  // 5MB
 const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -58,11 +60,12 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
 ];
 
 
- const formSchema = z.object({
+export const formSchema = z.object({
   username : z.string().max(20, "Your name should be less than 20 characters."),
   adImage: z
     .any()
     .refine((files) => {
+      console.log(files?.[0]?.size)
       return files?.[0]?.size <= MAX_FILE_SIZE;
     }, `Max image size is 5MB.`)
     .refine(
@@ -70,9 +73,6 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
       "Only .jpg, .jpeg, .png and .webp formats are supported."
     ),
 });
-
-export type ContactFormData = z.infer<typeof formSchema>;
-
 
 function FormAction({ userId } : { userId : string }){
 
@@ -88,10 +88,36 @@ function FormAction({ userId } : { userId : string }){
   });
 
 
-  function onSubmit(data: ContactFormData) {
-    toast("Your changes are successfull!",{
-      description: "hello",
-    })
+  async function onSubmit(data: ContactFormData) {
+    try{
+      if(!data) {
+        toast("please dont do sth stupiz!",{
+        description: "hello.",
+        });
+        return;
+      }
+
+      toast.info("Your changes have been sent.")
+
+      const response = await fetch(`/api/users/${userId}/profile`, {
+        method: "POST",
+          headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      if (response.status !== 200) {
+        const err = (await response.json()).message
+        throw new Error(`${err}`);
+      }
+    }catch(e){
+      console.log("err: ", e);
+      toast.error(`${e}`);
+    }
   }
   console.log(form)
 
@@ -126,24 +152,32 @@ return(
       /> : null }
       <div className="pt-4">
         <FormField 
-              control={form.control}
-              name="adImage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Avatar Img</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your name here. " type="file" {...field} 
-                    onChange={(e) => { 
-                      setCurrentImg(e.target.files?.[0] as ContactFormData["adImage"])
-                      } }/>
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          control={form.control}
+          name="adImage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Avatar Img</FormLabel>
+              <FormControl>
+                <Input 
+                placeholder="Enter your name here. " 
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const fileList = e.target.files
+                  if (fileList) {
+                    field.onChange(fileList)
+                    setCurrentImg(e.target.files?.[0] as ContactFormData["adImage"])
+                  } 
+                  }}/>
+                
+              </FormControl>
+              <FormDescription>
+                This is your public avatar.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
       <DialogFooter>
           <DialogClose asChild>

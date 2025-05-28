@@ -1,47 +1,67 @@
+'use client'
+import {
+  useQuery,
+} from '@tanstack/react-query'
 import { CalendarDays, MapPin, Mail, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { getUser } from "./getUser"
-import { getUserInSession } from "@/lib/auth"
 import ButtonEditProfile from "./ButtonEditProfile"
 import Image from "next/image"
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { UserProfile } from '@/type'
+import ProfileSkeleton from './ProfileSkeleton'
+import { UIError } from '@/components/ui-error'
 
 
 
-export default async function ProfileComponent() {
-    
-  const payload  = await getUserInSession()
-  if (!payload) {
-      return <div> you dont have session. </div>
+export default function ProfileComponent({ userId } : {userId : string}) {
+  const checkSession = useQuery({ 
+    queryKey: ['UserInfo'],
+    queryFn: async () => {
+    const response = await fetch(`/api/users/${userId}/profile`)
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Network response was not ok')
+      }
+      return data;
+    },
+  })
+  if (checkSession.status == "pending") {
+    return <ProfileSkeleton/>
   }
-  const userId : string = payload.userId as string
-  const user = await getUser( userId );
-  if(!user) return null
-  console.log(user)
-    
+  if (checkSession.status == "error") {
+    return <UIError className="h-full flex justify-center items-center"  title={`There is some errors : ${checkSession.error.message}`}/>
+  }
+  const user : UserProfile = checkSession.data;
+
   return (
     <div className="w-full max-w-7xl mx-auto">
       <Card className="border-none shadow-none ">
         {/* Cover Image */}
-        <div className="h-48 bg-slate-100 rounded-t-lg" >
+        <div className="h-48 bg-amber-200 rounded-t-lg" >
             { 
-                user.backGroundUrl ?
-                <Image
-                    src={ user.backGroundUrl }
-                    alt= "user background"
-                /> : null
+              user.backGroundUrl ?
+              <Image
+                  src={ user.backGroundUrl }
+                  alt= "user background"
+              /> : null
             }
         </div>
 
         {/* Profile Header */}
         <div className=" px-6">
           <div className="flex flex-col sm:flex-row gap-6 -mt-12 sm:-mt-16">
-            
-
+            <Avatar className="relative bottom-5 h-24 w-24 sm:h-32 sm:w-32 rounded-full border-4 border-background bg-blue-100">
+              <AvatarImage
+              src={user.avatarUrl}
+              alt="user avt"
+              />
+              <AvatarFallback className="w-full h-full flex justify-center items-center text-3xl">{user.name.charAt(0)}</AvatarFallback>
+            </Avatar>
             <div className="flex-1 pt-4 sm:pt-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
+                <div >
                   <h1 className="text-2xl font-bold">{user.name}</h1>
                   <p className="text-muted-foreground">
                     {user.role}

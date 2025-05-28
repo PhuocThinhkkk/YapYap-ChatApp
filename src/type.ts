@@ -1,3 +1,5 @@
+import * as z from "zod";
+import { formSchema } from "./app/(withSideBar)/home/ButtonEditProfile";
 export type UserDB = {
     _id : string;
     name: string,
@@ -39,3 +41,5 @@ export type UserProfile = {
     bio? : string,
     backGroundUrl? : string
 }
+
+export type ContactFormData = z.infer<typeof formSchema>;

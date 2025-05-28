@@ -6,7 +6,7 @@ import { UserDB } from "@/type";
 
 
 export async function GET (req : NextRequest, { params } : {params: Promise<{userId: string}>}){
-   const { userId } = await params;
+    const { userId } = await params;
 
     const userdb = await User.findById(userId).lean();
     if (!userdb) {
