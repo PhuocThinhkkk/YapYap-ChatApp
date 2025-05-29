@@ -19,12 +19,12 @@ export default function ProfileComponent({ userId } : {userId : string}) {
   const checkSession = useQuery({ 
     queryKey: ['UserInfo'],
     queryFn: async () => {
-    const response = await fetch(`/api/users/${userId}/profile`)
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Network response was not ok')
-      }
-      return data;
+      const response = await fetch(`/api/users/${userId}/profile`)
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || 'Network response was not ok')
+        }
+        return data;
     },
   })
   if (checkSession.status == "pending") {

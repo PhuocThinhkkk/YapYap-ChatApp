@@ -35,7 +35,7 @@ export async function  GET( res : NextRequest, { params } : {params: Promise<{us
     
     const userCookie = await getUserInSession();
     
-    if ( !userCookie || !userId || !userCookie?.userId || !(userCookie.userId == userId) ) {
+    if ( !userCookie || !userId || !userCookie?._id || !(userCookie._id == userId) ) {
         NextResponse.json({message: "Unauthorized"}, {status: 401});
     }
     await connectDB();

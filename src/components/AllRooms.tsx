@@ -34,7 +34,7 @@ const AllRooms = async () => {
    
     console.log("user cookies : ",leader)
   
-    const leaderId = leader.userId;
+    const leaderId = leader._id;
   
     const roomIdDb : ROOM[] = await Room.find({ users : leaderId });
     console.log("roomIdDb :",roomIdDb)

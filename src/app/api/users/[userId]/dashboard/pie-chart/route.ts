@@ -23,7 +23,7 @@ export async function GET (req : NextRequest, {params}:  { params : Promise<{use
         const { userId } = await params;
         const userIdSession = await getUserInSession()
 
-        if(!userIdSession || userId != userIdSession.userId) {
+        if(!userIdSession || userId != userIdSession._id) {
             return NextResponse.json({message: "unauthorized "}, {status: 400})
         }
         await connectDB()
