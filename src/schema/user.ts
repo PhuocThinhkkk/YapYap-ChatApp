@@ -8,11 +8,11 @@ const userSchema = new mongoose.Schema({
     roomsOwn: [ {type : mongoose.Schema.Types.ObjectId, ref: 'Room', required : true} ],
     rooms: [{type : mongoose.Schema.Types.ObjectId, ref: 'Room', required : true}],
     createdAt : {type : Date , default : Date.now},
-    location : String,
-    avatarUrl : String,
-    role : String,
-    bio : String,
-    backGroundUrl : String,
+    location : { type : String, default: ""},
+    avatarUrl : { type : String, default: ""},
+    role : { type : String, default: "normal"},
+    bio : { type : String, default: ""},
+    backgroundUrl : { type : String, default: ""},
 },{
     versionKey: false, 
 });

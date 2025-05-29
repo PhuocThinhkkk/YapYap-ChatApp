@@ -23,28 +23,56 @@ export async function POST(request: NextRequest, { params } : {params: Promise<{
       return NextResponse.json({message: "Unathorize! "}, { status: 401 });
     }
     const data = await request.formData();
-    const file = data.get("file")
+    const avatarfile = data.get("avatarImg")
+    const backgroundfile = data.get("backgroundImg");
+    const userName = data.get("userName");
+    const userBio = data.get("userBio");
     console.log("form in route handler: ", data)
-    if (file instanceof File) {
-      console.log("file name: ", file?.name)
-      console.log("file size: ", file?.size)
-      console.log("file type: ", file?.type)
+    if (avatarfile instanceof File) {
+      console.log("avatarfile name: ", avatarfile?.name)
+      console.log("avatarfile size: ", avatarfile?.size)
+      console.log("avatarfile type: ", avatarfile?.type)
     } else {
-      console.log("⚠️ Not a File. Type is:", typeof file, file);
+      console.log("⚠️ Not a avatarfile. Type is:", typeof avatarfile, avatarfile);
     } 
+    let url = "No url."
+    if(avatarfile){
+      const userProfileImage : ContactFormData["avatarImg"] = avatarfile;
+      const { cid } = await pinata.upload.public.file(userProfileImage)
+      url = await pinata.gateways.public.convert(cid);
+
+      await User.updateOne(
+        {_id : user._id},
+        { $set: {avatarUrl : url}}
+      )
+    }
+    if(backgroundfile){
+      const userBackgroundImage : ContactFormData["backgroundImg"] = backgroundfile;
+      const { cid } = await pinata.upload.public.file(userBackgroundImage)
+      url = await pinata.gateways.public.convert(cid);
+
+      await User.updateOne(
+        {_id : user._id},
+        { $set: { backgroundUrl: url } }
+      )
+    }
+    if (userName) {
+      await User.updateOne(
+        {_id : user._id},
+        { $set: {name: userName}}
+      )
+    }
+    if (userBio) {
+      await User.updateOne(
+        {_id : user._id},
+        { $set: {bio: userBio}}
+      )
+    }
+
    
-    const userProfileImage : ContactFormData["adImage"] = file
-    const { cid } = await pinata.upload.public.file(userProfileImage)
-    const url = await pinata.gateways.public.convert(cid);
-
-    await User.updateOne(
-      {_id : user._id},
-      {avatarUrl : url}
-    )
-
-    return NextResponse.json(url, { status: 200 });
+    return NextResponse.json({message: "success!"}, { status: 200 });
   } catch (e) {
-    console.log(e);
+    console.log("server err: ",e);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

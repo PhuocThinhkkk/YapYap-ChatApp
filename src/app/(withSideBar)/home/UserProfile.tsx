@@ -16,7 +16,7 @@ import { UIError } from '@/components/ui-error'
 
 
 export default function ProfileComponent({ userId } : {userId : string}) {
-  const checkSession = useQuery({ 
+  const { data , status, error }  = useQuery({ 
     queryKey: ['UserInfo'],
     queryFn: async () => {
       const response = await fetch(`/api/users/${userId}/profile`)
@@ -27,13 +27,13 @@ export default function ProfileComponent({ userId } : {userId : string}) {
         return data;
     },
   })
-  if (checkSession.status == "pending") {
+  if (status == "pending") {
     return <ProfileSkeleton/>
   }
-  if (checkSession.status == "error") {
-    return <UIError className="h-full flex justify-center items-center"  title={`There is some errors : ${checkSession.error.message}`}/>
+  if (status == "error") {
+    return <UIError className="h-full flex justify-center items-center"  title={`There is some errors : ${error}`}/>
   }
-  const user : UserProfile = checkSession.data;
+  const user : UserProfile = data;
 
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -41,9 +41,9 @@ export default function ProfileComponent({ userId } : {userId : string}) {
         {/* Cover Image */}
         <div className="h-48 bg-amber-200 rounded-t-lg" >
             { 
-              user.backGroundUrl ?
+              user.backgroundUrl ?
               <Image
-                  src={ user.backGroundUrl }
+                  src={ user.backgroundUrl }
                   alt= "user background"
               /> : null
             }
@@ -69,7 +69,10 @@ export default function ProfileComponent({ userId } : {userId : string}) {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <ButtonEditProfile userId = {userId}/>
+
+                  {/* Button for mutation */}
+                  <ButtonEditProfile user = {user}/>
+
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button size="icon" variant="ghost"  className=" hover:cursor-pointer">

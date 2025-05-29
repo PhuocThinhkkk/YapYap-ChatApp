@@ -11,7 +11,7 @@ export type UserDB = {
     avatarUrl? : string,
     role? : string,
     bio? : string,
-    backGroundUrl? : string
+    backgroundUrl? : string
 }
 
 
@@ -29,6 +29,7 @@ export type MessageDB = {
 
 
 export type UserProfile = {
+    _id : string,
     name: string ,
     email: string ,
     roomsOwnLen: number,
@@ -39,7 +40,7 @@ export type UserProfile = {
     avatarUrl? : string,
     role? : string,
     bio? : string,
-    backGroundUrl? : string
+    backgroundUrl? : string
 }
 
 export type ContactFormData = z.infer<typeof formSchema>;
