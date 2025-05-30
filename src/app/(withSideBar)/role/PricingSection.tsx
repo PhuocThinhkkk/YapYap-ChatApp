@@ -1,11 +1,13 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useQuery } from "@tanstack/react-query"
 import { Check, } from "lucide-react"
 import { useState, useEffect } from "react"
+import Cookies from "js-cookie"
 
     type CardPlan = {
-        title : string,
+        title : "Free Plan" | "Premium Plan",
         description : string,
         price : number,
         time : "Day" | "Month" | "Year",
@@ -51,18 +53,40 @@ import { useState, useEffect } from "react"
     buttonText : "Start Premium Trial"
   }
 
-const PricingSection = () => {
+
+const PricingSection = ( ) => {
+    const [userId, setUserId] = useState<string | undefined>(undefined)
     const [isVisible, setIsVisible] = useState(false)
-        useEffect(() => {
-            setIsVisible(true)
-        }, [])
+    useEffect(() => {
+        setIsVisible(true)
+        const id = (JSON.parse(Cookies.get("user") as string))._id
+        setUserId(id)
+    }, []);
+    const UserQuery = useQuery({
+        queryKey: ['UserInfor'],
+        enabled: !!userId,
+        queryFn: async () => {
+        const response = await fetch(`/api/users/${userId}/profile`)
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Network response was not ok')
+            }
+            return data;
+        },
+    })
+    const user = UserQuery.data;
+    console.log("user id: ",userId)
+    
+    if (UserQuery.error) {
+        return
+    }
     return (
             
         <section className="py-4">
             <div className="container mx-auto px-4">
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <PricingCard plan={FreePlan} isVisible={isVisible}/>
-                    <PricingCard plan={PremiumPlan} isVisible={isVisible}/>
+                    <PricingCard userPlan={user?.role} plan={FreePlan} isVisible={isVisible}/>
+                    <PricingCard userPlan={user?.role} plan={PremiumPlan} isVisible={isVisible}/>
                 </div>
             </div>
         </section>
@@ -73,10 +97,12 @@ export default PricingSection
 
 function PricingCard({ 
     plan, 
-    isVisible 
+    isVisible,
+    userPlan, 
 } : {
     plan : CardPlan, 
-    isVisible : boolean
+    isVisible : boolean,
+    userPlan : string | undefined,
 }){
     return(
         <Card className={`relative border-2 hover:shadow-lg 
@@ -104,10 +130,22 @@ function PricingCard({
                 </ul>
             </CardContent>
             <CardFooter className="h-full items-end">
-                <Button className="w-full " variant="outline">
-                    {plan.buttonText}
-                </Button>
+                { 
+                    userPlan == plan.title ? 
+                    <ButtonCurrentPlan/> : 
+                    <Button className="w-full hover:cursor-pointer " variant="outline">
+                        {plan.buttonText}
+                    </Button>
+                }
             </CardFooter>
         </Card>
+    )
+}
+
+function ButtonCurrentPlan(){
+    return(
+        <Button className=" w-full hover:bg-amber-100 bg-amber-100 text-cyan-800">
+            You are using this
+        </Button>
     )
 }

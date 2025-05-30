@@ -1,7 +1,8 @@
 
 import { UIError } from '@/components/ui-error'
 import { getUserInSession } from "@/lib/auth"
-import UserProfilePage from './UserProfilePage';
+import ProfileComponent from './UserProfile';
+
 
 
 
@@ -12,7 +13,7 @@ const Page = async () => {
   }
   return (
     <> 
-      <UserProfilePage userId={user._id}/>
+      <ProfileComponent userId={user._id}/>
     </>
  
   )
