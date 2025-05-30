@@ -50,14 +50,15 @@ export function Area_Chart() {
       const res = await fetch("/api/session")
       const data = await res.json();
       console.log("hello")
-      if(res.status != 200) {
+      if(!res.ok) {
+        console.error(`${res.status}`)
         return
       }
       console.log("user payload: ",data)
-      if (!data.userId) {
+      if (!data._id) {
         return
       }
-      const res2 = await fetch(`/api/users/${data.userId}/dashboard/area-chart`, {
+      const res2 = await fetch(`/api/users/${data._id}/dashboard/area-chart`, {
         cache: 'no-store'
       })
       if (res2.status != 200) {
