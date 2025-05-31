@@ -2,6 +2,7 @@
   "name": "fsnextjs",
   "version": "1.0.0",
   "private": true,
+   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -57,6 +58,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "tailwindcss": "^4.0.17",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "overrides": {
