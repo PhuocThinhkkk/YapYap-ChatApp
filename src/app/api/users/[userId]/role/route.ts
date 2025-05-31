@@ -6,7 +6,7 @@ import connectDB from "@/lib/mongoDb";
 
 
 export async function POST (req : NextRequest, { params } : {params: Promise<{userId: string}>}){
-    const userRole = await req.json()
+    const userRole = req.body
     const { userId } = await params;
     await connectDB();
     const userdb = await User.findById(userId).lean();
@@ -21,6 +21,7 @@ export async function POST (req : NextRequest, { params } : {params: Promise<{us
     User.findByIdAndUpdate(user._id, 
         {$set : {role : userRole}}
     )
+    console.log("hi")
 
     return NextResponse.json( {message: "success!"}, { status: 200 } )
 

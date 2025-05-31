@@ -114,7 +114,10 @@ function PricingCard({
             if (!user) {
                 throw new Error("Please sign in to continue.");
             }   
-            const res = await fetch(`/api/users/${user?._id}/role`);
+            const res = await fetch(`/api/users/${user?._id}/role`, {
+                method: "POST",
+                body: plan.title ,
+            });
             const data = await res.json()
             if (!res.ok) {
                 throw new Error(`There is something wrong: ${data.message}` || 'Network response was not ok')
