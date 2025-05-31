@@ -1,19 +1,27 @@
-
+'use client'
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Toaster } from "@/components/ui/sonner";
+
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const queryClient = new QueryClient()
   return (
     <> 
       <SidebarProvider>
           <AppSidebar />
           <SidebarInset>
-            {children}
+            <QueryClientProvider client={queryClient}>
+              {children}
+              </QueryClientProvider>
           </SidebarInset>
       </SidebarProvider>
       <Toaster />

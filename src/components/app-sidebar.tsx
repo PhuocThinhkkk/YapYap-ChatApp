@@ -1,4 +1,4 @@
-import { Calendar, Home,  LayoutDashboardIcon, MessageCircleCodeIcon, Search, Settings } from "lucide-react"
+import { RocketIcon, Home,  LayoutDashboardIcon, MessageCircleCodeIcon, Search, Settings } from "lucide-react"
 
 import {
   Sidebar,
@@ -24,9 +24,9 @@ const items = [
     icon: MessageCircleCodeIcon,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Pricing",
+    url: "/role",
+    icon: RocketIcon,
   },
   {
     title: "Search",
