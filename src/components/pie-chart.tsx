@@ -48,10 +48,10 @@ export function Component() {
         return
       }
       console.log("user payload: ",data)
-      if (!data.userId) {
+      if (!data._id) {
         return
       }
-      const res2 = await fetch(`/api/users/${data.userId}/dashboard/pie-chart`, {
+      const res2 = await fetch(`/api/users/${data._id}/dashboard/pie-chart`, {
         cache: 'no-store'
       })
       if (res2.status != 200) {
