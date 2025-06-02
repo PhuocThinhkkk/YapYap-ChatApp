@@ -1,20 +1,23 @@
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import User from "@/schema/user";
-import { getUserInSession } from "@/lib/auth";
-import { UserDB } from "@/type";
+import { getUserIdInSession } from "@/lib/session";
+import connectDB from "@/lib/mongoDb";
 
 
-export async function GET (req : NextRequest, { params } : {params: Promise<{userId: string}>}){
-    const { userId } = await params;
-    const userdb = await User.findById(userId).lean();
-    if (!userdb) {
-        return NextResponse.json( { message: "user not found!" } , { status: 400 } )
+export async function GET (){
+    try{
+        const userIdInSession : string | null = await getUserIdInSession();
+        if(!userIdInSession) return NextResponse.json({message: 'you dont have session.'}, {status: 401})
+        
+        await connectDB();
+        const user = await User.findById(userIdInSession);
+        if (!user || user.role != "Admin") {
+            throw new Error("unauthorized")
+        }
+        const users = await User.find();
+        return NextResponse.json( users, { status: 200 } )
+    }catch(e){
+        return NextResponse.json( {message: `${e}`}, { status: 200 } )
     }
-    
-    const userInSession = await getUserInSession();
-    if(!userInSession) return NextResponse.json({message: 'you dont have session.'}, {status: 401})
-    const user : UserDB = JSON.parse(JSON.stringify(userdb));
-    return NextResponse.json( user, { status: 200 } )
-
 }

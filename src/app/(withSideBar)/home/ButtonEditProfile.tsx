@@ -29,7 +29,8 @@ import { Edit, ImageIcon } from "lucide-react"
 import { useState } from "react";
 import { toast } from "sonner"
 import { 
-  useMutation
+  useMutation,
+  useQueryClient
 
 } from "@tanstack/react-query";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -109,6 +110,7 @@ export const formSchema = z.object({
 });
 
 function FormAction({ user } : {user : UserProfile}){
+  const clientQuery = useQueryClient();
   const [currentAvatarImg, setCurrentAvatarImg] = useState<ContactFormData["avatarImg"] | null >(null)
   const [currentBackgroundImg, setCurrentBackgroundImg] = useState<ContactFormData["backgroundImg"] | null >(null)
   const mutaion = useMutation(
@@ -116,6 +118,8 @@ function FormAction({ user } : {user : UserProfile}){
       mutationFn: updateUser,
       onSuccess: () => {
         toast.success(`Your changes have been success. `);
+        clientQuery.invalidateQueries({ queryKey: ["UserInfor"] });
+
       },
       onError: (err)=>{
         toast.error(`${err}`);

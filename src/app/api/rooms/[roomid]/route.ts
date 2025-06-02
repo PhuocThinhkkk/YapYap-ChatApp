@@ -1,9 +1,9 @@
 export const dynamic = 'force-dynamic'
-
 import  { NextResponse, type NextRequest } from "next/server";
 import connectDB from "@/lib/mongoDb";
-import Room from "@/schema/room";
-import { protectRoom } from "@/lib/protectRoom";
+import User from "@/schema/user";
+import { getUserIdInSession } from "@/lib/session";
+
 
 
 
@@ -13,16 +13,25 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{roo
     console.log("room id ", roomid)
     await connectDB()
     
-    const authorization = await protectRoom(roomid);
-    if(authorization != "success"){
-      console.log("authorization failed")
-      return NextResponse.json({message : authorization}, {status : 401});
+    const userIdInSession = getUserIdInSession()
+    if (!userIdInSession) {
+      return NextResponse.json({message : " no room like this "}, {status : 400});
     }
-    console.log("authorization success")
-    const roomData = await Room.findById(roomid);
-    if( !roomData ) return NextResponse.json({message : " no room like this "}, {status : 400});
-    console.log(roomData)
-    return NextResponse.json(roomData, {status: 200})
+    
+    const user = await User.findById(userIdInSession)
+    .populate(
+      {
+        path: "rooms",
+        match: {_id : roomid}
+      }
+    )
+    if (!user?.rooms) {
+      return NextResponse.json({message : " unauthorize. "}, {status : 400});
+    }
+
+    const roomsData = user.rooms;
+    console.log(roomsData)
+    return NextResponse.json(roomsData, {status: 200})
 
   }catch(err){
     console.log("error when getting room's roomData :", err);

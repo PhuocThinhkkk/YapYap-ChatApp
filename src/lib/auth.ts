@@ -1,11 +1,10 @@
-
 import 'server-only'
 import connectDB from './mongoDb';
 import { getSession, decrypt } from './session';
 import User from '@/schema/user';
 import { UserDB } from '@/type';
 
-export async function getUserInSession(){
+export async function getUserDbInSession(){
   const session = await getSession();
   if(!session) return null
   const payload = await decrypt(session)

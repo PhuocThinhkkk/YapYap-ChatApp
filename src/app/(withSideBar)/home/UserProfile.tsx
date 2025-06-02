@@ -17,7 +17,7 @@ import { UIError } from '@/components/ui-error'
 
 export default function ProfileComponent({ userId } : {userId : string}) {
   const { data , status, error }  = useQuery({ 
-    queryKey: ['UserInfo'],
+    queryKey: ['UserInfor'],
     queryFn: async () => {
       const response = await fetch(`/api/users/${userId}/profile`)
         const data = await response.json();

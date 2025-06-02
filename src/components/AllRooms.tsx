@@ -3,12 +3,12 @@ import { cn } from "@/lib/utils"
 import ButtonJoinRoom from "@/components/ButtonJoinRoom"
 import { Avatar } from "@radix-ui/react-avatar"
 import { AvatarFallback } from "@/components/ui/avatar"
-import { redirect } from "next/navigation";
 import connectDB from "@/lib/mongoDb"
 import Room from "@/schema/room"
 import User from "@/schema/user"
-import { getUserInSession } from "@/lib/auth";
+import { getUserIdInSession } from "@/lib/session";
 import { cookies } from "next/headers"
+import { UIError } from "./ui-error"
 
 
 
@@ -21,27 +21,25 @@ interface ROOM {
   createdAt: Date;
 }
 
-
+export const revalidate = 180
 
 const AllRooms = async () => {
     await cookies();
     await connectDB();
-    const leader = await getUserInSession();
-    if(!leader) {
-      console.log("no user in cookies")
-      redirect('/sign-in')
+    const userIdInSession = await getUserIdInSession();
+    if(!userIdInSession) {
+      console.log("unauthorize")
+      return <UIError className="w-full text-center" title="Please sign in to see this page"/>
     }
    
-    console.log("user cookies : ",leader)
-  
-    const leaderId = leader._id;
-  
-    const roomIdDb : ROOM[] = await Room.find({ users : leaderId });
+    console.log("user cookies : ",userIdInSession)
+
+    const roomIdDb : ROOM[] = await Room.find({ users : userIdInSession });
     console.log("roomIdDb :",roomIdDb)
-  
-    const user  = await User.findById(leaderId)
+    
+    const user  = await User.findById(userIdInSession)
     if(!user) {
-      return
+      return <UIError className="w-full text-center" title="There is something wrong "/>
     }
     let isChange : boolean = false;
     const rooms : string[] = user.rooms;
@@ -52,7 +50,7 @@ const AllRooms = async () => {
       if(room) {
         roomsFull.push(room);
       }
-      if(room && room.leaderId == leaderId && !roomsOwn.toString().includes(room._id)){
+      if(room && room.leaderId == userIdInSession && !roomsOwn.toString().includes(room._id)){
         roomsOwn.push(room._id);
         isChange = true;
       }
@@ -82,7 +80,7 @@ const AllRooms = async () => {
       
   
     if(isChange) {
-      await User.updateOne({ _id: leaderId }, { $set: { rooms, roomsOwn } });
+      await User.updateOne({ _id: userIdInSession }, { $set: { rooms, roomsOwn } });
       console.log("rooms after update :",rooms)
     }
 

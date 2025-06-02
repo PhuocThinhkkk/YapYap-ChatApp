@@ -8,7 +8,7 @@ import { UserDB, UserProfile } from "@/type";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { getUserInSession } from "@/lib/auth";
+import { getUserIdInSession } from "@/lib/session";
 
 export async function POST(request: NextRequest, { params } : {params: Promise<{userId: string}>}) {
   try {
@@ -18,10 +18,11 @@ export async function POST(request: NextRequest, { params } : {params: Promise<{
     if (!userInParams) {
       return NextResponse.json({message: "No user like this. "}, { status: 404 });
     }
-    const user = await getUserInSession();
-    if (!user || user._id !== userIdParams) {
+    const userIdInSession = await getUserIdInSession();
+    if (userIdInSession !== userIdParams) {
       return NextResponse.json({message: "Unathorize! "}, { status: 401 });
     }
+
     const data = await request.formData();
     const avatarfile = data.get("avatarImg")
     const backgroundfile = data.get("backgroundImg");
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest, { params } : {params: Promise<{
       url = await pinata.gateways.public.convert(cid);
 
       await User.updateOne(
-        {_id : user._id},
+        {_id : userIdInSession},
         { $set: {avatarUrl : url}}
       )
     }
@@ -52,19 +53,19 @@ export async function POST(request: NextRequest, { params } : {params: Promise<{
       url = await pinata.gateways.public.convert(cid);
 
       await User.updateOne(
-        {_id : user._id},
+        {_id : userIdInSession},
         { $set: { backgroundUrl: url } }
       )
     }
     if (userName) {
       await User.updateOne(
-        {_id : user._id},
+        {_id : userIdInSession},
         { $set: {name: userName}}
       )
     }
     if (userBio) {
       await User.updateOne(
-        {_id : user._id},
+        {_id : userIdInSession},
         { $set: {bio: userBio}}
       )
     }

@@ -1,9 +1,9 @@
 export const dynamic = 'force-dynamic'
-
 import  { NextResponse, type NextRequest } from "next/server";
 import MESSAGE from "@/schema/message";
 import connectDB from "@/lib/mongoDb";
-import { protectRoom } from "@/lib/protectRoom";
+import { getUserIdInSession } from "@/lib/session";
+import User from "@/schema/user";
 
 
 export async function GET( req : NextRequest , {params} : {params : Promise<{roomid : string}>}){
@@ -12,11 +12,19 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{roo
     console.log("room id ", roomid)
     await connectDB();
 
-    const authorization = await protectRoom(roomid);
-    if(authorization != "success"){
-      return NextResponse.json({message : authorization}, {status : 401});
+    const userIdInSession = getUserIdInSession();
+    if (!userIdInSession) {
+      return NextResponse.json({messages: "Unauthorize."}, {status : 400});
     }
     
+    const user = await User.findById(userIdInSession).populate({
+      path: "rooms",
+      match: {_id : roomid },
+    })
+    if (user?.rooms.length === 0) {
+      return NextResponse.json({messages: "Unauthorize."}, {status : 400});
+    }
+
     const messages = await MESSAGE.find({ roomId : roomid });
     if(messages.length === 0 ) return NextResponse.json({messages: "no data in this room"}, {status : 400});
     console.log(messages)

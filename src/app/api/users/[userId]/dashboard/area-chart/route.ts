@@ -6,26 +6,8 @@ import User from "@/schema/user";
 import MESSAGE from "@/schema/message";
 import dayjs from 'dayjs'
 import { NextRequest, NextResponse } from "next/server";
-import { getUserInSession } from "@/lib/auth";
-
-
-interface Message {
-    _id : string,
-    userId : string,
-    roomNamw : string,
-    roomId : string,
-    createdAt : Date,
-    infor : string,
-}
-
-
-interface roomMessageChartData {
-    date: string,
-    dayInWeek: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday"| "Sunday",
-    yourRoom: number,
-    orthersRoom: number,
-}
-  
+import { getUserIdInSession } from "@/lib/session";
+import { roomMessageChartData, MessageDB } from "@/type"
 
 const dayWeek = ["Sunday","Monday" , "Tuesday" , "Wednesday" , "Thursday" , "Friday" , "Saturday"] as const
 
@@ -33,15 +15,16 @@ const dayWeek = ["Sunday","Monday" , "Tuesday" , "Wednesday" , "Thursday" , "Fri
 export async function  GET( res : NextRequest, { params } : {params: Promise<{userId: string}>}){
     const { userId } = await params;
     
-    const userCookie = await getUserInSession();
+    const userIdInSession = await getUserIdInSession();
     
-    if ( !userCookie || !userId || !userCookie?._id || !(userCookie._id == userId) ) {
-        NextResponse.json({message: "Unauthorized"}, {status: 401});
+    if (  (userIdInSession != userId) ) {
+
+        return NextResponse.json({message: "Unauthorized"}, {status: 401});
     }
     await connectDB();
     
     const user = await User.findById(userId);
-    if(!user) return
+    if(!user) return NextResponse.json({message: "No user like this in database."}, {status: 401});
 
     const rooms : string[] = user.rooms;
     const roomsOwn : string[] = user.roomsOwn;
@@ -54,7 +37,7 @@ export async function  GET( res : NextRequest, { params } : {params: Promise<{us
     }
 
     const sevenDaysAgo = dayjs().subtract(7, 'day').toDate();
-    const allMessage : Message[] = await MESSAGE.find({userId, createdAt: {$gte : sevenDaysAgo}})
+    const allMessage : MessageDB[] = await MESSAGE.find({userId, createdAt: {$gte : sevenDaysAgo}})
     if (allMessage.length == 0) {
         return NextResponse.json({message: "You havent have any messages in the last 7 days."}, {status: 404});
     }
@@ -91,6 +74,7 @@ export async function  GET( res : NextRequest, { params } : {params: Promise<{us
             chartDataMap[dateStr].orthersRoom += 1;
         }
     }
+
     const chartDataArray : roomMessageChartData[] = Object.values(chartDataMap);
     return NextResponse.json(chartDataArray, {status: 200})
 

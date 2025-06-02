@@ -16,13 +16,22 @@ export type UserDB = {
 
 
 export type MessageDB = {
-	_id?: string
+	_id : string
 	userId: string,
 	roomName: string,
 	roomId: string,
-	createdAt?: Date,
+	createdAt : Date,
 	info: string;
 }
+
+//for area chart
+export type roomMessageChartData = {
+    date: string,
+    dayInWeek: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday"| "Sunday",
+    yourRoom: number,
+    orthersRoom: number,
+}
+  
 
 
 

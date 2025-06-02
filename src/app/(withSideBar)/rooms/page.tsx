@@ -3,7 +3,7 @@ import ButtonCreateRoom from "@/components/ButtonCreateRoom"
 import SearchRoom from "@/components/SearchRoom";
 import AllRooms from "@/components/AllRooms";
 import { Suspense } from "react";
-import RoomsLoadingSkeleton from "./loading";
+import { RoomsLoadingSkeleton }from "@/components/RoomsLoadingSkeleton";
 
 const Page = () => {
   return (

@@ -1,6 +1,4 @@
-
 import 'server-only'
-
 import { SignJWT, jwtVerify } from 'jose'
 import { SessionPayload } from './definitions'
 import { cookies } from 'next/headers'
@@ -78,3 +76,11 @@ export async function deleteSession() {
   cookieStore.delete('session')
 }
 
+
+export async function getUserIdInSession() : Promise<string | null>{
+  const session = await getSession();
+  if(!session) return null
+  const payload = await decrypt(session) 
+  if(!payload) return null
+  return payload.userId  as string
+}

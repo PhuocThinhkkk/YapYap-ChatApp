@@ -5,6 +5,7 @@ import Room from "@/schema/room"
 import { createSession, getSession } from "./lib/session"
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache";
 
 
 export const createUser = async (_prevState : unknown ,formData : FormData) =>{
@@ -140,6 +141,7 @@ export async function SearchRoom (_prevState : unknown , formData: FormData) : P
   }
   await Room.updateOne({ roomName }, { $addToSet: { users: userId } })
   console.log("You have joined the room")
+  revalidatePath('/rooms')
   redirect('/rooms')
 
 }

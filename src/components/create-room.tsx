@@ -69,8 +69,8 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
     const res = await response.json();
 
 
-    if(response.status !== 200) {
-      return alert(`${res.message}`)
+    if( !response.ok ) {
+      throw new Error(`${res.message}`)
     }
     router.push('/rooms')
     // Redirect to the newly created chat room (this is just a placeholder)

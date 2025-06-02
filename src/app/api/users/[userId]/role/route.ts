@@ -1,28 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/schema/user";
-import { getUserInSession } from "@/lib/auth";
-import { UserDB } from "@/type";
+import { getUserIdInSession } from "@/lib/session";
 import connectDB from "@/lib/mongoDb";
 
 
 export async function POST (req : NextRequest, { params } : {params: Promise<{userId: string}>}){
-    const userRole = req.body
-    const { userId } = await params;
-    await connectDB();
-    const userdb = await User.findById(userId).lean();
-    if (!userdb) {
-        return NextResponse.json( { message: "user not found!" } , { status: 400 } )
+    try{
+        const userRole = await req.json();
+        console.log("role : ", userRole);
+        const { userId } = await params;
+        await connectDB();
+        const userDdInSession = await getUserIdInSession();
+        if(!userDdInSession) return NextResponse.json({message: 'you dont have session.'}, {status: 401})
+        if(userDdInSession != userId) return NextResponse.json({message: 'You are not alow to do this'}, {status: 401})
+            
+        const result = await User.updateOne( 
+            {_id : userId}, 
+            { $set : {role : userRole} } 
+        )
+        console.log("result update db: ", result)
+        return NextResponse.json({message: "success!"}, { status: 200 })
+    }catch(e){
+        return NextResponse.json( {message: `There is something wrong: ${e}`}, { status: 500 } )
     }
-    const user : UserDB = JSON.parse(JSON.stringify(userdb));
-    const userInSession = await getUserInSession();
-    if(!userInSession) return NextResponse.json({message: 'you dont have session.'}, {status: 401})
-    if(userInSession._id != user._id) return NextResponse.json({message: 'You are not alow to do this'}, {status: 401})
-    
-    User.findByIdAndUpdate(user._id, 
-        {$set : {role : userRole}}
-    )
-    console.log("hi")
-
-    return NextResponse.json( {message: "success!"}, { status: 200 } )
-
 }

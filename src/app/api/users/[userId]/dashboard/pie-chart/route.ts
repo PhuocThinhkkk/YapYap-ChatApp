@@ -1,40 +1,32 @@
 export const dynamic = 'force-dynamic'
-
-import { getUserInSession } from "@/lib/auth";
+import { getUserIdInSession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/schema/user";
 import MESSAGE from "@/schema/message";
 import Room from "@/schema/room";
 import connectDB from "@/lib/mongoDb";
-
-interface Message {
-    _id : string,
-    userId : string,
-    roomName : string,
-    roomId : string,
-    createdAt : Date,
-    infor : string,
-}
-
+import { MessageDB } from "@/type";
 
 
 export async function GET (req : NextRequest, {params}:  { params : Promise<{userId : string}>}) {
     try{
         const { userId } = await params;
-        const userIdSession = await getUserInSession()
+        const userIdSession = await getUserIdInSession()
 
-        if(!userIdSession || userId != userIdSession._id) {
+        if(userId != userIdSession) {
             return NextResponse.json({message: "unauthorized "}, {status: 400})
         }
         await connectDB()
         const user = await User.findById(userId);
+        if(!user) {
+            return NextResponse.json({message: "unauthorized "}, {status: 400})
+        }
+
         const arrUserRooms : string[] = user.roomsOwn;
         if(arrUserRooms.length == 0) return NextResponse.json({message: "create a room to see data."}, {status: 400})
 
            
         const letters = '0123456789ABCDEF';
-
-        
         const result = [];
         
         for (let i = 0; i < arrUserRooms.length; i++) {
@@ -44,7 +36,7 @@ export async function GET (req : NextRequest, {params}:  { params : Promise<{use
             }
 
             let count ;
-            const messages : Message[] | null = await MESSAGE.find({roomId : arrUserRooms[i]})
+            const messages : MessageDB[] | null = await MESSAGE.find({roomId : arrUserRooms[i]})
             if(!messages) count = 0;
             else{
                 count = messages.length
