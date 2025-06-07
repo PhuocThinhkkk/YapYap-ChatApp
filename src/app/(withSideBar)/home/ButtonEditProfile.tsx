@@ -39,12 +39,18 @@ import { Placeholder } from "@/components/Placeholder";
 
 
 export default function ButtonEditProfile({ user } : {user : UserProfile}) {
+  const [isOpen, setIsOpen] = useState(false)
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="hover:cursor-pointer">
+        <Button 
+          onClick={() => {
+            setIsOpen(true)
+          }} 
+          size="sm" variant="outline" 
+          className="hover:cursor-pointer">
           <Edit className="mr-2 h-4 w-4" />
-          Edit Profile
+            Edit Profile
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
@@ -53,7 +59,7 @@ export default function ButtonEditProfile({ user } : {user : UserProfile}) {
           <DialogDescription>Makes changes to your profile here. Click save to save your changes.</DialogDescription>
         </DialogHeader>
         
-        <FormAction user={user}/>
+        <FormAction user={user} setIsOpen={setIsOpen}/>
  
       </DialogContent> 
     </Dialog>
@@ -109,7 +115,7 @@ export const formSchema = z.object({
     ),
 });
 
-function FormAction({ user } : {user : UserProfile}){
+function FormAction({ user, setIsOpen } : {user : UserProfile, setIsOpen : ( bool : boolean )  => void}){
   const clientQuery = useQueryClient();
   const [currentAvatarImg, setCurrentAvatarImg] = useState<ContactFormData["avatarImg"] | null >(null)
   const [currentBackgroundImg, setCurrentBackgroundImg] = useState<ContactFormData["backgroundImg"] | null >(null)
@@ -118,6 +124,7 @@ function FormAction({ user } : {user : UserProfile}){
       mutationFn: updateUser,
       onSuccess: () => {
         toast.success(`Your changes have been success. `);
+        setIsOpen(false)
         clientQuery.invalidateQueries({ queryKey: ["UserInfor"] });
 
       },
@@ -151,9 +158,12 @@ function FormAction({ user } : {user : UserProfile}){
 
 
       const formData = new FormData();
-  
-      formData.append("avatarImg", data?.avatarImg?.[0]);
-      formData.append("backgroundImg", data?.backgroundImg?.[0]);
+      if (data?.avatarImg?.[0]) {
+        formData.append("avatarImg", data?.avatarImg?.[0]);  
+      }
+      if (data?.backgroundImg?.[0]) {
+        formData.append("backgroundImg", data?.backgroundImg?.[0]); 
+      }
       formData.append("userBio", data.userBio)
       formData.append("userName", data.userName)
       

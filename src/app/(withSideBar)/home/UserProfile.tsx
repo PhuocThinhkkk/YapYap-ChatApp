@@ -39,18 +39,21 @@ export default function ProfileComponent({ userId } : {userId : string}) {
     <div className="w-full max-w-7xl mx-auto">
       <Card className="border-none shadow-none ">
         {/* Cover Image */}
-        <div className="h-48 bg-amber-200 rounded-t-lg" >
-            { 
-              user.backgroundUrl ?
-              <Image
-                  src={ user.backgroundUrl }
-                  alt= "user background"
-              /> : null
-            }
+        <div className="h-48 bg-amber-200 rounded-t-lg relative">
+          {user.backgroundUrl ? (
+            <Image
+              src={user.backgroundUrl }
+              alt="user background"
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+            />
+          ) : null}
         </div>
 
         {/* Profile Header */}
-        <div className=" px-6">
+        <div className="py-4 px-6">
           <div className="flex flex-col sm:flex-row gap-6 -mt-12 sm:-mt-16">
             <Avatar className="relative bottom-5 h-24 w-24 sm:h-32 sm:w-32 rounded-full border-4 border-background bg-blue-100">
               <AvatarImage
