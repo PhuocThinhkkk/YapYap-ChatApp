@@ -4,6 +4,12 @@ import SearchRoom from "@/components/SearchRoom";
 import AllRooms from "@/components/AllRooms";
 import { Suspense } from "react";
 import { RoomsLoadingSkeleton }from "@/components/RoomsLoadingSkeleton";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card"
+import {  Plus } from "lucide-react";
+import UserIconSignIn from "@/components/UserIconSignIn";
 
 const Page = () => {
   return (
@@ -12,19 +18,43 @@ const Page = () => {
     <header className="relative flex h-18 items-center border-b px-4">
       <SidebarTrigger className="md:hidden" />
       <h1 className="ml-2 text-lg font-semibold">Rooms</h1>
-      <div className="absolute right-7 h-full  top-4">
-        <ButtonCreateRoom/>
+      <div className="absolute right-8">
+        <UserIconSignIn/>
       </div>
     </header>
 
+
+    <div className="mb-8 flex items-center justify-between">
+      <Card className="w-full mb-8 border-0 shadow-xl bg-gradient-to-r from-white to-slate-50">
+        <CardContent className=" pb-4 px-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-semibold text-slate-900 mb-2">Quick Join</h2>
+            <p className="text-slate-600">Enter a room name or browse available rooms below</p>
+          </div>
+          <SearchRoom/>
+        {/* Create Room Section */}
+        <div className="text-center">
+          <div className="w-2xl inline-flex justify-between items-center p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                <Plus className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <div className="text-left">
+              <h3 className="font-semibold text-slate-900">Start Your Own Room</h3>
+              <p className="text-sm text-slate-600">Create a space for your community</p>
+            </div>
+           <ButtonCreateRoom/>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+    </div>
+    
+    
+
     <div className="space-y-8">
       
-      <p className="m-4 text-center text-3xl font-bold "> Enter your rooms name:</p>
-      <div className="flex justify-center min-w-full">
-          <div className="relative w-4/5 lg:w-2/3 h-12 mx-auto">
-            <SearchRoom/>
-          </div>
-      </div>
       <Suspense fallback={<RoomsLoadingSkeleton/>}>
         <AllRooms/>
       </Suspense>

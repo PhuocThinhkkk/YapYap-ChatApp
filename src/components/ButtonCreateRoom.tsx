@@ -1,10 +1,19 @@
-
+"use client"
 import { Button } from "@/components/ui/button"
 import  Link  from "next/link"
+import { Plus } from "lucide-react"
+import { useState } from "react"
 
 const ButtonCreateRoom = () => {
+  const [isLoading, setIsLoading] = useState(false)
   return (
-    <Link href={"/create-room"}><Button className=" h-3/5 w-24 font-bold bg-blue-700 text-xs hover:bg-blue-900 hover:cursor-pointer" > Create room</Button>
+    <Link href={"/create-room"} onClick={()=>{
+      setIsLoading(true)
+      }}>
+      <Button disabled={isLoading} className="hover:cursor-pointer bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+        <Plus className="w-4 h-4 mr-2" />
+        Create room
+      </Button>
     </Link>
     
   )

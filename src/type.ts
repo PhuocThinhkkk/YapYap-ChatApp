@@ -53,3 +53,13 @@ export type UserProfile = {
 }
 
 export type ContactFormData = z.infer<typeof formSchema>;
+
+
+export type RoomDb = {
+  _id: string;
+  roomName: string;
+  maxPeople: number,
+  leaderId: string;
+  users: string[];
+  createdAt: Date;
+}

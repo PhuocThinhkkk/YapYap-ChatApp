@@ -8,18 +8,22 @@ import { useState } from "react";
 const SearchRoom = () => {
     const [roomName, setRoomName] = useState<string>("");
   return (
-    <div className="grid grid-cols-7 gap-4 items-center relative w-full h-12 ">
-        <MessageCircle className="absolute left-3 top-1/2 h-6 w-6 -translate-y-1/2 text-muted-foreground" ></MessageCircle>
+ 
+  <div className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto mb-6">
+      <div className="relative flex-1">
+        <MessageCircle className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" ></MessageCircle>
         <Input
         type="text"
         placeholder="Rooms name: "
-        className="col-span-5 lg:col-span-6 pl-10 w-full h-full"
+        className="pl-12 h-14 text-lg border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 bg-white"
         value={roomName}
         onChange={(e) => setRoomName(e.target.value)}
         name="roomName"
         />
-        <JoinRoomPopup  roomName={roomName} />
-    </div>
+      </div>
+      <JoinRoomPopup  roomName={roomName} />
+  </div>
+
   )
 }
 

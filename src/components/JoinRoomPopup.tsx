@@ -12,6 +12,7 @@ import { useActionState, useState } from "react"
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SearchRoom } from '@/actions'
+import { Search } from "lucide-react"
 
 const initialState = {
     message: '',
@@ -36,7 +37,10 @@ const JoinRoomPopup = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange} >
         <DialogTrigger asChild>
-            <Button variant="outline" className='bg-blue-500 text-white px-4 py-2 rounded-md hover:cursor-pointer' >Join</Button>
+            <Button variant="outline" className='hover:cursor-pointer h-14 w-30 px-8 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white' >
+                <Search className="w-5 h-5 mr-2" />
+                Join
+            </Button>
         </DialogTrigger>
         {roomName ?
             (
