@@ -14,6 +14,20 @@ export type UserDB = {
     backgroundUrl? : string
 }
 
+export type UserCookie = {
+    _id : string;
+    name: string,
+    email: string ,
+    roomsOwnLength?: number,
+    roomsLength?: number,
+    createdAt : Date,
+    location? : string,
+    avatarUrl? : string,
+    role? : string,
+    bio? : string,
+    backgroundUrl? : string
+}
+
 
 export type MessageDB = {
 	_id : string

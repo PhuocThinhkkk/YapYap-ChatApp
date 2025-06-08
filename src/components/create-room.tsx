@@ -1,6 +1,5 @@
 "use client"
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -11,6 +10,10 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card } from "@/components/ui/card"
 import { useRouter } from 'next/navigation'
+import Cookie from "js-cookie"
+import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
+import { Shield } from "lucide-react"
 
 const formSchema = z.object({
   roomName: z
@@ -24,8 +27,40 @@ const formSchema = z.object({
   }),
 })
 
+const freeOptions = [
+  { value: "5", label: "5 people", description: "Small group" , tier: "free" },
+  { value: "10", label: "10 people", description: "Medium group" , tier: "free" },
+  
+]
+const premiumOptions = [
+  { value: "25", label: "25 people", description: "Large group", tier: "pro" },
+  { value: "50", label: "50 people", description: "Community", tier: "pro" },
+  { value: "100", label: "100 people", description: "Public room", tier: "pro" },
+]
+
+
 export function CreateChatForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const [isPremium, setIsPremium] = useState<boolean | null>(null)
+  const [isRedirect, setIsRedirect] = useState(false)
+
+  useEffect(()=>{
+    try {
+      const userCookie = Cookie.get('user')
+      if (!userCookie) {
+        throw new Error("Please sign in to continue")
+      }
+      const user = JSON.parse(userCookie);
+      if (!user?.role) {
+        throw new Error("Please sign in to continue")
+      }
+      setIsPremium(user.role != "Free Plan")
+    } catch (error) {
+      toast.error(`${error}`)
+    }
+    
+  },[])
+
   const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,8 +84,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
     const confirmPassword = values.confirmPassword;
     const maxPeople = values.maxPeople;
     if(password !== confirmPassword){
-      alert(`your confirm password didnt match!`)
-      throw "your confirm password didnt match!"
+      throw new Error( "your confirm password didnt match!" );
     }
   
     const room = {
@@ -154,33 +188,97 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="5">
-                      <div className="flex items-center">
-                        <Users className="mr-2 h-4 w-4" />
-                        <span>5 people</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="10">
-                      <div className="flex items-center">
-                        <Users className="mr-2 h-4 w-4" />
-                        <span>10 people</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="50">
-                      <div className="flex items-center">
-                        <Users className="mr-2 h-4 w-4" />
-                        <span>50 people</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="100">
-                      <div className="flex items-center">
-                        <Users className="mr-2 h-4 w-4" />
-                        <span>100 people</span>
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
+                      {freeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          <div className="flex items-center justify-between w-full">
+                            <div className="flex items-center">
+                              <Users className="mr-2 h-4 w-4" />
+                              <span>{option.label}</span>
+                            </div>
+                            <Badge variant="secondary" className="ml-2 text-xs">
+                              {option.description}
+                            </Badge>
+                          </div>
+                        </SelectItem>
+                      ))}
+
+                      {/* Show disabled options for free users */}
+                      {!isPremium ? (
+                        <>
+                          <SelectItem value="25" disabled>
+                            <div className="flex items-center justify-between w-full opacity-50">
+                              <div className="flex items-center">
+                                <Users className="mr-2 h-4 w-4" />
+                                <span>25 people</span>
+                              </div>
+                              <Badge variant="outline" className="ml-2 text-xs border-orange-200 text-orange-600">
+                                Pro Plan
+                              </Badge>
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="50" disabled>
+                            <div className="flex items-center justify-between w-full opacity-50">
+                              <div className="flex items-center">
+                                <Users className="mr-2 h-4 w-4" />
+                                <span>50 people</span>
+                              </div>
+                              <Badge variant="outline" className="ml-2 text-xs border-orange-200 text-orange-600">
+                                Pro Plan
+                              </Badge>
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="100" disabled>
+                            <div className="flex items-center justify-between w-full opacity-50">
+                              <div className="flex items-center">
+                                <Users className="mr-2 h-4 w-4" />
+                                <span>100 people</span>
+                              </div>
+                              <Badge variant="outline" className="ml-2 text-xs border-purple-200 text-purple-600">
+                                Enterprise
+                              </Badge>
+                            </div>
+                          </SelectItem>
+                        </>
+                      ) :  premiumOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          <div className="flex items-center justify-between w-full">
+                            <div className="flex items-center">
+                              <Users className="mr-2 h-4 w-4" />
+                              <span>{option.label}</span>
+                            </div>
+                            <Badge variant="secondary" className="ml-2 text-xs">
+                              {option.description}
+                            </Badge>
+                          </div>
+                        </SelectItem>
+                      ))
+                      }
+                    </SelectContent>
                 </Select>
                 <FormDescription>Choose how many people can join this chat room.</FormDescription>
+                {!isPremium && (
+                    <div className="mt-2 p-3 bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-lg">
+                      <div className="flex items-center gap-2 text-sm text-orange-700">
+                        <Shield className="w-4 h-4" />
+                        <span className="font-medium">Want larger rooms?</span>
+                      </div>
+                      <p className="text-xs text-orange-600 mt-1">
+                        Upgrade to Pro for up to 50 participants or Enterprise for up to 100 participants.
+                      </p>
+                      <Button 
+                        disabled={isRedirect}
+                        onClick={()=>{
+                          setIsRedirect(true);
+                          router.push("/role");
+                        }}
+                        variant="outline"
+                        size="sm"
+                        className="hover:cursor-pointer mt-2 h-7 text-xs border-orange-200 text-orange-600 hover:bg-orange-50"
+                      >
+                        Upgrade Now
+                      </Button>
+                    </div>
+                  )}
                 <FormMessage />
               </FormItem>
             )}

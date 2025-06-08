@@ -9,7 +9,7 @@ import {
   CardContent,
 } from "@/components/ui/card"
 import {  Plus } from "lucide-react";
-import UserIconSignIn from "@/components/UserIconSignIn";
+import UserIconWithSuspense from "@/components/UserIconWithSuspense";
 
 const Page = () => {
   return (
@@ -19,7 +19,7 @@ const Page = () => {
       <SidebarTrigger className="md:hidden" />
       <h1 className="ml-2 text-lg font-semibold">Rooms</h1>
       <div className="absolute right-8">
-        <UserIconSignIn/>
+        <UserIconWithSuspense/>
       </div>
     </header>
 

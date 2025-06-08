@@ -6,6 +6,7 @@ import { createSession, getSession } from "./lib/session"
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache";
+import { setUserInforInCookie } from "./lib/auth";
 
 
 export const createUser = async (_prevState : unknown ,formData : FormData) =>{
@@ -74,20 +75,17 @@ export const signIn = async (_prevState : unknown ,form : FormData) => {
 
   await createSession(UserExist._id.toString());
   console.log("user sign in successfully");
-  const cookieStore = await cookies();
+  
+  const user = JSON.parse(JSON.stringify(UserExist));
 
-  const UserCookie = ({...UserExist})._doc;
-
-  console.log("UserCookie :", UserCookie);
-  UserCookie.roomsLength = UserCookie.rooms.length;
-  UserCookie.roomsOwnLength = UserCookie.roomsOwn.length;
-  delete UserCookie.rooms;
-  delete UserCookie.password;
-  delete UserCookie.roomsOwn;
-
-  cookieStore.set('user', JSON.stringify(UserCookie))
-  console.log("User :", UserCookie);
+  console.log("user :", user);
+  const newUser = await setUserInforInCookie({user})
+  if ('message' in newUser) {
+    return newUser;
+  }
+  console.log("new User :", newUser);
   redirect("/");
+  
 }
 
 type res = {

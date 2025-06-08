@@ -12,6 +12,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST( req : NextRequest ) {
   try { 
+    const proPlan = [25, 50, 100];
     const room = await req.json()
     room.maxPeople = Number(room.maxPeople)
     console.log(room)
@@ -31,6 +32,13 @@ export async function POST( req : NextRequest ) {
     const userdb = await User.findById(userIdInSession);
     if(!userdb) return NextResponse.json({message: "no user in db. "}, {status: 400})
     
+    if (userdb.role == "Free Plan" ) {
+      for (let index = 0; index < proPlan.length; index++) {
+        if (room.maxPeople == proPlan[index]) {
+          return NextResponse.json({message: "Unauthorize."}, {status: 404})
+        }
+      }
+    }
 
     console.log("Creating room with:", {
       roomName: room.roomName,
@@ -49,12 +57,14 @@ export async function POST( req : NextRequest ) {
       users: [userIdInSession],
     });
 
+
     console.log("new room have been created successfully");
     revalidatePath("/rooms")
     return NextResponse.json({ ...res, status: 200 });
   }
   catch (error){
     console.error(error);
+    return NextResponse.json({message: error}, {status: 500} );
   }
   
 }
