@@ -12,19 +12,34 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { UserProfile } from '@/type'
 import ProfileSkeleton from './ProfileSkeleton'
 import { UIError } from '@/components/ui-error'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
 
 
 
-export default function ProfileComponent({ userId } : {userId : string}) {
+export default function ProfileComponent() {
+  const params = useParams<{ userId: string }>()
+  const [userParamsId, setUserParamsId] = useState<string | null>(null)
+  const [userCookieId, setUserCookiesId] = useState<string | undefined>(undefined)
+  useEffect(()=>{
+    const userCookie = Cookies.get('user');
+    if (userCookie) {
+      const userId = (JSON.parse(userCookie))?._id
+      setUserCookiesId(userId)
+    }
+    setUserParamsId(params.userId)
+  },[])                                                                        //eslint-disable-line
+
   const { data , status, error }  = useQuery({ 
     queryKey: ['UserInfor'],
     queryFn: async () => {
-      const response = await fetch(`/api/users/${userId}/profile`)
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.message || 'Network response was not ok')
-        }
-        return data;
+      const response = await fetch(`/api/users/${userParamsId}/profile`)
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Network response was not ok')
+      }
+      return data;
     },
   })
   if (status == "pending") {
@@ -72,9 +87,8 @@ export default function ProfileComponent({ userId } : {userId : string}) {
                   </p>
                 </div>
                 <div className="flex gap-2">
-
-                  {/* Button for mutation */}
-                  <ButtonEditProfile user = {user}/>
+                  
+                  { userCookieId == userParamsId && <ButtonEditProfile user = {user}/>}
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

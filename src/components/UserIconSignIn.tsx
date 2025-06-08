@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { getUserDbInSession } from "@/lib/auth"
+import { getUserIdInSession } from "@/lib/session"
 import User from "@/schema/user";
 import { UserDB } from "@/type";
 import ButtonLinkSignIn from "./ButtonLinkSignIn";
@@ -7,7 +7,7 @@ import Link from "next/link";
 
 
 const UserIconSignIn = async () => {
-    const userIdInSession = await getUserDbInSession();
+    const userIdInSession = await getUserIdInSession();
     const user : UserDB | null = await User.findById(userIdInSession);
     
     return (
@@ -25,7 +25,7 @@ const UserIconSignIn = async () => {
                 { (userIdInSession && user) ?
                     <div>   
                         <div className="relative">
-                            <Link href="/home">
+                            <Link href={`/home/${userIdInSession}`}>
                                 <Avatar className="w-12 h-12 border-2 border-indigo-200">
                                     <AvatarImage src={user.avatarUrl} />
                                     <AvatarFallback className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold">
