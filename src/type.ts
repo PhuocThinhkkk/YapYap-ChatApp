@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { formSchema } from "./app/(withSideBar)/home/ButtonEditProfile";
+import { formSchema } from "./app/(withSideBar)/users/[userId]/ButtonEditProfile";
 export type UserDB = {
     _id : string;
     name: string,
@@ -45,10 +45,18 @@ export type roomMessageChartData = {
     yourRoom: number,
     orthersRoom: number,
 }
+
+export type resPieChart = {
+    id : string,
+    roomName : string,
+    count : number,
+    fill : string,
+}
   
-
-
-
+export type resBigChart = {
+    date : string,
+    count : number,
+}
 
 
 export type UserProfile = {

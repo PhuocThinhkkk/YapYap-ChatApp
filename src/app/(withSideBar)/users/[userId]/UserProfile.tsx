@@ -32,7 +32,7 @@ export default function ProfileComponent() {
   },[])                                                                        //eslint-disable-line
 
   const { data , status, error }  = useQuery({ 
-    queryKey: ['UserInfor'],
+    queryKey: ['UserInfor', userParamsId], //  include ID for cache correctness
     queryFn: async () => {
       const response = await fetch(`/api/users/${userParamsId}/profile`)
       const data = await response.json();
@@ -41,6 +41,7 @@ export default function ProfileComponent() {
       }
       return data;
     },
+    enabled: !!userParamsId, // Query only runs when userParamsId is truthy
   })
   if (status == "pending") {
     return <ProfileSkeleton/>

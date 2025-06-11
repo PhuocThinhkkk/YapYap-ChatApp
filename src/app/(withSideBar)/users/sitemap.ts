@@ -24,7 +24,7 @@ export default async function sitemap({
     .select('_id updatedAt');
 
   return users.map((user) => ({
-    url: `${BASE_URL}/user/${user._id}`,
+    url: `${BASE_URL}/users/${user._id}`,
     lastModified: user.updatedAt ?? new Date(),
   }));
 }

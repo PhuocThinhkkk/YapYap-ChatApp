@@ -4,7 +4,6 @@ import { useState, useEffect} from "react"
 import { TrendingUp } from "lucide-react"
 import { Pie, PieChart, Cell, Tooltip, Legend } from "recharts"
 
-
 import {
   Card,
   CardContent,
@@ -13,57 +12,64 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { toast } from "sonner"
+import { resPieChart } from "@/type"
 
-// Array of beautiful colors with their names and hex values
-  const beautifulColors = [
-    { name: "Lavender", hex: "#E6E6FA" },
-    { name: "Mint Green", hex: "#98FB98" },
-    { name: "Coral", hex: "#FF7F50" },
-    { name: "Sky Blue", hex: "#87CEEB" },
-    { name: "Peach", hex: "#FFDAB9" },
-    { name: "Lilac", hex: "#C8A2C8" },
-    { name: "Turquoise", hex: "#40E0D0" },
-    { name: "Salmon", hex: "#FA8072" },
-    { name: "Periwinkle", hex: "#CCCCFF" },
-    { name: "Mauve", hex: "#E0B0FF" },
-    { name: "Teal", hex: "#008080" },
-    { name: "Rose Gold", hex: "#B76E79" },
-    { name: "Sage Green", hex: "#BCB88A" },
-    { name: "Powder Blue", hex: "#B0E0E6" },
-    { name: "Blush Pink", hex: "#FFB6C1" },
-  ]
 
+const monthNames = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 export function Component() {
   const [isClient, setIsClient] = useState(false)
-  // const [total, setToal] = useState< number | null >(null)
-  const [chartData, setChartData ] = useState<unknown[]>([]);
+   const [total, setToal] = useState< number | null >(null)
+   const [formattedTime, setFormatTime] = useState<string>("")
+  const [chartData, setChartData ] = useState<resPieChart[]>([]);
   useEffect(() => {
     setIsClient(true);
+   
     const initialFetching = async () =>{
-      const res = await fetch("/api/session")
-      const data = await res.json();
-      console.log("hello")
-      if(res.status != 200) {
-        return
-      }
-      console.log("user payload: ",data)
-      if (!data._id) {
-        return
-      }
-      const res2 = await fetch(`/api/users/${data._id}/dashboard/pie-chart`, {
-        cache: 'no-store'
-      })
-      if (res2.status != 200) {
-        console.log("false to fetch pie chart data")
-        return
-      }
-      const data2 = await res2.json();
-      console.log("area chart data: ", data2)
-      setChartData(data2)
-    }
+      try { 
+        const res = await fetch("/api/session")
+        const data = await res.json();
 
+        if(!res.ok) {
+          throw new Error(`status: ${res.status}, ${data.message}`)
+        }
+        console.log("user payload: ",data)
+        if (!data) {
+          throw new Error(`No session. Please sign in to continue`)
+        }
+        const res2 = await fetch(`/api/users/${data}/dashboard/pie-chart`, {
+          cache: 'no-store'
+        })
+        const data2 = await res2.json()
+        if (!res2.ok) {
+          throw new Error(`status: ${res2.status}, ${data2.message}`)
+        }
+        console.log("area chart data: ", data2)
+        setChartData(data2) 
+        
+        let totals = 0;
+        for (let index = 0; index < data2.length; index++) {
+          totals += data2[index].count
+
+        }
+        setToal(totals);
+
+      } catch (error) {
+        toast.error(`${error}`)
+      }
+    }
     initialFetching();
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0-11 (Jan=0, Dec=11)
+
+    const formatteTime = `${monthNames[0]} - ${monthNames[currentMonth]} ${currentYear}`;
+    setFormatTime(formatteTime)
+
   }, [])
 
 
@@ -71,7 +77,7 @@ export function Component() {
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Messages in your rooms</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>{formattedTime}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0 justify-center items-center flex">
         { isClient ? 
@@ -86,7 +92,7 @@ export function Component() {
             >
               {
                 chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={beautifulColors[index].hex}/>
+                  <Cell key={`cell-${index}`} fill={entry.fill}/>
                 ))
                 
               }
@@ -101,10 +107,10 @@ export function Component() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Totals : {total} <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing total messages for each room
         </div>
       </CardFooter>
     </Card>

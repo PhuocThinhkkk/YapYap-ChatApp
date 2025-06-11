@@ -1,0 +1,86 @@
+import { NextResponse } from "next/server";
+import { getUserIdInSession } from "@/lib/session";
+import MESSAGE from "@/schema/message";
+
+export async function GET(request: Request,  {params}:  { params : Promise<{userId : string}>}) {
+    try{
+        const { userId } = await params;
+        const userIdSession = await getUserIdInSession()
+  
+    
+        if (!userId || userId != userIdSession) {
+            return NextResponse.json(
+            { error: 'unauthorize.' },
+            { status: 400 }
+            );
+        }
+
+        return getLastThreeMonthsMessages(userId)
+    }catch(e){
+        console.log("error :", e)
+        return NextResponse.json({message: "Server error!"}, {status: 500})
+    }
+}
+
+
+
+
+interface MessageCountByDay {
+  date: string; // Format: "May 27"
+  count: number;
+}
+
+async function getLastThreeMonthsMessages(userId: string) {
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+  
+  const messages = await MESSAGE.find({
+    userId,
+    createdAt: { $gte: threeMonthsAgo }
+  }).sort({ createdAt: 1 });
+
+  
+  const dailyCounts: Record<string, number> = {};
+
+  messages.forEach(message => {
+    const date = message.createdAt;
+    const dateKey = date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric' 
+    }); // Format: "May 27"
+
+    dailyCounts[dateKey] = (dailyCounts[dateKey] || 0) + 1;
+  });
+
+  
+  const result: MessageCountByDay[] = Object.entries(dailyCounts)
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+ 
+  const completeResult = fillMissingDays(result, threeMonthsAgo);
+
+  return NextResponse.json(completeResult, { status: 200 });
+}
+
+function fillMissingDays(data: MessageCountByDay[], startDate: Date): MessageCountByDay[] {
+  const result: MessageCountByDay[] = [];
+  const currentDate = new Date(startDate);
+  const today = new Date();
+  const dateFormatOptions: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
+
+  while (currentDate <= today) {
+    const dateStr = currentDate.toLocaleDateString('en-US', dateFormatOptions);
+    const existingData = data.find(item => item.date === dateStr);
+    
+    result.push({
+      date: dateStr,
+      count: existingData ? existingData.count : 0
+    });
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return result;
+}

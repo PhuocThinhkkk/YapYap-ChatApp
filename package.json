@@ -2,7 +2,7 @@
   "name": "fsnextjs",
   "version": "1.0.0",
   "private": true,
-   "type": "module",
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@faker-js/faker": "^9.8.0",
     "@tailwindcss/postcss": "^4.0.17",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",

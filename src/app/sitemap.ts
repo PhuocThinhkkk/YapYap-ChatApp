@@ -23,10 +23,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
-      url: `${BASE_URL}/Dashboard`,
+      url: `${BASE_URL}/dashboard`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.4,
+    },{
+      url: `${BASE_URL}/create-room`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.3,
     },
   ]
 }

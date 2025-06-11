@@ -1,13 +1,11 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from "recharts"
-
+import * as React from "react"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -17,92 +15,112 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { browser: "chrome", visitors: 187, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 275, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
-]
+import { resBigChart } from "@/type"
+import { toast } from "sonner"
+
+export const description = "A bar chart showing message counts"
+
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
+  count: {
+    label: "Messages",
+    color: "var(--chart-1)", // 
   },
 } satisfies ChartConfig
 
 export function BigAssChart() {
+  const [chartData, setChartData] = React.useState<resBigChart[]>([])
+  const [total, setToal] = React.useState< number | null >(null)
+
+  React.useEffect(() => {
+    
+    const initialFetching = async () =>{
+      try { 
+        const res = await fetch("/api/session")
+        const data = await res.json();
+
+        if(!res.ok) {
+          throw new Error(`status: ${res.status}, ${data.message}`)
+        }
+        console.log("user payload: ",data)
+        if (!data) {
+          throw new Error(`No session. Please sign in to continue`)
+        }
+        const res2 = await fetch(`/api/users/${data}/dashboard/big-chart`, {
+          cache: 'no-store'
+        })
+        const data2 = await res2.json()
+        if (!res2.ok) {
+          throw new Error(`status: ${res2.status}, ${data2.message}`)
+        }
+        console.log("area chart data: ", data2)
+        setChartData(data2) 
+        
+        let totals = 0;
+        for (let index = 0; index < data2.length; index++) {
+          totals += data2[index].count
+
+        }
+        setToal(totals);
+
+      } catch (error) {
+        toast.error(`${error}`)
+      }
+    }
+    initialFetching();
+
+  }, [])
+
+
   return (
-    <Card className="">
+    <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Active</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Message Activity</CardTitle>
+        <CardDescription>
+          Total messages sent: {total ? total.toString() : null }
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-40">
-          <BarChart accessibilityLayer data={chartData}>
+        <ChartContainer config={chartConfig} className="h-[250px] w-full">
+          <BarChart
+            data={chartData}
+            margin={{ left: 12, right: 12 }}
+          >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="browser"
+              dataKey="date"
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
-              }
+              tickFormatter={(value) => {
+                const date = new Date(value)
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })
+              }}
             />
             <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={
+                <ChartTooltipContent
+                  nameKey="count"
+                  labelFormatter={(value) => {
+                    return new Date(value).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  }}
+                />
+              }
             />
-            <Bar
-              dataKey="visitors"
-              strokeWidth={2}
-              radius={8}
-              activeIndex={2}
-              activeBar={({ ...props }) => {
-                return (
-                  <Rectangle
-                    {...props}
-                    fillOpacity={0.8}
-                    stroke={props.payload.fill}
-                    strokeDasharray={4}
-                    strokeDashoffset={4}
-                  />
-                )
-              }}
+            <Bar 
+              dataKey="count" 
+              fill="var(--chart-1)" 
+              radius={[4, 4, 0, 0]} 
             />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   )
 }
