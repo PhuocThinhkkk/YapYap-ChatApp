@@ -49,3 +49,5 @@ package-lock.json
 tsconfig.json
 next.config.js
 .VSCodeCounter
+
+todo.md

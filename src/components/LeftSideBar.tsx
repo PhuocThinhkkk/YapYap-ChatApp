@@ -18,7 +18,7 @@ interface Room {
   password:  string,
   maxPeople: number, 
   leaderId: string,
-  user: [],
+  users: [],
   createdAt?: Date,
  
 }
@@ -34,8 +34,7 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
     const userCookie = Cookie.get("user");
     if (!userCookie) {
       alert("you need to sign in to continue !");
-      route.push('/sign-in');
-      return
+      return 
     }
     const parsed = JSON.parse(userCookie);
     const userId = parsed._id;
@@ -49,14 +48,16 @@ const LeftSideBar = ({ isOpen } : { isOpen:boolean }) => {
       const data = await res.json();
       console.log(data);
       setConversations(data);
-    }
-    fetchData();
-    for(let i = 0; i<conversations.length; i++){
+      for(let i = 0; i<conversations.length; i++){
       if( params.roomid === conversations[i].roomName ){
         setActiveConversation(conversations[i]);
         return;
       }
     }
+    }
+
+    fetchData();
+   
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])

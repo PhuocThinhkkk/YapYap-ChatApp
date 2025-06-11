@@ -4,6 +4,7 @@ import MESSAGE from "@/schema/message";
 import connectDB from "@/lib/mongoDb";
 import { getUserIdInSession } from "@/lib/session";
 import User from "@/schema/user";
+import Room from "@/schema/room";  
 
 
 export async function GET( req : NextRequest , {params} : {params : Promise<{roomid : string}>}){
@@ -12,11 +13,12 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{roo
     console.log("room id ", roomid)
     await connectDB();
 
-    const userIdInSession = getUserIdInSession();
+    const userIdInSession = await getUserIdInSession();
     if (!userIdInSession) {
       return NextResponse.json({messages: "Unauthorize."}, {status : 400});
     }
-    
+    console.log(!!Room)
+    console.log(!!MESSAGE)
     const user = await User.findById(userIdInSession).populate({
       path: "rooms",
       match: {_id : roomid },

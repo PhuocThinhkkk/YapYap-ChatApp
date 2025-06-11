@@ -30,9 +30,12 @@ const AllRooms = async () => {
     console.log("user cookies : ",userIdInSession)
 
     const roomIdDb : RoomDb[] = await Room.find({ users : userIdInSession });
-    console.log("roomIdDb :",roomIdDb)
+
     
-    const user  = await User.findById(userIdInSession)
+    const user  = await User.findById(userIdInSession).populate({
+      path: "rooms",
+    })
+    console.log("user: ",user)
     if(!user) {
       return <UIError className="w-full text-center" title="There is something wrong "/>
     }
@@ -50,8 +53,7 @@ const AllRooms = async () => {
         isChange = true;
       }
     }
-    console.log("rooms :",rooms)
-    
+  
   
     
     for (let i = 0; i < roomIdDb.length; i++) {
@@ -78,7 +80,7 @@ const AllRooms = async () => {
       await User.updateOne({ _id: userIdInSession }, { $set: { rooms, roomsOwn } });
       console.log("rooms after update :",rooms)
     }
-
+    
     return (
     <>
       <RoomsStats rooms={roomsFull} userId={userIdInSession}/>

@@ -13,6 +13,6 @@ const messageSchema = new mongoose.Schema({
 )
 
 
-const MESSAGE = mongoose.models.message || mongoose.model("message", messageSchema);
+const MESSAGE = mongoose.models.Message || mongoose.model("Message", messageSchema);
 
 export default MESSAGE;
