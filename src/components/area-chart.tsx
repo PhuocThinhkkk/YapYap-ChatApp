@@ -40,11 +40,7 @@ export function Area_Chart() {
   const [dataChart, setDataChart] = useState <roomMessageChartData[] | null> (null)
   const [key, setKey] = useState(0);
 
-  const updateChartData = (newData : roomMessageChartData[]) => {
-    setDataChart(newData);
-    setKey(prevKey => prevKey + 1); 
-  };
-
+ 
   useEffect(()=>{
     const initialFetching = async () =>{
       const res = await fetch("/api/session")
@@ -55,19 +51,20 @@ export function Area_Chart() {
         return
       }
       console.log("user payload: ",data)
-      if (!data._id) {
+      if (!data) {
         return
       }
-      const res2 = await fetch(`/api/users/${data._id}/dashboard/area-chart`, {
+      const res2 = await fetch(`/api/users/${data}/dashboard/area-chart`, {
         cache: 'no-store'
       })
-      if (res2.status != 200) {
+      if (!res2.ok) {
         console.log("false to fetch area chart data")
         return
       }
       const data2 : roomMessageChartData[] = await res2.json();
       console.log("area chart data: ", data2)
-      updateChartData(data2)
+      setDataChart(data2);
+      setKey(prevKey => prevKey + 1); 
     }
     initialFetching();
   },[])

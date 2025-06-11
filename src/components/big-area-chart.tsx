@@ -53,7 +53,7 @@ export function BigAssChart() {
         if (!res2.ok) {
           throw new Error(`status: ${res2.status}, ${data2.message}`)
         }
-        console.log("area chart data: ", data2)
+        console.log("big bar data: ", data2)
         setChartData(data2) 
         
         let totals = 0;

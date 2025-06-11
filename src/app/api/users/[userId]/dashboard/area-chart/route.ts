@@ -12,7 +12,7 @@ import { roomMessageChartData, MessageDB } from "@/type"
 const dayWeek = ["Sunday","Monday" , "Tuesday" , "Wednesday" , "Thursday" , "Friday" , "Saturday"] as const
 
 
-export async function  GET( res : NextRequest, { params } : {params: Promise<{userId: string}>}){
+export async function GET( res : NextRequest, { params } : {params: Promise<{userId: string}>}){
     const { userId } = await params;
     
     const userIdInSession = await getUserIdInSession();

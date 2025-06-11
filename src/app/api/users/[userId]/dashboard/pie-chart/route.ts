@@ -81,7 +81,7 @@ export async function GET (req : NextRequest, {params}:  { params : Promise<{use
     let othersCount = 0;
 
     for (let i = 0; i < validRooms.length; i++) {
-    if (i < 14) {
+    if (i < 3) {
         const color = findColor(result);
         result.push({
         id: validRooms[i].id,
@@ -95,7 +95,7 @@ export async function GET (req : NextRequest, {params}:  { params : Promise<{use
     }
 
     // Others category
-    if (validRooms.length > 14) {
+    if (validRooms.length > 3) {
     const color = findColor(result);
     result.push({
         id: "others",
@@ -117,7 +117,7 @@ export async function GET (req : NextRequest, {params}:  { params : Promise<{use
 function findColor( result : resPieChart[] ) : string {
     const newColor = beautifulColors[Math.floor(Math.random() *15)].hex;
     for (let index = 0; index < result.length; index++) {
-        if (result.length > 14) {
+        if (result.length > 3) {
             console.log("rooms in pie chart : ", result.length)
         }
         const oldColor = result[index]?.fill;
