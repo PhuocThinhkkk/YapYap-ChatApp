@@ -365,7 +365,7 @@ function InterfaceCard({
   )
 }
 
-function TestimonialCard({ quote, author, role }) { 
+function TestimonialCard({ quote, author, role } : { quote : string, author: string, role: string }) { 
   return (
     <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
       <div className="flex mb-6">
@@ -373,7 +373,7 @@ function TestimonialCard({ quote, author, role }) {
           <Star key={star} className="size-5 text-yellow-400 fill-yellow-400" />
         ))}
       </div>
-      <p className="text-gray-700 mb-6 italic">"{quote}"</p>
+      <p className="text-gray-700 mb-6 italic">{quote}</p>
       <div>
         <p className="font-bold">{author}</p>
         <p className="text-gray-600 text-sm">{role}</p>
