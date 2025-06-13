@@ -20,7 +20,7 @@ async function connectDB() {
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI, {
-      bufferCommands: false,
+      bufferCommands: true,
     }).then((mongoose) => {
       console.log('Connected to DB');
       return mongoose;
