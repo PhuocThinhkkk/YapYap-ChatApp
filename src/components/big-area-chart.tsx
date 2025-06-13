@@ -42,7 +42,7 @@ export function BigAssChart() {
         if(!res.ok) {
           throw new Error(`status: ${res.status}, ${data.message}`)
         }
-        console.log("user payload: ",data)
+        
         if (!data) {
           throw new Error(`No session. Please sign in to continue`)
         }
@@ -53,7 +53,7 @@ export function BigAssChart() {
         if (!res2.ok) {
           throw new Error(`status: ${res2.status}, ${data2.message}`)
         }
-        console.log("big bar data: ", data2)
+        
         setChartData(data2) 
         
         let totals = 0;

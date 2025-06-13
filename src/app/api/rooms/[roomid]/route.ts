@@ -10,7 +10,6 @@ import { getUserIdInSession } from "@/lib/session";
 export async function GET( req : NextRequest , {params} : {params : Promise<{roomid : string}>}){
   try{
     const { roomid } = await params;
-    console.log("room id ", roomid)
     await connectDB()
     
     const userIdInSession = getUserIdInSession()
@@ -30,11 +29,9 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{roo
     }
 
     const roomsData = user.rooms;
-    console.log(roomsData)
     return NextResponse.json(roomsData, {status: 200})
 
   }catch(err){
-    console.log("error when getting room's roomData :", err);
     return NextResponse.json({message : `error when getting room's roomData ${err}`}, {status: 500});
   }
 }

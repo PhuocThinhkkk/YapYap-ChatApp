@@ -88,49 +88,44 @@ export async function SearchRoom (_prevState : unknown , formData: FormData) : P
   
   if(!formData) return {message: "Please enter the form"}
   const roomName = formData.get('roomName') as string
-  console.log("Received FormData:", formData)
   if(!roomName) {
-    console.log("Please enter a room name")
+
     return {message: "Please enter a room name"}
   }
-  console.log("roomName:", roomName);
   
 
   const cookieStore = await cookies()
     const user = cookieStore.get('user')
     if(!user) {
-      console.log("Please sign in to join a room")
+  
       return {message: "Please sign in to join a room"}
     }
     const userId = JSON.parse(user.value)._id;
-  console.log("userId:", userId);
  
   const password = formData.get('password') as string
   await connectDB();
   const room = await Room.findOne({ roomName })
   if(!room) {
-    console.log("Room not found")
+
     return {message: "Room not found"}
   }
-  console.log("room : ", room);
   if(room.password !== password) {
-    console.log("Password :", typeof password, password)
-    console.log("Password :", typeof room.password, room.password)
-    console.log("Wrong password")
+
+
+
     return {message: "Wrong password"}
   }
   if(room.users.length >= room.maxPeople) {
-      console.log("Room is full")
+  
       return {message: "Room is full"}
   }
   for (let i = 0; i < room.users.length; i++) {
     if(room.users[i].toString() === userId.toString()) {
-      console.log("You are already in this room")
+  
       return {message: "You are already in this room"}
     }
   }
   await Room.updateOne({ roomName }, { $addToSet: { users: userId } })
-  console.log("You have joined the room")
   revalidatePath('/rooms')
   redirect('/rooms')
 

@@ -26,15 +26,13 @@ const Page = async ( {params} : {params : Promise<{ roomid : string }>}) => {
     path: "rooms",
     match: {_id : roomId}
   })
-  console.log(user)
+ 
   if ( !user?.rooms || user?.rooms?.length == 0 ) {
     return <UIError title="Unauthorize."/>
   }
 
-  const roomData = user.rooms[0]
-  console.log(roomData)
+  const roomData = user.rooms[0]  
   const roomName = roomData.roomName;
-  console.log("room name: ", roomName)
 
   return (
     <Suspense fallback={<div>loading</div>}>
