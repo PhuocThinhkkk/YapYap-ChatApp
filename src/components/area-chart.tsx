@@ -16,6 +16,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
 
 
@@ -45,12 +46,12 @@ export function Area_Chart() {
     const initialFetching = async () =>{
       const res = await fetch("/api/session")
       const data = await res.json();
-      console.log("hello")
+      
       if(!res.ok) {
-        console.error(`${res.status}`)
+        toast.error(data.message)
         return
       }
-      console.log("user payload: ",data)
+      
       if (!data) {
         return
       }
@@ -58,11 +59,11 @@ export function Area_Chart() {
         cache: 'no-store'
       })
       if (!res2.ok) {
-        console.log("false to fetch area chart data")
+        
         return
       }
       const data2 : roomMessageChartData[] = await res2.json();
-      console.log("area chart data: ", data2)
+      
       setDataChart(data2);
       setKey(prevKey => prevKey + 1); 
     }

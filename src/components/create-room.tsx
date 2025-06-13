@@ -78,7 +78,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
   
   try {
     // Here you would typically send the data to your backend
-    console.log("Form submitted:", values)
+    
     const roomName = values.roomName;
     const password = values.password;
     const confirmPassword = values.confirmPassword;
@@ -100,21 +100,21 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
         credentials: 'include'
       }
     );
-    const res = await response.json();
+    const data = await response.json();
 
 
     if( !response.ok ) {
-      throw new Error(`${res.message}`)
+      throw new Error(`${data.message}`)
     }
     router.push('/rooms')
     // Redirect to the newly created chat room (this is just a placeholder)
     // router.push(`/chat/${encodeURIComponent(values.roomName)}`);
 
     
-    console.log(`Chat room "${values.roomName}" created successfully!`)
+    
     form.reset()
   } catch (error) {
-    console.error("Error creating chat room:", error)
+    toast.error(`Error when creating room: ${error}`)
   } finally {
     setIsLoading(false)
   }

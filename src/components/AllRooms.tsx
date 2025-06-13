@@ -10,10 +10,8 @@ import { getUserIdInSession } from "@/lib/session";
 import { cookies } from "next/headers"
 import { UIError } from "./ui-error"
 import { MessageCircle, Users, Zap, TrendingUp } from "lucide-react"
-import { RoomDb } from "@/type"
+import { RoomDb, UserDB } from "@/type"
 import MESSAGE from "@/schema/message"
-
-
 
 
 export const revalidate = 180
@@ -23,69 +21,29 @@ const AllRooms = async () => {
     await connectDB();
     const userIdInSession = await getUserIdInSession();
     if(!userIdInSession) {
-      console.log("unauthorize")
+  
       return <UIError className="w-full text-center" title="Please sign in to see this page"/>
     }
    
-    console.log("user cookies : ",userIdInSession)
 
-    const roomIdDb : RoomDb[] = await Room.find({ users : userIdInSession });
-
-    
-    const user  = await User.findById(userIdInSession).populate({
+    console.log(!!Room)
+    const user : UserDB  = await User.findById(userIdInSession).populate({
       path: "rooms",
     })
     console.log("user: ",user)
     if(!user) {
-      return <UIError className="w-full text-center" title="There is something wrong "/>
+      return <UIError className="w-full text-center" title="Please sign in to see your rooms "/>
     }
-    let isChange : boolean = false;
-    const rooms : string[] = user.rooms;
-    const roomsOwn : string[] = user.roomsOwn;
-    const roomsFull : RoomDb[] = [];
-    for (let i = 0; i < rooms.length; i++) {
-      const room = await Room.findById(rooms[i]);
-      if(room) {
-        roomsFull.push(room);
-      }
-      if(room && room.leaderId == userIdInSession && !roomsOwn.toString().includes(room._id)){
-        roomsOwn.push(room._id);
-        isChange = true;
-      }
-    }
-  
-  
-    
-    for (let i = 0; i < roomIdDb.length; i++) {
-      if(!rooms.toString().includes(roomIdDb[i]._id.toString()) ) {
-        rooms.push(roomIdDb[i]._id);
-        roomsFull.push(roomIdDb[i]);
-        isChange = true;
-      }
-    
-    }
-  
-    for (let i = 0; i < rooms.length; i++) {
-      for(let j = 0; j < i; j++){
-        if(rooms[i].toString() == rooms[j].toString()){
-          rooms.splice(i, 1);
-          isChange = true;
-        }
-      }
+    if(!user.rooms) {
+      return <UIError className="w-full text-center" title="You dont have any room, get start by click in create room button "/>
     }
     
-      
-  
-    if(isChange) {
-      await User.updateOne({ _id: userIdInSession }, { $set: { rooms, roomsOwn } });
-      console.log("rooms after update :",rooms)
-    }
     
     return (
     <>
-      <RoomsStats rooms={roomsFull} userId={userIdInSession}/>
+      <RoomsStats rooms={user.rooms} userId={userIdInSession}/>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
-        {roomsFull?.map((room , index) =>
+        {user.rooms?.map((room , index) =>
             <Card className="m-4" key={index}>
                 <div className="flex h-15 m-4">
                 <div className="w-15 h-15">

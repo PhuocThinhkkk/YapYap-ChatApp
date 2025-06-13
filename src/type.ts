@@ -4,8 +4,8 @@ export type UserDB = {
     _id : string;
     name: string,
     email: string ,
-    roomsOwn?: [],
-    rooms?: [],
+    roomsOwn?: RoomDb[],
+    rooms?: RoomDb[],
     createdAt : Date,
     location? : string,
     avatarUrl? : string,
@@ -82,6 +82,6 @@ export type RoomDb = {
   roomName: string;
   maxPeople: number,
   leaderId: string;
-  users: string[];
+  users: UserDB[];
   createdAt: Date;
 }

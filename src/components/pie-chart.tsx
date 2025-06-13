@@ -37,7 +37,6 @@ export function Component() {
         if(!res.ok) {
           throw new Error(`status: ${res.status}, ${data.message}`)
         }
-        console.log("user payload: ",data)
         if (!data) {
           throw new Error(`No session. Please sign in to continue`)
         }
@@ -48,7 +47,6 @@ export function Component() {
         if (!res2.ok) {
           throw new Error(`status: ${res2.status}, ${data2.message}`)
         }
-        console.log("pie chart data: ", data2)
         setChartData(data2) 
         
         let totals = 0;

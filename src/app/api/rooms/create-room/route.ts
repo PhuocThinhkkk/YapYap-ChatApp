@@ -15,19 +15,19 @@ export async function POST( req : NextRequest ) {
     const proPlan = [25, 50, 100];
     const room = await req.json()
     room.maxPeople = Number(room.maxPeople)
-    console.log(room)
+    
     await connectDB();
     
     const isExist = await Room.findOne({ roomName : room.roomName } );
     if(isExist){
-      console.log("room name exist");
+
       return NextResponse.json({ message: "room name exist" }, { status: 400 });
     }
  
     const userIdInSession = await getUserIdInSession();
     if(!userIdInSession) return NextResponse.json({message: "user dont have session."}, {status: 400})
     
-    console.log("user cookie in api route: ",userIdInSession)
+  
   
     const userdb = await User.findById(userIdInSession);
     if(!userdb) return NextResponse.json({message: "no user in db. "}, {status: 400})
@@ -40,15 +40,7 @@ export async function POST( req : NextRequest ) {
       }
     }
 
-    console.log("Creating room with:", {
-      roomName: room.roomName,
-      password: room.password,
-      maxPeople: room.maxPeople,
-      userIdInSession,
-      users: [userIdInSession],
-    });
-
-  
+   
     const res = await Room.create({
       roomName : room.roomName,
       password : room.password,
@@ -57,13 +49,19 @@ export async function POST( req : NextRequest ) {
       users: [userIdInSession],
     });
 
+    await User.updateOne({ _id: userIdInSession },
+      { $push:{ 
+        rooms: res._id ,
+        roomsOwn: res._id 
+      }}
+    )
 
-    console.log("new room have been created successfully");
+    
     revalidatePath("/rooms")
     return NextResponse.json({ ...res, status: 200 });
   }
   catch (error){
-    console.error(error);
+    
     return NextResponse.json({message: error}, {status: 500} );
   }
   

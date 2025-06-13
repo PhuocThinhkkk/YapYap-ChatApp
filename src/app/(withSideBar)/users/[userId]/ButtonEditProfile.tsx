@@ -169,8 +169,7 @@ function FormAction({ user, setIsOpen } : {user : UserProfile, setIsOpen : ( boo
       
       mutaion.mutate({userId, formData })
     } catch (error) {
-      console.log("error in submit func: ",error)
-      toast.error("There is something wrong.")
+      toast.error(`There is something wrong: ${ error}`)
     }
     
       

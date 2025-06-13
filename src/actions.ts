@@ -2,7 +2,7 @@
 import connectDB from "./lib/mongoDb"
 import User from "@/schema/user";
 import Room from "@/schema/room"
-import { createSession, getSession } from "./lib/session"
+import { createSession, } from "./lib/session"
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache";
@@ -11,7 +11,7 @@ import { setUserInforInCookie } from "./lib/auth";
 
 export const createUser = async (_prevState : unknown ,formData : FormData) =>{
   
-  console.log("Received FormData:", formData)
+
   const validatedFields = {
     name: formData.get('name'),
     email: formData.get('email'),
@@ -20,23 +20,18 @@ export const createUser = async (_prevState : unknown ,formData : FormData) =>{
     rooms: [],
   }
 
-  console.log(validatedFields);
+  
   await connectDB();
   const user = new User(validatedFields)
 
   const isExist = await User.findOne({ email : user.email } );
 
   if(isExist){
-    console.log("user is exists in db");
     return {message: 'Your email is exists! '}
   }
-  console.log("new user : ", user);
 
   await user.save();
   await createSession(user._id.toString());
-  console.log("new user sign up successfully");
-  const session1 = await getSession();
-  console.log("get session:", session1);
 
   const cookieStore = await cookies();
   const UserCookie = ({...user})._doc;
@@ -57,33 +52,30 @@ export const signIn = async (_prevState : unknown ,form : FormData) => {
     email : form.get("email") as string ,
     password : form.get("password") as string
   }
-  console.log("form :" , userForm);
+
 
   await connectDB();
   const UserExist = await User.findOne({email : userForm.email});
   
   if(!UserExist){
-    console.log("no user with that email in db");
+
     return {message: 'Your email is not correct !'};
   }
 
   const isPassWordCorrect = UserExist.password === userForm.password;
   if(!isPassWordCorrect){
-    console.log("password is not correct");
+
     return {message: 'Your password is not correct !'};
   }
 
   await createSession(UserExist._id.toString());
-  console.log("user sign in successfully");
-  
-  const user = JSON.parse(JSON.stringify(UserExist));
 
-  console.log("user :", user);
+  const user = JSON.parse(JSON.stringify(UserExist));
+  
   const newUser = await setUserInforInCookie({user})
   if ('message' in newUser) {
     return newUser;
   }
-  console.log("new User :", newUser);
   redirect("/");
   
 }

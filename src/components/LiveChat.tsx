@@ -7,6 +7,7 @@ import React, { FormEvent, useEffect, useState, useRef } from 'react';
 import { Send, SidebarOpenIcon } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import LeftSideBar from "@/components/LeftSideBar";
+import { toast } from "sonner";
 
 interface Message {
 	_id?: string
@@ -66,10 +67,8 @@ export default function LiveChat( {
 	useEffect(() => {
 
 		if (!socket) return;
-		console.log("Socket connected");
 		socket.emit("join_room", roomId);
 		socket.on("sendMessage", (message: Message) => {
-			console.log("message received: ",message);
 			setMessages((prevMessages) => [...prevMessages, message]);
 		});
 
@@ -82,13 +81,11 @@ export default function LiveChat( {
 
 	if(!userId) return null;
 	
-	console.log("user cookie :",userId)
-	console.log(Cookie.get());
 
 	const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
 	try{
 		if (!socket) {
-			alert('Socket not connected'); //
+			toast.error('Socket not connected'); //
 			return;
 		}
 		

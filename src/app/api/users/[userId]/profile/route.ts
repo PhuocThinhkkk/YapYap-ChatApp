@@ -29,11 +29,7 @@ export async function POST(request: NextRequest, { params } : {params: Promise<{
     const userName = data.get("userName");
     const userBio = data.get("userBio");
     console.log("form in route handler: ", data)
-    if (avatarfile instanceof File) {
-      console.log("avatarfile name: ", avatarfile?.name)
-      console.log("avatarfile size: ", avatarfile?.size)
-      console.log("avatarfile type: ", avatarfile?.type)
-    } else {
+    if (!(avatarfile instanceof File)) {
       console.log("⚠️ Not a avatarfile. Type is:", typeof avatarfile, avatarfile);
     } 
     let url = "No url."

@@ -34,8 +34,8 @@ const Page = () => {
           <SearchRoom/>
         {/* Create Room Section */}
         <div className="text-center">
-          <div className="w-2xl inline-flex justify-between items-center p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
-            <div className="flex-shrink-0">
+          <div className="md:w-2xl w-xl inline-flex justify-between items-center p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
+            <div className="hidden md:visible flex-shrink-0">
               <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
                 <Plus className="w-6 h-6 text-white" />
               </div>

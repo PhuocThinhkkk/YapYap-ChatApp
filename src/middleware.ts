@@ -18,7 +18,6 @@ export const config = {
   matcher: [
     '/',
     '/dashboard',
-    '/rooms',
-    '/rooms/:path*',
+    '/chatrooms/:path*',
     ]
 }
