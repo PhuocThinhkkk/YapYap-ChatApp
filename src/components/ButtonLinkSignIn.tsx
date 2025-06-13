@@ -9,7 +9,7 @@ const ButtonLinkSignIn = () => {
     <Link href="/sign-in" onClick={()=>{
         setIsLoading(true)
     }}>
-        <Button disabled={isLoading} className='hover:cursor-pointer bg-slate-100 hover:bg-slate-700'>SignIn</Button>
+        <Button disabled={isLoading} className='hover:cursor-pointer text-black hover:text-white bg-slate-100 hover:bg-slate-700'>SignIn</Button>
     </Link>
   )
 }

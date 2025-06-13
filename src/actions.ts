@@ -39,7 +39,7 @@ export const createUser = async (_prevState : unknown ,formData : FormData) =>{
   delete UserCookie.rooms;
   delete UserCookie.password;
   cookieStore.set('user', JSON.stringify(UserCookie));
-  redirect('/')
+  redirect('/home')
 }
 
 interface UserForm {
@@ -76,7 +76,7 @@ export const signIn = async (_prevState : unknown ,form : FormData) => {
   if ('message' in newUser) {
     return newUser;
   }
-  redirect("/");
+  redirect("/home");
   
 }
 

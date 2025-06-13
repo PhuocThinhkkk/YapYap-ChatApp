@@ -41,7 +41,7 @@ import { Placeholder } from "@/components/Placeholder";
 export default function ButtonEditProfile({ user } : {user : UserProfile}) {
   const [isOpen, setIsOpen] = useState(false)
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen} >
       <DialogTrigger asChild>
         <Button 
           onClick={() => {
@@ -53,11 +53,12 @@ export default function ButtonEditProfile({ user } : {user : UserProfile}) {
             Edit Profile
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
+      <DialogContent className= "max-w-[350px] sm:max-w-[600px]">
+        <DialogHeader className="text-center max-w-[300px] sm:max-w-[600px]">
           <DialogTitle>Edit your profile</DialogTitle>
           <DialogDescription>Makes changes to your profile here. Click save to save your changes.</DialogDescription>
         </DialogHeader>
+        
         
         <FormAction user={user} setIsOpen={setIsOpen}/>
  
@@ -179,7 +180,7 @@ function FormAction({ user, setIsOpen } : {user : UserProfile, setIsOpen : ( boo
 return(
   <Form {...form}>
      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-      <ScrollArea className="h-[500] py-4">
+      <ScrollArea className="h-[500] py-4 ">
         <div className="py-4">  
           <FormField
             control={form.control}
@@ -188,7 +189,7 @@ return(
               <FormItem>
                 <FormLabel>Your name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your name here. " {...field}/>
+                  <Input className="max-w-[300px] sm:max-w-[600px]" placeholder="Enter your name here. " {...field}/>
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
@@ -207,7 +208,7 @@ return(
               <FormItem>
                 <FormLabel>Your bio</FormLabel>
                 <FormControl>
-                  <Textarea  placeholder="Enter your bio here..." {...field} />
+                  <Textarea className="max-w-[300px] sm:max-w-[600px] min-h-[200px]" placeholder="Enter your bio here..."  {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public bio.
@@ -232,14 +233,17 @@ return(
                 width={150}
                 height={150}
                 style={{ aspectRatio: "150/150", objectFit: "cover" }}
+                className="w-24 h-24 sm:w-32 sm:h-32 md:w-[150px] md:h-[150px] object-cover "
                 /> : <Placeholder 
                 width={150}
                 height={150}
                 icon={ImageIcon}
+                className="w-24 h-24 sm:w-32 sm:h-32 md:w-[150px] md:h-[150px] object-cover "
                 iconSize={32}
                 /> }
                 <FormControl>
                   <Input 
+                   className="max-w-[300px] sm:max-w-[600px]"
                   placeholder="Enter your name here. " 
                   type="file"
                   accept="image/*"
@@ -261,7 +265,7 @@ return(
           />
         </div>
       
-        <div className="py-4">
+        <div className="py-4 w-4/5 lg:w-full">
           <FormField 
             control={form.control}
             name="backgroundImg"
@@ -272,17 +276,20 @@ return(
                 <Image 
                 src={URL.createObjectURL(currentBackgroundImg)}
                 alt="Your img."
-                width={500}
+                width={500 }
                 height={150}
                 style={{ aspectRatio: "500/150", objectFit: "cover" }}
+                className="w-full max-w-[500px] h-[100px] sm:h-[125px] md:h-[150px] object-cover "
                 /> : <Placeholder 
                 width={500}
                 height={150}
                 icon={ImageIcon}
+                  className="max-w-[300px] sm:max-w-[600px]"
                 iconSize={32}
                 /> }
                 <FormControl>
                   <Input 
+                   className="max-w-[300px] sm:max-w-[600px]"
                   placeholder="Enter your name here. " 
                   type="file"
                   accept="image/*"
