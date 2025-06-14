@@ -1,8 +1,10 @@
 import 'server-only'
 import { UserDB } from '@/type';
 import User from '@/schema/user';
+import connectDB from "@/lib/mongoDb"
 
 export async function getUserById(id : string) : Promise<UserDB | null> {
+    await connectDB()
     const userdb = await User.findById(id).select('-password')
     if (!userdb) {
         return null
