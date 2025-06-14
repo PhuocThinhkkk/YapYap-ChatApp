@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { Area_Chart } from "@/components/area-chart"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Component } from "@/components/pie-chart"

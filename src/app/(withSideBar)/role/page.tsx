@@ -1,9 +1,11 @@
+export const dynamic = 'force-dynamic'
 import HeroPricing from "./HeroPricing"
 import PricingSection from "./PricingSection"
 import FeaturesComparision from "./FeaturesComparision"
 import FeedbackSection from "@/components/FeedbackSection"
 import UserIconWithSuspense from "@/components/UserIconWithSuspense"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+
 
 export default async function Page() {
   

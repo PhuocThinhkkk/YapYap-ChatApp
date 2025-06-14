@@ -15,7 +15,7 @@ export async function GET(request: Request,  {params}:  { params : Promise<{user
             );
         }
 
-        return getLastThreeMonthsMessages(userId)
+        return await getLastThreeMonthsMessages(userId)
     }catch(e){
         console.log("error :", e)
         return NextResponse.json({message: "Server error!"}, {status: 500})
@@ -30,7 +30,7 @@ interface MessageCountByDay {
   count: number;
 }
 
-async function getLastThreeMonthsMessages(userId: string) {
+async function getLastThreeMonthsMessages(userId: string) : Promise<NextResponse<MessageCountByDay[]>>{
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 

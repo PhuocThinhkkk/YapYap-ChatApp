@@ -5,7 +5,7 @@ import  UserIconSignIn  from "@/components/UserIconSignIn"
 
 const UserIconWithSuspense = () => {
   return (
-    <Suspense fallback={<Loader2 className="animate-spin text-primary h-16 w-16" />}>
+    <Suspense fallback={<Loader2 className="animate-spin text-primary h-10 w-10" />}>
         <UserIconSignIn/>
     </Suspense>
   )

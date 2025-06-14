@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import ButtonCreateRoom from "@/components/ButtonCreateRoom"
 import SearchRoom from "@/components/SearchRoom"
