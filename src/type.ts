@@ -30,13 +30,20 @@ export type UserCookie = {
 
 
 export type MessageDB = {
-	_id : string
-	userId: string,
-	roomName: string,
-	roomId: string,
-	createdAt : Date,
+	_id? : string
+	user: UserDB,
+	room: RoomDb,
+	createdAt? : Date,
 	info: string;
 }
+export type ResponseMessage = {
+	_id? : string
+	user: UserDB,
+	room: RoomDb,
+	createdAt? : string,
+	info: string;
+}
+
 
 //for area chart
 export type roomMessageChartData = {

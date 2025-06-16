@@ -37,7 +37,7 @@ export async function GET( res : NextRequest, { params } : {params: Promise<{use
     }
 
     const sevenDaysAgo = dayjs().subtract(7, 'day').toDate();
-    const allMessage : MessageDB[] = await MESSAGE.find({userId, createdAt: {$gte : sevenDaysAgo}})
+    const allMessage : MessageDB[] = await MESSAGE.find({user: userId, createdAt: {$gte : sevenDaysAgo}})
     if (allMessage.length == 0) {
         return NextResponse.json({message: "You havent have any messages in the last 7 days."}, {status: 404});
     }
@@ -61,14 +61,18 @@ export async function GET( res : NextRequest, { params } : {params: Promise<{use
 
     for (let i = 0; i < allMessage.length; i++) {
         const msg = allMessage[i];
-        const dateObj : Date = new Date(msg.createdAt)
+        if(!msg.createdAt) {
+            console.error("msg.createAt :", msg.createdAt)
+            return NextResponse.json({message: 'Server error!'}, {status: 500})
+        }
+        const dateObj : Date = new Date(msg.createdAt)  
         const dateStr : string = dateObj.toISOString().split("T")[0];
 
         if (!chartDataMap[dateStr]) {  // sometime it wont have
            continue;
         }
 
-        if (allMessage[i].userId.toString() == userId) {
+        if (allMessage[i].user.toString() == userId) {
             chartDataMap[dateStr].yourRoom += 1;
         }else{
             chartDataMap[dateStr].orthersRoom += 1;

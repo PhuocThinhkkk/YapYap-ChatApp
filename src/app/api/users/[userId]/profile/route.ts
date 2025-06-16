@@ -86,7 +86,7 @@ export async function GET(request: NextRequest, { params } : {params: Promise<{u
       return NextResponse.json({message: "No user like this. "}, { status: 404 });
     }
     const user : UserDB = JSON.parse( JSON.stringify(userdb) );
-    const messagesSent : number = await MESSAGE.countDocuments( { userId } )
+    const messagesSent : number = await MESSAGE.countDocuments( { user: userId } )
     const roomsLen : number = user.rooms ? user.rooms.length : 0;
     const roomsOwnLen : number =  user.roomsOwn ? user.roomsOwn.length : 0;
     delete user.rooms;

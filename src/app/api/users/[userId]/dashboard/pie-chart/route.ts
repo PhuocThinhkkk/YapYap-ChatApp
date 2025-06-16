@@ -54,7 +54,7 @@ export async function GET (req : NextRequest, {params}:  { params : Promise<{use
             if (!room) return null;
 
             const messages = await MESSAGE.find({
-            roomId,
+            room: roomId,
             createdAt: { 
                 $gte: new Date(`${currentYear}-01-01`), 
                 $lt: new Date(`${currentYear + 1}-01-01`)

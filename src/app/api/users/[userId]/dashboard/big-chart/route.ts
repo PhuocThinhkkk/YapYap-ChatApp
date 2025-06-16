@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getUserIdInSession } from "@/lib/session";
 import MESSAGE from "@/schema/message";
+import { MessageDB } from "@/type";
 
 export async function GET(request: Request,  {params}:  { params : Promise<{userId : string}>}) {
     try{
@@ -35,8 +36,8 @@ async function getLastMonthMessages(userId: string) : Promise<NextResponse<Messa
   monthAgo.setMonth(monthAgo.getMonth() - 1);
 
   
-  const messages = await MESSAGE.find({
-    userId,
+  const messages : MessageDB[] = await MESSAGE.find({
+    user : userId,
     createdAt: { $gte: monthAgo }
   }).sort({ createdAt: 1 });
 
@@ -45,6 +46,10 @@ async function getLastMonthMessages(userId: string) : Promise<NextResponse<Messa
 
   messages.forEach(message => {
     const date = message.createdAt;
+    if(!date){
+      console.error("some message dont have createAt")
+      return NextResponse.json({messsage : "Server Error"}, { status: 200 });
+    }
     const dateKey = date.toLocaleDateString('en-US', { 
       month: 'short', 
       day: 'numeric' 

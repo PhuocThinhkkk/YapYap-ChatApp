@@ -27,9 +27,9 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{roo
       return NextResponse.json({messages: "Unauthorize."}, {status : 400});
     }
 
-    const messages = await MESSAGE.find({ roomId : roomid });
+    const messages = await MESSAGE.find({ room : roomid });
     if(messages.length === 0 ) return NextResponse.json({messages: "no data in this room"}, {status : 400});
-    console.log(messages)
+    console.log("messages in route handler: ",messages)
     return NextResponse.json(messages, {status: 200})
 
   }catch(err){
@@ -52,7 +52,7 @@ export async function POST( req : NextRequest ) {
         userId,
         roomName,
         info,
-        roomId,
+        room: roomId,
       }
     );
 
