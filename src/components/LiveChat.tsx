@@ -105,7 +105,7 @@ export default function LiveChat( {
 			method: "POST",
 			body: JSON.stringify(message),
 		});
-		if(res.status !== 200 ) {
+		if(!res.ok ) {
 			console.log("there is sth wrong in server! ");
 			return  //
 		}

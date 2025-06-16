@@ -9,6 +9,7 @@ const UserIconSignIn = async () => {
     try{
         const userIdInSession = await getUserIdInSession();
         let user
+        console.log(user)
         if (userIdInSession) {
             user  = await getUserById(userIdInSession)     
         }

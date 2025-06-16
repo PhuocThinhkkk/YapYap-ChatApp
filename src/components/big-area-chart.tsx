@@ -50,12 +50,13 @@ export function BigAssChart() {
           cache: 'no-store'
         })
         const data2 = await res2.json()
+        console.log(res2)
         if (!res2.ok) {
           throw new Error(`status: ${res2.status}, ${data2.message}`)
         }
         
         setChartData(data2) 
-        
+        console.log("hello ",data2)
         let totals = 0;
         for (let index = 0; index < data2.length; index++) {
           totals += data2[index].count
