@@ -120,17 +120,18 @@ export default function LiveChat( {
 				console.error(!info , !user , !room , !room._id , !userId )
 				throw new Error('some information is missing!')
 			}
-			
+			const now = new Date()
 			const message = {
 				userId,
 				roomId : room._id,
 				info,
 			}
-			console.log(message)
+
 			const fullInforMessage : ResponseMessage = {
 				user,
 				room,
 				info,
+				createdAt: now.toISOString()
 			}
 			setMessages([...messages, 
 				fullInforMessage
@@ -150,7 +151,7 @@ export default function LiveChat( {
 			toast.error(`Error when sending message: ${err}`)
 		}
 	}
-	
+
 
 	return (
 		<>
@@ -173,7 +174,7 @@ export default function LiveChat( {
 						
 
 						return (
-							<div key={message._id}>
+							<div key={index}>
 							{/* Date Header */}
 							{showDateHeader && (
 								<div className="flex justify-center mb-4">
@@ -188,21 +189,20 @@ export default function LiveChat( {
 								className={`flex items-start gap-3 ${message.user._id === userId ? "justify-end" : "justify-start"}`}
 							>
 								{message.user._id !== userId && (
-								<Avatar className="w-8 h-8 mt-1">
-									<AvatarImage src={message.user.avatarUrl || "/placeholder.svg"} alt={message.user.name} />
-									<AvatarFallback>
-									{message.user.name
-										.split(" ")
-										.map((n) => n[0])
-										.join("")}
-									</AvatarFallback>
-								</Avatar>
+									<Avatar className="w-8 h-8 mt-1">
+										<AvatarImage src={message.user.avatarUrl} alt={message.user.name} />
+										<AvatarFallback>
+											{message.user.name?.split(" ")
+												.map((n) => n[0])
+												.join("")}
+										</AvatarFallback>
+									</Avatar>
 								)}
 
 								<div className={`flex flex-col ${message.user._id === userId ? "items-end" : "items-start"}`}>
-								{message.user._id !== userId && (
+								{message.user._id !== userId ? (
 									<div className="text-xs text-muted-foreground mb-1 px-1">{message.user.name}</div>
-								)}
+								) : <div className="text-xs text-muted-foreground mb-1 px-1">You</div>}
 
 								<div
 									className={`max-w-[70%] rounded-lg px-4 py-2 ${
@@ -253,7 +253,7 @@ export default function LiveChat( {
 
  function formatDate(dateString : string | undefined) : string {
 	if (!dateString) {
-		console.error('pass in underfined Date to function')
+		console.error('pass in underfined Date to formatDate function')
 		toast.error('pass in underfined Date to function')
 		return ""
 	}
@@ -278,7 +278,7 @@ export default function LiveChat( {
 
  function formatTime(dateString : string | undefined) {
 	if (!dateString) {
-		console.error('pass in underfined Date to function')
+		console.error('pass in underfined Date to formatTime function')
 		toast.error('pass in underfined Date to function')
 		return ""
 	}
@@ -293,7 +293,7 @@ export default function LiveChat( {
  function isSameDay(date1String : string | undefined, date2String : string | undefined) {
 	
 	if (!date1String || !date2String) {
-		console.error('pass in underfined Date to function')
+		console.error('pass in underfined Date to isSameDay function')
 		toast.error('pass in underfined Date to function')
 		return ""
 	}
