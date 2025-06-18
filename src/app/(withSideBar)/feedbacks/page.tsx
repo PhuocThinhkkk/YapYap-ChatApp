@@ -1,68 +1,52 @@
 
-
+import { SidebarTrigger, } from "@/components/ui/sidebar"
+import UserIconWithSuspense from "@/components/UserIconWithSuspense"
 import { MessageSquareHeart, Users, TrendingUp } from "lucide-react"
-import { Feedback } from "@/type"
+import {  FeedbackDb } from "@/type"
 import TabFeedBack from "@/components/TabFeedBack"
+import { getAllFeedbacks } from "@/lib/db/feedback"
+
 
 export const revalidate = 3600 // revalidate at most every hour
 
 
-export default function FeedbackPage() {
+export default async function FeedbackPage() {
 
-    const initialFeedbacks: Feedback[] = [
-        {
-            _id: "1",
-            name: "Sarah Johnson",
-            email: "sarah@example.com",
-            title: "Great user experience!",
-            message:
-            "I love how intuitive the interface is. The design is clean and everything works smoothly. Keep up the excellent work!",
-            rating: 5,
-            category: "UI/UX",
-            createdAt: "2024-01-15",
+  const initialFeedbacks : FeedbackDb[] = await getAllFeedbacks()
 
-        },
-        {
-            _id: "2",
-            name: "Mike Chen",
-            email: "mike@example.com",
-            title: "Loading times could be improved",
-            message:
-            "The app is fantastic overall, but I've noticed some pages take a while to load, especially on mobile devices.",
-            rating: 3,
-            category: "Performance",
-            createdAt: "2024-01-14",
+  const numberFeedbacks = initialFeedbacks.length;
+  let totalRating = 0;
+  let fiveStarRating = 0;
 
-        },
-        {
-            _id: "3",
-            name: "Emily Rodriguez",
-            title: "Missing dark mode",
-            message:
-            "Would love to see a dark mode option. It would be great for late-night usage and would look really modern.",
-            rating: 4,
-            category: "Feature Request",
-            createdAt: "2024-01-13",
-
-        },
-        {
-            _id: "4",
-            name: "David Kim",
-            email: "david@example.com",
-            title: "Excellent customer support",
-            message:
-            "Had an issue and the support team resolved it within hours. Very impressed with the quick response and professionalism.",
-            rating: 5,
-            category: "Support",
-            createdAt: "2024-01-12",
-        
-        },
-    ]
-
+  for (let index = 0; index < initialFeedbacks.length; index++) {
+    const element = initialFeedbacks[index];
+    if (element.rating == 5) {
+      fiveStarRating++
+    }
+    if (element.rating) {
+      totalRating += element.rating;
+    }
     
+  }
+  let averageRattingNumber = 0
 
+  if (numberFeedbacks) {
+    const averageRating = totalRating / numberFeedbacks
+    averageRattingNumber = parseFloat(averageRating.toFixed(2))
+  }
+  
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <> 
+    {/* Header with trigger for mobile */}
+      <header className="flex h-20 items-center border-b px-4">
+        <SidebarTrigger className="md:hidden" />
+        <h1 className="ml-2 font-semibold text-2xl">Feekback Center</h1>
+        <div className="absolute right-8">
+            <UserIconWithSuspense/>
+          </div>
+      </header>
+      
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
         <div className="absolute inset-0 bg-black/10"></div>
@@ -71,9 +55,7 @@ export default function FeedbackPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-6">
               <MessageSquareHeart className="w-8 h-8" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-              Feedback Center
-            </h1>
+
             <p className="text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
               Your voice matters. Share your thoughts and help us create amazing experiences together.
             </p>
@@ -91,7 +73,7 @@ export default function FeedbackPage() {
                 <Users className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">totalFeedbacks</p>
+                <p className="text-2xl font-bold text-gray-900">{numberFeedbacks}</p>
                 <p className="text-gray-600">Total Feedback</p>
               </div>
             </div>
@@ -103,7 +85,7 @@ export default function FeedbackPage() {
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">averageRating</p>
+                <p className="text-2xl font-bold text-gray-900">{averageRattingNumber.toString()}</p>
                 <p className="text-gray-600">Average Rating</p>
               </div>
             </div>
@@ -115,8 +97,8 @@ export default function FeedbackPage() {
                 <MessageSquareHeart className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">resolvedCount</p>
-                <p className="text-gray-600">Resolved Issues</p>
+                <p className="text-2xl font-bold text-gray-900">{fiveStarRating}</p>
+                <p className="text-gray-600">Five Star</p>
               </div>
             </div>
           </div>
@@ -127,5 +109,6 @@ export default function FeedbackPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

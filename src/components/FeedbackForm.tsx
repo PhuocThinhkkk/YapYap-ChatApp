@@ -10,59 +10,70 @@ import { Textarea } from "@/components/ui/text-area-v0"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Star, Send, Sparkles } from "lucide-react"
 import { toast } from "sonner"
-import type { Feedback } from "@/type"
-
+import { FeedbackFormType } from "@/type"
 
 
 export default function FeedbackForm() {
     const [rating, setRating] = useState(0)
     const [hoveredRating, setHoveredRating] = useState(0)
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        title: "",
-        message: "",
-        category: "",
+    const [formData, setFormData] = useState<FeedbackFormType>({
+      title: "",
+      message: "",
+      category: "",
+      ratting : 0,
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
   
 
     const handleSubmit = async (e: React.FormEvent) => {
+      try{
         e.preventDefault()
 
-        if (!formData.name || !formData.title || !formData.message || !rating || !formData.category) {
-        toast.info( "Missing Information")
-        return
+        if ( !formData.title || !formData.message || !rating || !formData.category ) {
+          toast.info( "Missing Information")
+          return
         }
-
         setIsSubmitting(true)
-
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
+        formData.ratting = rating;
         console.log(formData)
-
+        // Simulate API call
+        const res = await fetch("/api/feedback",
+          {
+            method : "POST",
+            headers: {
+              'Content-Type': 'application/json'  // Tell the server you're sending JSON
+            },
+            body: JSON.stringify(formData)   
+          }
+        )
+        const data = await res.json()
+        if (!res.ok) {
+          throw new Error(`${data.message}`)
+        }
         // Reset form
         setFormData({
-            name: "",
-            email: "",
-            title: "",
-            message: "",
-            category: "",
+          title: "",
+          message: "",
+          category: "",
+          ratting : 0,
         })
         setRating(0)
         setIsSubmitting(false)
 
         toast.success("Feedback Submitted! ✨ Thank you for your feedback. We'll review it shortly.")
+      }catch(e){
+        console.error(e)
+        toast.error(`${e}`)
+      }
     }
 
     const handleInputChange = (field: string, value: string) => {
-        setFormData((prev) => ({ ...prev, [field]: value }))
+      setFormData((prev) => ({ ...prev, [field]: value }))
     }
 
     const getRatingText = (rating: number) => {
-        const texts = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"]
-        return texts[rating]
+      const texts = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"]
+      return texts[rating]
     }
 
   return (
@@ -80,35 +91,6 @@ export default function FeedbackForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
-                Name *
-              </Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                placeholder="Your full name"
-                className="border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl h-12"
-                required
-              />
-            </div>
-            <div className="space-y-3">
-              <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                placeholder="your@email.com (optional)"
-                className="border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl h-12"
-              />
-            </div>
-          </div>
-
           <div className="space-y-3">
             <Label htmlFor="category" className="text-sm font-semibold text-gray-700">
               Category *
@@ -139,7 +121,10 @@ export default function FeedbackForm() {
                     className="p-2 hover:scale-125 transition-all duration-200 rounded-full hover:bg-white/50"
                     onMouseEnter={() => setHoveredRating(star)}
                     onMouseLeave={() => setHoveredRating(0)}
-                    onClick={() => setRating(star)}
+                    onClick={() => {
+                      console.log(star)
+                       setRating(star)}
+                      }
                   >
                     <Star
                       className={`w-8 h-8 transition-all duration-200 ${
@@ -151,12 +136,12 @@ export default function FeedbackForm() {
                   </button>
                 ))}
               </div>
-              {(rating > 0 || hoveredRating > 0) && (
-                <div className="text-center">
+              {(rating > 0 || hoveredRating > 0) ? (
+                <div className="text-center h-10 hover:cursor-pointer">
                   <p className="text-lg font-semibold text-gray-800">{getRatingText(hoveredRating || rating)}</p>
                   <p className="text-sm text-gray-600">{hoveredRating || rating} out of 5 stars</p>
                 </div>
-              )}
+              ) : <div className="h-10 hover:cursor-pointer"></div>}
             </div>
           </div>
 
@@ -199,7 +184,7 @@ export default function FeedbackForm() {
                 Submitting...
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 hover:cursor-pointer">
                 <Send className="w-5 h-5" />
                 Submit Feedback
               </div>
