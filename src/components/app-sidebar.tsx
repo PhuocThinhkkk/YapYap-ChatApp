@@ -1,4 +1,4 @@
-import { RocketIcon, Home,  LayoutDashboardIcon, MessageCircleCodeIcon, Search, Settings } from "lucide-react"
+import { RocketIcon, Home,  LayoutDashboardIcon, MessageCircleCodeIcon, Search, EthernetPort } from "lucide-react"
 
 import {
   Sidebar,
@@ -34,9 +34,9 @@ const items = [
     icon: Search,
   },
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Feedbacks",
+    url: "/feedbacks",
+    icon: EthernetPort,
   },
   {
     title: "Dashboard",

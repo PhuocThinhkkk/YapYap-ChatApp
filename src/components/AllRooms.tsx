@@ -1,8 +1,4 @@
-import { Card, CardContent, CardFooter} from "@/components/ui/card"
-import { cn } from "@/lib/utils"
-import ButtonJoinRoom from "@/components/ButtonJoinRoom"
-import { Avatar } from "@radix-ui/react-avatar"
-import { AvatarFallback } from "@/components/ui/avatar"
+import { Card, CardContent,} from "@/components/ui/card"
 import connectDB from "@/lib/mongoDb"
 import Room from "@/schema/room"
 import User from "@/schema/user"
@@ -12,11 +8,13 @@ import { UIError } from "./ui-error"
 import { MessageCircle, Users, Zap, TrendingUp } from "lucide-react"
 import { RoomDb, UserDB } from "@/type"
 import MESSAGE from "@/schema/message"
+import RoomCard from "./RoomCard"
 
 
 export const revalidate = 180
 
 const AllRooms = async () => {
+  try{
     await cookies();
     await connectDB();
     const userIdInSession = await getUserIdInSession();
@@ -44,24 +42,10 @@ const AllRooms = async () => {
       <RoomsStats rooms={user.rooms} userId={userIdInSession}/>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
         {user.rooms?.map((room , index) =>
-            <Card className="m-4" key={index}>
-                <div className="flex h-15 m-4">
-                <div className="w-15 h-15">
-                    <Avatar>
-                      <AvatarFallback>{room.roomName.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                </div>
-                <span  className={cn(
-                        "m-4 leading-none items-end text-2xl font-bold"
-                      )} >       
-                    {room.roomName}
-                </span>
-                </div>
-                <CardContent >Max people : {room.maxPeople}</CardContent>
-                <CardFooter>
-                  <ButtonJoinRoom roomId = {room._id}></ButtonJoinRoom>
-                </CardFooter>
-            </Card>
+          <div key={index}>
+              <RoomCard room={room}/>
+          </div>
+          
         )}
     </div>
     
@@ -70,6 +54,10 @@ const AllRooms = async () => {
        
         
     )
+  }catch(e){
+    console.log(e)
+    return <UIError title="Server error"/>
+  }
 }
 
 async function RoomsStats ({ rooms, userId } : { rooms : RoomDb[], userId : string}) {

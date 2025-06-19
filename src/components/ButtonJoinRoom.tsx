@@ -1,16 +1,25 @@
-import  Link from 'next/link'
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
+import BananaLoading from './BananaLoading'
 
 const ButtonJoinRoom = ({roomId} : {roomId: string}) => {
+  const [isRedirect, setIsRedirect] = useState(false)
+  const route = useRouter()
+  async function handleOnclick(){
+    setIsRedirect(true)
+    route.push(`/chatrooms/${roomId}`)
+  }
   return (
-    <div>
-        <Link href={`/chatrooms/${roomId}`} className=''>
-            <Button className='hover:cursor-pointer'>
-                Join
-            </Button>
-        </Link>
-    </div>
+    <>
+    <Button onClick={handleOnclick} className='hover:cursor-pointer'>
+        Join
+    </Button>
+    <BananaLoading isRedirect={isRedirect}/>
+    </>   
+    
+    
   )
 }
 

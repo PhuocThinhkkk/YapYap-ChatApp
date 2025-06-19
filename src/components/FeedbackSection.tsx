@@ -1,49 +1,12 @@
 import { Card, CardContent,} from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Star } from "lucide-react"
+import { get4FiveStarFeedbacks } from "@/lib/db/feedback"
 
 
- const testimonials = [
-    {
-      name: "Sarah Chen",
-      role: "Product Manager",
-      company: "TechFlow",
-      avatar: "/placeholder.svg?height=40&width=40",
-      content:
-        "The free plan was perfect for our MVP. Once we grew, upgrading to premium was a no-brainer. The advanced analytics helped us increase conversions by 40%.",
-      rating: 5,
-    },
-    {
-      name: "Marcus Rodriguez",
-      role: "Startup Founder",
-      company: "InnovateLab",
-      avatar: "/placeholder.svg?height=40&width=40",
-      content:
-        "Started with the free tier and loved the simplicity. The premium features like priority support and advanced integrations are worth every penny.",
-      rating: 5,
-    },
-    {
-      name: "Emily Watson",
-      role: "Developer",
-      company: "CodeCraft",
-      avatar: "/placeholder.svg?height=40&width=40",
-      content:
-        "Great value for money. The free plan has everything you need to get started, and premium unlocks powerful features for scaling.",
-      rating: 4,
-    },
-    {
-      name: "David Kim",
-      role: "CTO",
-      company: "DataSync",
-      avatar: "/placeholder.svg?height=40&width=40",
-      content:
-        "We've been using the premium plan for 2 years. The reliability and support quality are exceptional. Highly recommend for any serious business.",
-      rating: 5,
-    },
-  ]
-
-
-const FeedbackSection = () => {
+const FeedbackSection = async () => {
+  "use cache"
+  const testimonials = await get4FiveStarFeedbacks()
   return (
     <section className="py-16 bg-slate-50">
         <div className="container mx-auto px-4">
@@ -66,21 +29,21 @@ const FeedbackSection = () => {
                     />
                     ))}
                 </div>
-                <p className="text-gray-700 mb-6 italic">{testimonial.content}</p>
+                <p className="text-gray-700 mb-6 italic">{testimonial.message}</p>
                 <div className="flex items-center">
                     <Avatar className="h-10 w-10 mr-3">
-                    <AvatarImage src={testimonial.avatar || "/placeholder.svg"} alt={testimonial.name} />
+                    <AvatarImage src={testimonial.user.avatarUrl || "/placeholder.svg"} alt={testimonial.user.name} />
                     <AvatarFallback>
-                        {testimonial.name
+                        {testimonial.user.name
                         .split(" ")
                         .map((n) => n[0])
                         .join("")}
                     </AvatarFallback>
                     </Avatar>
                     <div>
-                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                    <p className="font-semibold text-gray-900">{testimonial.user.name}</p>
                     <p className="text-sm text-gray-600">
-                        {testimonial.role} at {testimonial.company}
+                        {testimonial.user.role} at {testimonial.createdAt.toString()}
                     </p>
                     </div>
                 </div>

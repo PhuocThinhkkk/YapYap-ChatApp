@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic'
 import HeroPricing from "./HeroPricing"
 import PricingSection from "./PricingSection"
 import FeaturesComparision from "./FeaturesComparision"
@@ -14,7 +13,7 @@ export default async function Page() {
       {/* Header with trigger for mobile */}
         <header className="relative flex h-18 items-center border-b px-4">
           <SidebarTrigger className="md:hidden" />
-          <h1 className="ml-2 text-lg font-semibold">Rooms</h1>
+          <h1 className="ml-2 text-lg font-semibold">Pricing</h1>
           <div className="absolute right-8">
             <UserIconWithSuspense/>
           </div>

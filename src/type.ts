@@ -92,3 +92,21 @@ export type RoomDb = {
   users: UserDB[];
   createdAt: Date;
 }
+
+
+export type FeedbackDb = {
+  _id: string
+  title: string
+  message: string
+  rating: number
+  user : UserDB
+  category: string
+  createdAt: Date
+}
+
+export type FeedbackFormType = {
+    title: string,
+    message: string,
+    category: string,
+    ratting : number,
+}
