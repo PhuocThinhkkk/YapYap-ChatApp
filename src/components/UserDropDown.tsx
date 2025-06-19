@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Settings, HelpCircle } from "lucide-react"
+import { LogOut, User, } from "lucide-react"
 import { UserDB } from "@/type"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -79,18 +79,7 @@ const UserDropDown = (
             <span>View Profile</span>
             </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-            <Link href="/settings" className="flex items-center cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-            </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-            <Link href="/help" className="flex items-center cursor-pointer">
-            <HelpCircle className="mr-2 h-4 w-4" />
-            <span>Help & Support</span>
-            </Link>
-        </DropdownMenuItem>
+        
         <DropdownMenuSeparator />
         <DropdownMenuItem
             onClick={onLogout}

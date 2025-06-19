@@ -20,16 +20,19 @@ import { toast } from "sonner"
     const freeFeatures = [
         "You can have 40 rooms",
         "Up to 10 users per rooms",
+        "Seeing beautifull charts",
+        "Edit your personal profile",
+        "Seding feedbacks",
+
     ]
 
     const premiumFeatures = [
         "Unlimited rooms",
         "Up to 100 users per rooms",
-        "Support for sending images, videos, voice messages, and files.",
-        "Message reactions (👍 ❤️ 😂)",
-        "Message editing and deletion",
         "Seeing beautifull charts",
-
+        "Edit your personal profile",
+        "Seding feedbacks",
+        "Message reactions (👍 ❤️ 😂)",
     ]
   const FreePlan : CardPlan = {
     title : "Free Plan",

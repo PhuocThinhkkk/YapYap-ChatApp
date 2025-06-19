@@ -1,3 +1,4 @@
+"use cache"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,12 +12,24 @@ import {
   UserPlus,
   ArrowRight,
   Star,
-  
 } from "lucide-react"
 import Image from "next/image"
+import { 
+  Card,  
+  CardContent 
+} from "@/components/ui/card"
+import { 
+  Avatar, 
+  AvatarFallback, 
+  AvatarImage 
+} from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { get4FiveStarFeedbacks } from "@/lib/db/feedback"
+import type { FeedbackDb } from "@/type"
 
+export default async function LandingPage() {
 
-export default function LandingPage() {
+  const initialFeedbacks : FeedbackDb[] = await get4FiveStarFeedbacks()
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50">
       {/* Navigation */}
@@ -161,22 +174,60 @@ export default function LandingPage() {
             Dont just take our word for it - hear from our happy users.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <TestimonialCard
-              quote="YapYap has completely changed how I stay in touch with my friends. The private rooms are perfect for our group chats!"
-              author="Alex Johnson"
-              role="College Student"
-            />
-            <TestimonialCard
-              quote="The interface is so intuitive and fun to use. I love how I can customize my profile to express my personality."
-              author="Sarah Chen"
-              role="Graphic Designer"
-            />
-            <TestimonialCard
-              quote="As someone who works remotely, YapYap helps me stay connected with my team in a way that feels personal and engaging."
-              author="Michael Rodriguez"
-              role="Software Developer"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+             {initialFeedbacks.map((feedback, index) => ( 
+              <Card
+              key={feedback._id}
+              className="hover:cursor-pointer bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-in fade-in-50 slide-in-from-bottom-4"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <CardContent className="pt-6">
+                {/* Star Rating */}
+                <div className="flex items-center mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-4 w-4 ${i < feedback.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Feedback Message */}
+                <p className="text-gray-700 mb-6 italic leading-relaxed">{feedback.message}</p>
+
+                {/* Category and Status Badges */}
+                <div className="flex gap-2 mb-4">
+                  <Badge variant="outline" className="text-xs">
+                    {feedback.category}
+                  </Badge>
+                  
+                </div>
+
+                {/* User Info */}
+               
+                <div className="flex items-center">
+                  <Avatar className="h-10 w-10 mr-3">
+                    <AvatarImage
+                      src={feedback.user.avatarUrl}
+                      alt={feedback.user.name}
+                    />
+                    <AvatarFallback className="bg-slate-50 text-zinc-800">
+                      {feedback.user.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-semibold text-gray-900">{feedback.user.name}</p>
+                    <p className="text-sm text-gray-600">
+                      {feedback.title} • {(new Date(feedback.createdAt)).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -365,19 +416,3 @@ function InterfaceCard({
   )
 }
 
-function TestimonialCard({ quote, author, role } : { quote : string, author: string, role: string }) { 
-  return (
-    <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-      <div className="flex mb-6">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star key={star} className="size-5 text-yellow-400 fill-yellow-400" />
-        ))}
-      </div>
-      <p className="text-gray-700 mb-6 italic">{quote}</p>
-      <div>
-        <p className="font-bold">{author}</p>
-        <p className="text-gray-600 text-sm">{role}</p>
-      </div>
-    </div>
-  )
-}

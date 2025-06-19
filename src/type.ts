@@ -101,7 +101,7 @@ export type FeedbackDb = {
   rating: number
   user : UserDB
   category: string
-  createdAt: string
+  createdAt: Date
 }
 
 export type FeedbackFormType = {

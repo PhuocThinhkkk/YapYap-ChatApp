@@ -53,3 +53,42 @@ export async function createFeedback( userId : string, formdata : FeedbackFormTy
     })
     return result
 }
+
+export const get4FiveStarFeedbacks: () => Promise<FeedbackDb[]> = cache(async () => {
+  await connectDB();
+
+  const feedbacks = await Feedback.aggregate([
+    {
+      $match: { rating: 5 } 
+    },
+    { $limit : 4 },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    {
+      $unwind: '$user'
+    },
+    {
+      $addFields: {
+        '_id': { $toString: '$_id' },
+        'user._id': { $toString: '$user._id' }
+      }
+    },
+    {
+      $project: {
+        __v: 0,
+        'user.password': 0,
+        'user.__v': 0,
+        'user.createdAt': 0,
+        'user.updatedAt': 0
+      }
+    }
+  ]);
+
+  return feedbacks;
+});

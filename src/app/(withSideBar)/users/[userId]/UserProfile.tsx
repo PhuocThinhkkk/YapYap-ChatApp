@@ -121,7 +121,7 @@ export default function ProfileComponent() {
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <CalendarDays className="mr-1 h-4 w-4" />
-                    Day creat account: 
+                    Day create account: 
                         {" "+user.joinAt}
                 </div>
               </div>

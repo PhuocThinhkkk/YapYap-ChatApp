@@ -72,7 +72,6 @@ export default function FeedbackList({ feedbacks }: FeedbackListProps) {
   async function redirectToProfile(userId : string){
 
     setIsRedirect(true) 
-    await new Promise((resolve) => setTimeout(resolve, 3000))
     route.push(`/users/${userId}`)
   }
 
@@ -197,7 +196,7 @@ export default function FeedbackList({ feedbacks }: FeedbackListProps) {
                 redirectToProfile(feedback.user._id)
               }}
               key={feedback._id}
-              className="bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-in fade-in-50 slide-in-from-bottom-4"
+              className="hover:cursor-pointer bg-white hover:shadow-md transition-all duration-300 hover:-translate-y-1 animate-in fade-in-50 slide-in-from-bottom-4"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <CardContent className="pt-6">
@@ -240,7 +239,7 @@ export default function FeedbackList({ feedbacks }: FeedbackListProps) {
                   <div>
                     <p className="font-semibold text-gray-900">{feedback.user.name}</p>
                     <p className="text-sm text-gray-600">
-                      {feedback.title} • {new Date(feedback.createdAt).toLocaleDateString()}
+                      {feedback.title} • {(new Date(feedback.createdAt)).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
