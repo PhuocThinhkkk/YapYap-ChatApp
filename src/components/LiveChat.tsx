@@ -50,13 +50,12 @@ export default function LiveChat( {
 				})
 				const dataUser = await resForUser.json();
 				if(!resForUser.ok ) {
-					console.log(dataUser)
 					throw new Error(dataUser.message)
 				}
 				setUser(dataUser);
 
 			}catch (err) {
-				console.error("Failed to fetch messages:", err);
+				console.error(err)
 				toast.error("Failed to get messages");
 				return
 			}
@@ -71,16 +70,14 @@ export default function LiveChat( {
 				);
 				const data = await resForMessage.json();
 				if(!resForMessage.ok ) {
-					console.log(data)
 					throw new Error(data.message)
 				}
-				console.log("message in client: ",data)
 				const newDate = new Date(data.createdAt)
 				data.createAt = newDate
 				setMessages(data);
 
 			}catch (err) {
-				console.error("Failed to fetch messages:", err);
+				console.error(err)
 				toast.error("Failed to get messages");
 				return
 			}
@@ -117,7 +114,6 @@ export default function LiveChat( {
 			const formData = new FormData(form);
 			const info = formData.get('message') as string
 			if(!info || !user || !room || !room._id || !userId ) {
-				console.error(!info , !user , !room , !room._id , !userId )
 				throw new Error('some information is missing!')
 			}
 			const now = new Date()
@@ -141,13 +137,11 @@ export default function LiveChat( {
 				body: JSON.stringify(message),
 			});
 			if(!res.ok ) {
-				console.log("there is sth wrong in server! ");
 				return  //
 			}
 			socket.emit('sendMessage',{roomId : room._id, message} );
 			form.reset();
 		}catch(err){
-			console.log(err);
 			toast.error(`Error when sending message: ${err}`)
 		}
 	}
@@ -253,7 +247,6 @@ export default function LiveChat( {
 
  function formatDate(dateString : string | undefined) : string {
 	if (!dateString) {
-		console.error('pass in underfined Date to formatDate function')
 		toast.error('pass in underfined Date to function')
 		return ""
 	}
@@ -278,7 +271,6 @@ export default function LiveChat( {
 
  function formatTime(dateString : string | undefined) {
 	if (!dateString) {
-		console.error('pass in underfined Date to formatTime function')
 		toast.error('pass in underfined Date to function')
 		return ""
 	}
@@ -293,7 +285,6 @@ export default function LiveChat( {
  function isSameDay(date1String : string | undefined, date2String : string | undefined) {
 	
 	if (!date1String || !date2String) {
-		console.error('pass in underfined Date to isSameDay function')
 		toast.error('pass in underfined Date to function')
 		return ""
 	}

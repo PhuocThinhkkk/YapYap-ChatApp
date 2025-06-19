@@ -75,7 +75,7 @@ const PricingSection = ( ) => {
         },
     })
     const user = UserQuery.data;
-    console.log("user id: ",userId)
+    
     
 
     return (
@@ -136,7 +136,7 @@ function PricingCard({
 
             mutation.mutate();
             
-            console.log("success")
+            
         }catch(e){
             toast.error(`${e}`)
         }  

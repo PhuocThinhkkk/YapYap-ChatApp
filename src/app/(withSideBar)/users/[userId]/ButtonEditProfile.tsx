@@ -84,7 +84,7 @@ export const formSchema = z.object({
     .any()
     .optional()
     .refine((files) => {
-      console.log(files?.[0]?.size)
+
       // Only validate if a file is present
       if (!files?.[0]) return true;
       return files?.[0]?.size <= MAX_FILE_SIZE;
@@ -92,7 +92,7 @@ export const formSchema = z.object({
     .refine(
       (files) => {
         if (!files?.[0]) return true;
-        console.log("type of avatar: ",files?.[0]?.type)
+
         return ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type)
       },
       "Only .jpg, .jpeg, .png and .webp formats are supported."
@@ -101,7 +101,7 @@ export const formSchema = z.object({
     .any()
     .optional()
     .refine((files) => {
-      console.log(files?.[0]?.size)
+
       // Only validate if a file is present
       if (!files?.[0]) return true;
       return files?.[0]?.size <= MAX_FILE_SIZE;
@@ -109,7 +109,7 @@ export const formSchema = z.object({
     .refine(
       (files) => {
         if (!files?.[0]) return true;
-        console.log("type of background: ",files?.[0]?.type)
+
         return ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type)
       },
       "Only .jpg, .jpeg, .png and .webp formats are supported."
@@ -175,7 +175,7 @@ function FormAction({ user, setIsOpen } : {user : UserProfile, setIsOpen : ( boo
     
       
   }
-  console.log("form: ",form)
+
 
 return(
   <Form {...form}>

@@ -1,34 +1,23 @@
 import { Card, CardContent,} from "@/components/ui/card"
 import connectDB from "@/lib/mongoDb"
-import Room from "@/schema/room"
-import User from "@/schema/user"
 import { getUserIdInSession } from "@/lib/session";
-import { cookies } from "next/headers"
 import { UIError } from "./ui-error"
 import { MessageCircle, Users, Zap, TrendingUp } from "lucide-react"
 import { RoomDb, UserDB } from "@/type"
 import MESSAGE from "@/schema/message"
 import RoomCard from "./RoomCard"
+import { getUserByIdWithRoom } from "@/lib/db/userdb";
 
 
 export const revalidate = 180
 
 const AllRooms = async () => {
   try{
-    await cookies();
-    await connectDB();
     const userIdInSession = await getUserIdInSession();
     if(!userIdInSession) {
-  
       return <UIError className="w-full text-center" title="Please sign in to see this page"/>
     }
-   
-
-    console.log(!!Room)
-    const user : UserDB  = await User.findById(userIdInSession).populate({
-      path: "rooms",
-    })
-    console.log("user: ",user)
+    const user : UserDB  = await getUserByIdWithRoom(userIdInSession)
     if(!user) {
       return <UIError className="w-full text-center" title="Please sign in to see your rooms "/>
     }
@@ -56,7 +45,7 @@ const AllRooms = async () => {
     )
   }catch(e){
     console.log(e)
-    return <UIError title="Server error"/>
+    return <UIError title={`${e}`}/>
   }
 }
 

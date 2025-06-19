@@ -3,7 +3,6 @@ import  { NextResponse, type NextRequest } from "next/server";
 import MESSAGE from "@/schema/message";
 import connectDB from "@/lib/mongoDb";
 import { getUserIdInSession } from "@/lib/session";
-import Room from "@/schema/room";  
 import { getUserAndRoomById } from "@/lib/db/userdb";
 import { getMessagesWithUserByRoomId } from "@/lib/db/message";
 
@@ -11,15 +10,10 @@ import { getMessagesWithUserByRoomId } from "@/lib/db/message";
 export async function GET( req : NextRequest , {params} : {params : Promise<{roomid : string}>}){
   try{
     const { roomid } = await params;
-    console.log("room id ", roomid)
-    await connectDB();
-
     const userIdInSession = await getUserIdInSession();
     if (!userIdInSession) {
       return NextResponse.json({messages: "Unauthorize."}, {status : 400});
     }
-    console.log(!!Room)
-    console.log(!!MESSAGE)
     const user = await getUserAndRoomById(userIdInSession, roomid)
     if (!user.rooms || user?.rooms.length === 0) {
       return NextResponse.json({messages: "Unauthorize."}, {status : 400});
@@ -27,7 +21,6 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{roo
 
     const messages = await getMessagesWithUserByRoomId(roomid)
     if(messages.length === 0 || !messages ) return NextResponse.json({messages: "no data in this room"}, {status : 400});
-    console.log("messages in route handler: ",messages)
     return NextResponse.json(messages, {status: 200})
 
   }catch(err){

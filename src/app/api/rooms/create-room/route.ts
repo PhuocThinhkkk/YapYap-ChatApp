@@ -45,8 +45,8 @@ export async function POST( req : NextRequest ) {
       roomName : room.roomName,
       password : room.password,
       maxPeople : room.maxPeople,
-      userIdInSession,
       users: [userIdInSession],
+      leaderId: userIdInSession,
     });
 
     await User.updateOne({ _id: userIdInSession },
@@ -61,8 +61,8 @@ export async function POST( req : NextRequest ) {
     return NextResponse.json({ ...res, status: 200 });
   }
   catch (error){
-    
-    return NextResponse.json({message: error}, {status: 500} );
+    console.error(error)
+    return NextResponse.json({message: "server error."}, {status: 500} );
   }
   
 }

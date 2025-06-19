@@ -19,7 +19,7 @@ export async function POST(req : NextRequest) {
         
         const result = await createFeedback(userId, data as FeedbackFormType); 
 
-        console.log("data in route handler",data)
+        
         return NextResponse.json( result ,{status: 200})
     }catch(err){
         return NextResponse.json({message: `something wrong with server ${err}`}, {status: 500})

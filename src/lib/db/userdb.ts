@@ -4,7 +4,7 @@ import User from '@/schema/user';
 import connectDB from "@/lib/mongoDb"
 import mongoose from 'mongoose';
 
-export async function getUserById(id : string) : Promise<UserDB | null> {
+export async function getUserById(id : string) : Promise<UserDB> {
     await connectDB()
     const userdb = await User.findById(id).select('-password')
     if (!userdb) {
@@ -15,6 +15,8 @@ export async function getUserById(id : string) : Promise<UserDB | null> {
     user.createdAt = createdAt
     return user as UserDB
 }
+
+
 
 export async function getUserAndRoomById(userId : string, roomId : string){
     const users = await User.aggregate([
@@ -35,9 +37,9 @@ export async function getUserAndRoomById(userId : string, roomId : string){
             name: 1, 
             rooms: {
                 $filter: {
-                input: "$rooms",
-                as: "room",
-                cond: { $eq: [ "$$room._id", new mongoose.Types.ObjectId(roomId) ] }
+                    input: "$rooms",
+                    as: "room",
+                    cond: { $eq: [ "$$room._id", new mongoose.Types.ObjectId(roomId) ] }
                 }
             }
         }
@@ -69,3 +71,57 @@ export async function getUserAndRoomById(userId : string, roomId : string){
     return user as UserDB
 
 }
+
+
+
+
+
+export async function getUserByIdWithRoom(userId : string){
+    const users = await User.aggregate([
+    {
+        $match: { _id: new mongoose.Types.ObjectId(userId) }
+    },
+    {
+        $lookup: {
+            from: "rooms", 
+            localField: "rooms",
+            foreignField: "_id",
+            as: "rooms"
+        }
+    },
+    {
+        $project: {
+            _id: { $toString: "$_id" },
+            name: 1, 
+            rooms: 1
+        }
+    },
+    {
+        $addFields: {
+            rooms: {
+            $map: {
+                input: "$rooms",
+                as: "room",
+                in: {
+                _id: { $toString: "$$room._id" },
+                    roomName: "$$room.roomName",
+                    leaderId: { $toString: "$$room.leaderId" },
+                    password: "$$room.password",
+                    maxPeople: "$$room.maxPeople",
+                    createdAt: "$$room.createdAt",
+                    users: "$$room.users",
+                }
+            }
+            }
+        }
+    }
+    ]); 
+    const user = users[0]
+    if (!user) {
+        throw new Error('Unauthorize.')
+        
+    }
+    return user as UserDB
+
+}
+
