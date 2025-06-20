@@ -51,6 +51,9 @@ export function BigAssChart() {
         })
         const data2 = await res2.json()
         console.log(res2)
+        if (res2.status == 504) {
+          throw new Error("Please refrest again to see all the chart")
+        }
         if (!res2.ok) {
           throw new Error(`status: ${res2.status}, ${data2.message}`)
         }

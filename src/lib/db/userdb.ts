@@ -64,10 +64,6 @@ export async function getUserAndRoomById(userId : string, roomId : string){
     }
     ]); 
     const user = users[0]
-    if (!user) {
-        throw new Error('Unauthorize.')
-        
-    }
     return user as UserDB
 
 }
@@ -117,11 +113,82 @@ export async function getUserByIdWithRoom(userId : string){
     }
     ]); 
     const user = users[0]
-    if (!user) {
-        throw new Error('Unauthorize.')
-        
-    }
     return user as UserDB
 
 }
 
+export async function get6RandomUsers() {
+  await connectDB();
+
+  const users = await User.aggregate([
+    { $sample: { size: 6 } },
+    {
+      $project: {
+        _id: { $toString: "$_id" },
+        name: 1,
+        email: 1,
+        avatarUrl: 1,
+        rooms: {
+          $map: {
+            input: "$rooms",
+            as: "roomId",
+            in: { $toString: "$$roomId" },
+          },
+        },
+        roomsOwn: {
+          $map: {
+            input: "$roomsOwn",
+            as: "ownId",
+            in: { $toString: "$$ownId" },
+          },
+        },
+        role: 1,
+        location: 1,
+      },
+    },
+  ]);
+
+  return users as UserDB[];
+}
+
+
+export async function searchForUsersByName (searchTerm: string){
+  await connectDB();
+
+  const users = await User.aggregate([
+    {
+      $match: {
+        name: { $regex: searchTerm, $options: 'i' }, // 'i' = case-insensitive
+      },
+    },
+    {
+      $project: {
+        _id: { $toString: "$_id" },
+        name: 1,
+        email: 1,
+        avatarUrl: 1,
+        rooms: {
+          $map: {
+            input: "$rooms",
+            as: "roomId",
+            in: { $toString: "$$roomId" },
+          },
+        },
+        roomsOwn: {
+          $map: {
+            input: "$roomsOwn",
+            as: "ownId",
+            in: { $toString: "$$ownId" },
+          },
+        },
+        role: 1,
+        location: 1,
+      },
+    },
+    {
+      $limit: 20, // Optional: limit results to prevent over-fetching
+    },
+  ]);
+
+  return users as UserDB[];
+};

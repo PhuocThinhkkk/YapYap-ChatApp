@@ -7,6 +7,7 @@ import { useState, useEffect } from "react"
 import Cookies from "js-cookie"
 import { UserProfile } from "@/type"
 import { toast } from "sonner"
+import { UIError } from "@/components/ui-error"
 
     type CardPlan = {
         title : "Free Plan" | "Premium Plan",
@@ -22,7 +23,7 @@ import { toast } from "sonner"
         "Up to 10 users per rooms",
         "Seeing beautifull charts",
         "Edit your personal profile",
-        "Seding feedbacks",
+        "Sending feedbacks",
 
     ]
 
@@ -31,7 +32,7 @@ import { toast } from "sonner"
         "Up to 100 users per rooms",
         "Seeing beautifull charts",
         "Edit your personal profile",
-        "Seding feedbacks",
+        "Sending feedbacks",
         "Message reactions (👍 ❤️ 😂)",
     ]
   const FreePlan : CardPlan = {
@@ -63,7 +64,7 @@ const PricingSection = ( ) => {
     }, []);
 
     const UserQuery = useQuery({
-        queryKey: ['UserInfor'],
+        queryKey: ['UserInfor', userId],
         enabled: !!userId,
         queryFn: async () => {
         const response = await fetch(`/api/users/${userId}/profile`)
@@ -81,6 +82,7 @@ const PricingSection = ( ) => {
     return (
             
         <section className="py-4">
+            {UserQuery.error && <UIError className="w-full" title={`${UserQuery.error}`}/>}
             <div className="container mx-auto px-4">
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     <PricingCard user={user} plan={FreePlan} isVisible={isVisible} isLoading={UserQuery.isLoading}/>

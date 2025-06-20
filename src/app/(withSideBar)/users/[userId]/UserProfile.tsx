@@ -53,7 +53,7 @@ export default function ProfileComponent() {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
-      <Card className="border-none shadow-none ">
+      <Card className="border shadow-2xs ">
         {/* Cover Image */}
         <div className="h-48 bg-amber-200 rounded-t-lg relative">
           {user.backgroundUrl ? (
