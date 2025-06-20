@@ -68,7 +68,7 @@ export default function ButtonEditProfile({ user } : {user : UserProfile}) {
 }
 
 
-const MAX_FILE_SIZE = 1024 * 1024 * 1;  // 1MB
+const MAX_FILE_SIZE = 1024 * 1024 * 2;  // 2MB
 const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -79,7 +79,7 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
 
 export const formSchema = z.object({
   userName : z.string().max(20, "Your name should be less than 20 characters."),
-  userBio : z.string().max(200, "Your bio should be less than 200 characters."),
+  userBio : z.string().max(700, "Your bio should be less than 700 characters."),
   avatarImg: z
     .any()
     .optional()
@@ -88,7 +88,7 @@ export const formSchema = z.object({
       // Only validate if a file is present
       if (!files?.[0]) return true;
       return files?.[0]?.size <= MAX_FILE_SIZE;
-    }, `Max image size is 1MB.`)
+    }, `Max image size is 2MB.`)
     .refine(
       (files) => {
         if (!files?.[0]) return true;
@@ -105,7 +105,7 @@ export const formSchema = z.object({
       // Only validate if a file is present
       if (!files?.[0]) return true;
       return files?.[0]?.size <= MAX_FILE_SIZE;
-    }, `Max image size is 1MB.`)
+    }, `Max image size is 2MB.`)
     .refine(
       (files) => {
         if (!files?.[0]) return true;

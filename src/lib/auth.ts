@@ -13,6 +13,7 @@ export async function setUserInforInCookie({ user } : {user : UserDB}) : Promise
 
     const roomsLength = user.rooms?.length;
     const roomsOwnLength = user.roomsOwn?.length;
+    delete user.bio;
     delete user.rooms;
     delete user.roomsOwn;
     const newUser = {

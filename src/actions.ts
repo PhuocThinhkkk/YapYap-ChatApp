@@ -2,7 +2,7 @@
 import connectDB from "./lib/mongoDb"
 import User from "@/schema/user";
 import Room from "@/schema/room"
-import { createSession, } from "./lib/session"
+import { createSession, getUserIdInSession, } from "./lib/session"
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache";
@@ -94,14 +94,11 @@ export async function SearchRoom (_prevState : unknown , formData: FormData) : P
   }
   
 
-  const cookieStore = await cookies()
-    const user = cookieStore.get('user')
-    if(!user) {
-  
-      return {message: "Please sign in to join a room"}
-    }
-    const userId = JSON.parse(user.value)._id;
- 
+
+  const userId = await getUserIdInSession()
+  if (!userId) {
+    return {message: "Unauthorize"}
+  }
   const password = formData.get('password') as string
   await connectDB();
   const room = await Room.findOne({ roomName })
@@ -125,7 +122,11 @@ export async function SearchRoom (_prevState : unknown , formData: FormData) : P
       return {message: "You are already in this room"}
     }
   }
-  await Room.updateOne({ roomName }, { $addToSet: { users: userId } })
+  const roomDb = await Room.findOneAndUpdate({ roomName }, { $addToSet: { users: userId } })
+  if (!roomDb) {
+    return {message: "Unauthorize."}
+  }
+  await User.updateOne({ _id : userId }, { $addToSet: { rooms: roomDb._id } })
   revalidatePath('/rooms')
   redirect('/rooms')
 

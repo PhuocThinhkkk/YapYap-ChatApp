@@ -23,7 +23,6 @@ import {
   AvatarFallback, 
   AvatarImage 
 } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { get4FiveStarFeedbacks } from "@/lib/db/feedback"
 import type { FeedbackDb } from "@/type"
 
@@ -33,7 +32,7 @@ export default async function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50">
       {/* Navigation */}
-      <header className="container mx-auto py-6 px-4 flex items-center justify-between">
+      <header className="container mx-auto py-6 px-20 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <MessageCircle className="size-8 text-purple-600" />
           <span className="text-2xl font-bold text-gradient from-purple-600 to-pink-500">YapYap</span>
@@ -64,14 +63,14 @@ export default async function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 flex flex-col md:flex-row items-center">
+      <section className="container mx-auto px-30 py-20 flex flex-col md:flex-row items-center ">
         <div className="md:w-1/2 mb-10 md:mb-0">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="text-gradient from-purple-600 to-pink-500">YapYap</span>
+          <h1 className=" font-bold mb-6">
+            <span className="text-4xl md:text-5xl text-gradient from-purple-600 to-pink-500">YapYap</span>
             <br />
-            <span className="text-gray-800">For those who just cant stop yapping.</span>
+            <span className="text-gray-800 text-xl md:text-2xl">For those who just cant stop yapping.</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-sm md:text-xl text-gray-600 mb-8">
             Connect with friends, create private rooms, and express yourself with emojis in our beautiful, intuitive
             chat platform.
           </p>
@@ -103,7 +102,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
+      <section id="features" className="py-20 bg-white px-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">Features Youll Love</h2>
           <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
@@ -136,7 +135,7 @@ export default async function LandingPage() {
       </section>
 
       {/* App Interface Showcase */}
-      <section id="interface" className="py-20 bg-gradient-to-b from-purple-50 to-white">
+      <section id="interface" className="py-20 px-20 bg-gradient-to-b from-purple-50 to-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">Beautiful Interface</h2>
           <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
@@ -167,14 +166,14 @@ export default async function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-20 bg-white">
+      <section id="testimonials" className="py-20 bg-white px-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">What Users Say</h2>
           <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
             Dont just take our word for it - hear from our happy users.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
              {initialFeedbacks.map((feedback, index) => ( 
               <Card
               key={feedback._id}
@@ -195,13 +194,6 @@ export default async function LandingPage() {
                 {/* Feedback Message */}
                 <p className="text-gray-700 mb-6 italic leading-relaxed">{feedback.message}</p>
 
-                {/* Category and Status Badges */}
-                <div className="flex gap-2 mb-4">
-                  <Badge variant="outline" className="text-xs">
-                    {feedback.category}
-                  </Badge>
-                  
-                </div>
 
                 {/* User Info */}
                
@@ -233,7 +225,7 @@ export default async function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-600 to-pink-500">
+      <section className="py-20 px-20 bg-gradient-to-r from-purple-600 to-pink-500">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Ready to Start Yapping?</h2>
           <p className="text-xl text-white mb-10 max-w-2xl mx-auto">
@@ -248,7 +240,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 text-white py-12 px-20">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between">
             <div className="mb-8 md:mb-0">

@@ -9,7 +9,6 @@ import RoomCard from "./RoomCard"
 import { getUserByIdWithRoom } from "@/lib/db/userdb";
 
 
-export const revalidate = 180
 
 const AllRooms = async () => {
   try{
@@ -56,7 +55,7 @@ async function RoomsStats ({ rooms, userId } : { rooms : RoomDb[], userId : stri
   const endOfDay = new Date(today.setHours(24, 0, 0, 0));
 
   const countMessage = await MESSAGE.countDocuments({
-    userId: userId,
+    user: userId,
     createdAt: {
       $gte: startOfDay,
       $lt: endOfDay
