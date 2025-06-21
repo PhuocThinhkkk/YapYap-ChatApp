@@ -49,7 +49,7 @@ export async function createFeedback( userId : string, formdata : FeedbackFormTy
         title : formdata.title,
         category : formdata.category,
         message : formdata.message,
-        ratting : formdata.ratting
+        rating : formdata.rating
     })
     return result
 }
