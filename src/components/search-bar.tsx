@@ -35,10 +35,10 @@ export function SearchBar({ onSearch, isLoading = false }: SearchBarProps) {
             </div>
             <Input
               type="text"
-              placeholder="Search by name, email, or location..."
+              placeholder="Search by name..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="pl-16 pr-32 py-8 text-lg bg-transparent border-0 focus:ring-0 focus:outline-none placeholder:text-gray-400 text-gray-700 font-medium"
+              className="pl-16 pr-32 py-8 text-xs md:text:sm lg:text-lg bg-transparent border-0 focus:ring-0 focus:outline-none placeholder:text-gray-400 text-gray-700 font-medium"
               disabled={isLoading}
             />
             {query && (

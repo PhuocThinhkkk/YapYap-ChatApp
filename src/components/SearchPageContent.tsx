@@ -14,18 +14,18 @@ export default function SearchPageContent() {
   const [searchResults, setSearchResults] = useState<UserDB[] >([])
   const [isSearching, setIsSearching] = useState(false)
   const initialFetch = useQuery({
-        queryKey: ['Search'],
-        queryFn: async () => {
-        const response = await fetch(`/api/users`)
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || 'Network response was not ok')
-            }
-            setSearchResults(data)
-            setIsSearching(false)
-            return data;
-        },
-        staleTime: 0, 
+    queryKey: ['Search'],
+    queryFn: async () => {
+      const response = await fetch(`/api/users`)
+      const data = await response.json();
+      if (!response.ok) {
+          throw new Error(data.message || 'Network response was not ok')
+      }
+      setSearchResults(data)
+      setIsSearching(false)
+      return data;
+    },
+    staleTime: 0, 
   }
   )
 
@@ -35,29 +35,38 @@ export default function SearchPageContent() {
 
   const handleSearch = async (query: string) => {
     try{
-        if (query.trim() === "") {
-        return
-        } 
-        setIsSearching(true)
-        setSearchQuery(query)
-
-        // Simulate API call delay
-        const res = await fetch(`/api/search?userName=${query}`)
-        if(!res.ok){
-            throw new Error(`${(await res.json()).message}`)
+      setIsSearching(true)
+      setSearchQuery(query)
+      if (query.trim() === "") {
+        const response = await fetch(`/api/users`)
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || 'Network response was not ok')
         }
-        const data = await res.json() as UserDB[]
-        const filtered = data.filter(
-        (user) =>
-            user.name.toLowerCase().includes(query.toLowerCase()) ||
-            user.email.toLowerCase().includes(query.toLowerCase()) ||
-            user?.location?.toLowerCase().includes(query.toLowerCase()),
-        )
-        setSearchResults(filtered)
+        setSearchResults(data)
         setIsSearching(false)
+        return;
+      } 
+      
+      
+      // Simulate API call delay
+      const res = await fetch(`/api/search?userName=${query}`)
+      if(!res.ok){
+        throw new Error(`${(await res.json()).message}`)
+      }
+      const data = await res.json() as UserDB[]
+      const filtered = data.filter(
+        (user) =>
+          user.name.toLowerCase().includes(query.toLowerCase()) ||
+          user.email.toLowerCase().includes(query.toLowerCase()) ||
+          user?.location?.toLowerCase().includes(query.toLowerCase()),
+      )
+      setSearchResults(filtered)
+      setIsSearching(false)
     }catch(e){
-        console.error(e);
-        toast.error(`${e}`)
+      console.error(e);
+      toast.error(`${e}`)
+      setIsSearching(false)
     }
   }
 

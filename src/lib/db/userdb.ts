@@ -117,6 +117,42 @@ export async function getUserByIdWithRoom(userId : string){
 
 }
 
+export async function get6RandomUsersNotIncludeCurrentUser(userId : string) {
+  await connectDB();
+
+  const users = await User.aggregate([
+    { $match: { _id: { $ne: new mongoose.Types.ObjectId(userId) } } },
+    { $sample: { size: 6 } },
+    {
+      $project: {
+        _id: { $toString: "$_id" },
+        name: 1,
+        email: 1,
+        avatarUrl: 1,
+        rooms: {
+          $map: {
+            input: "$rooms",
+            as: "roomId",
+            in: { $toString: "$$roomId" },
+          },
+        },
+        roomsOwn: {
+          $map: {
+            input: "$roomsOwn",
+            as: "ownId",
+            in: { $toString: "$$ownId" },
+          },
+        },
+        role: 1,
+        location: 1,
+      },
+    },
+  ]);
+
+  return users as UserDB[];
+}
+
+
 export async function get6RandomUsers() {
   await connectDB();
 
@@ -159,6 +195,50 @@ export async function searchForUsersByName (searchTerm: string){
     {
       $match: {
         name: { $regex: searchTerm, $options: 'i' }, // 'i' = case-insensitive
+      },
+    },
+    {
+      $project: {
+        _id: { $toString: "$_id" },
+        name: 1,
+        email: 1,
+        avatarUrl: 1,
+        rooms: {
+          $map: {
+            input: "$rooms",
+            as: "roomId",
+            in: { $toString: "$$roomId" },
+          },
+        },
+        roomsOwn: {
+          $map: {
+            input: "$roomsOwn",
+            as: "ownId",
+            in: { $toString: "$$ownId" },
+          },
+        },
+        role: 1,
+        location: 1,
+      },
+    },
+    {
+      $limit: 20, // Optional: limit results to prevent over-fetching
+    },
+  ]);
+
+  return users as UserDB[];
+};
+
+
+
+export async function searchForUsersByNameNotIncludeCurrentUser (searchTerm: string, userId : string){
+  await connectDB();
+
+  const users = await User.aggregate([
+    {
+      $match: {
+        name: { $regex: searchTerm, $options: 'i' }, // 'i' = case-insensitive
+        _id: { $ne: new mongoose.Types.ObjectId(userId) },
       },
     },
     {
