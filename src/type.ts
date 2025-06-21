@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { formSchema } from "./app/(withSideBar)/users/[userId]/ButtonEditProfile";
+import { formSchema } from "./components/ButtonEditProfile";
 export type UserDB = {
     _id : string;
     name: string,

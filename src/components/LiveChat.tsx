@@ -203,7 +203,7 @@ export default function LiveChat( {
 										message.user._id === userId ? "bg-primary text-primary-foreground" : "bg-muted"
 									}`}
 								>
-									<p className="min-w-20 pr-4 text-sm whitespace-pre-wrap break-words overflow-wrap-anywhere">
+									<p className="min-w-20 pr-4 text-sm whitespace-pre-wrap break-words overflow-ellipsis">
 									{message.info}
 									</p>
 								</div>

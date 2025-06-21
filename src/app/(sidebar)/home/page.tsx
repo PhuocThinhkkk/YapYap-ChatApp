@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 import { getUserIdInSession } from "@/lib/session";
 import Link from "next/link";
-import AllCardFeature from "./CardLink";
+import AllCardFeature from "@/components/CardLink";
 
 
 export default async function Home() {

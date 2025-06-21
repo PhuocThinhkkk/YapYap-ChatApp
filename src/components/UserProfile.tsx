@@ -6,11 +6,11 @@ import { CalendarDays, MapPin, Mail, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import ButtonEditProfile from "./ButtonEditProfile"
+import ButtonEditProfile from "@/components/ButtonEditProfile"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { UserProfile } from '@/type'
-import ProfileSkeleton from './ProfileSkeleton'
+import ProfileSkeleton from '@/components/ProfileSkeleton'
 import { UIError } from '@/components/ui-error'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

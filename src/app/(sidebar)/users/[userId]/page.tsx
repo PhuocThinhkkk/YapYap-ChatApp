@@ -1,4 +1,4 @@
-import ProfileComponent from './UserProfile';
+import ProfileComponent from '@/components/UserProfile';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import UserIconWithSuspense from '@/components/UserIconWithSuspense';
 const Page = async () => {
