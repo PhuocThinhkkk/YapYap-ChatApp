@@ -20,7 +20,7 @@ export default function FeedbackForm() {
       title: "",
       message: "",
       category: "",
-      ratting : 0,
+      rating : 0,
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
   
@@ -34,7 +34,7 @@ export default function FeedbackForm() {
           return
         }
         setIsSubmitting(true)
-        formData.ratting = rating;
+        formData.rating = rating;
         console.log(formData)
         // Simulate API call
         const res = await fetch("/api/feedback",
@@ -55,7 +55,7 @@ export default function FeedbackForm() {
           title: "",
           message: "",
           category: "",
-          ratting : 0,
+          rating : 0,
         })
         setRating(0)
         setIsSubmitting(false)
@@ -64,6 +64,7 @@ export default function FeedbackForm() {
       }catch(e){
         console.error(e)
         toast.error(`${e}`)
+        setIsSubmitting(false)
       }
     }
 

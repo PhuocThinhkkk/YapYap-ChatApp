@@ -13,7 +13,7 @@ export async function POST(req : NextRequest) {
 
         const data = await req.json()
         if ( !data.title || !data.message || !data.rating || !data.category ) {
-          throw new Error("missing field")
+          return NextResponse.json({message: 'missing field. '}, {status: 400})
         }
         data.rating = parseInt(data.rating)
         
@@ -22,6 +22,7 @@ export async function POST(req : NextRequest) {
         
         return NextResponse.json( result ,{status: 200})
     }catch(err){
-        return NextResponse.json({message: `something wrong with server ${err}`}, {status: 500})
+        console.error(err)
+        return NextResponse.json({message: `Server error.`}, {status: 500})
     }
 }

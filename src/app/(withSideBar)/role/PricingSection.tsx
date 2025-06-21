@@ -56,18 +56,25 @@ import { UIError } from "@/components/ui-error"
 const PricingSection = ( ) => {
     const [userId, setUserId] = useState<string | undefined>(undefined)
     const [isVisible, setIsVisible] = useState(false)
+    const [isLogIn, setIsLogIn] = useState<boolean | undefined>(undefined)
     
     useEffect(() => {
         setIsVisible(true)
-        const id = (JSON.parse(Cookies.get("user") as string))._id
+        const userCookie = (Cookies.get("user") as string | undefined)
+        if (!userCookie) {
+            setIsLogIn(false)
+            return
+        }
+        const id = (JSON.parse(userCookie))._id
         setUserId(id)
+        setIsLogIn(true)
     }, []);
 
     const UserQuery = useQuery({
         queryKey: ['UserInfor', userId],
         enabled: !!userId,
         queryFn: async () => {
-        const response = await fetch(`/api/users/${userId}/profile`)
+            const response = await fetch(`/api/users/${userId}/profile`)
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Network response was not ok')
@@ -75,21 +82,22 @@ const PricingSection = ( ) => {
             return data;
         },
     })
-    const user = UserQuery.data;
+
     
     
 
     return (
-            
+        <>  
+        {UserQuery.error && <UIError className="w-full text-center" title={`${UserQuery.error}`}/>}
+        {(isLogIn === false)  && <UIError className="w-full text-center" title="Please sign in to use this page."/>}
         <section className="py-4">
-            {UserQuery.error && <UIError className="w-full" title={`${UserQuery.error}`}/>}
             <div className="container mx-auto px-4">
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <PricingCard user={user} plan={FreePlan} isVisible={isVisible} isLoading={UserQuery.isLoading}/>
-                    <PricingCard user={user} plan={PremiumPlan} isVisible={isVisible} isLoading={UserQuery.isLoading}/>
+                    <PricingCard user={UserQuery.data} plan={FreePlan} isVisible={isVisible} isLoading={UserQuery.isLoading}/>
+                    <PricingCard user={UserQuery.data} plan={PremiumPlan} isVisible={isVisible} isLoading={UserQuery.isLoading}/>
                 </div>
             </div>
-        </section>
+        </section></>
     )
 }
 
@@ -110,7 +118,10 @@ function PricingCard({
     const mutation = useMutation(
         {
             mutationFn: async () => {
-                    const res = await fetch(`/api/users/${user?._id}/role`, {
+                if (!user) {
+                    throw new Error("Please sign in to continue.")
+                }
+                const res = await fetch(`/api/users/${user?._id}/role`, {
                     method: "POST",
                     body: JSON.stringify(plan.title),
                 });
@@ -124,24 +135,13 @@ function PricingCard({
                 toast.success("success");
                 queryClient.invalidateQueries({ queryKey: ["UserInfor"] });
             },
-            onError: ()=> {
-                toast.error("failed");
+            onError: (error : Error)=> {
+                toast.error(`${error}`);
             }
         }
     )
     async function ChangePlan(){
-        
-        try{
-            if (!user) {
-                throw new Error("Please sign in to continue.");
-            }   
-
-            mutation.mutate();
-            
-            
-        }catch(e){
-            toast.error(`${e}`)
-        }  
+        mutation.mutate();
     }
 
 

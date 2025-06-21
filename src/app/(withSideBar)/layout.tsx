@@ -1,7 +1,7 @@
 'use client'
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
-import { Toaster } from "@/components/ui/sonner";
+
 
 import {
   QueryClient,
@@ -24,7 +24,7 @@ export default function RootLayout({
               </QueryClientProvider>
           </SidebarInset>
       </SidebarProvider>
-      <Toaster />
+      
     </>
      
   );

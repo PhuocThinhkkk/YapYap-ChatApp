@@ -29,22 +29,28 @@ const UserDropDown = (
     const clientQuery = useQueryClient()
     
     async function onLogout(event: React.MouseEvent<HTMLElement>) {
-        event.preventDefault();
-        setIsLogOut(true);
-        const res = await fetch('/api/session', {
-            method: 'DELETE'
-        })
-        const data = await res.json()
-        if (!res.ok) {
-            toast.error(`${data.message}`)
-            setIsLogOut(false);
+            try{
+            event.preventDefault();
+            setIsLogOut(true);
+            const res = await fetch('/api/session', {
+                method: 'DELETE'
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                toast.error(`${data.message}`)
+                setIsLogOut(false);
+                return;
+            }
+            
+            toast.success('logout successfully')
+            clientQuery.invalidateQueries({ queryKey: ["UserInfor"] });
+            route.refresh()
+            route.push("/sign-in")
             return;
+        }catch(error){
+            console.error(error)
+            toast.error("there is something wrong!")
         }
-        toast.success('logout successfully')
-        clientQuery.invalidateQueries({ queryKey: ["UserInfor"] });
-        route.refresh()
-        route.push("/sign-in")
-        return;
     }
 
   return (
