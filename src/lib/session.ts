@@ -35,7 +35,7 @@ export async function getSession() {
 
 
 export async function createSession(userId: string) {
-  const expiresAt = new Date(Date.now() +  60 * 60 * 1000)
+  const expiresAt = new Date(Date.now() +  3 * 60 * 60 * 1000)
   const session = await encrypt({ userId, expiresAt })
   const cookieStore = await cookies()
  

@@ -8,7 +8,7 @@ export async function getUserById(id : string) : Promise<UserDB> {
     await connectDB()
     const userdb = await User.findById(id).select('-password')
     if (!userdb) {
-        throw new Error('There is no one like that in db.')
+      throw new Error('There is no one like that in db.')
     }
     const user = JSON.parse(JSON.stringify(userdb)) 
     const createdAt = new Date(user.createdAt)

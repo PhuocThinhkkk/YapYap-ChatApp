@@ -10,7 +10,7 @@ const friendRequestSchema = new mongoose.Schema({
         default: 'pending',
     },
     createdAt: { type: Date, default: Date.now },
-    isNew : { type: Boolean, default: true },
+    isNewToTarget : { type: Boolean, default: true },
 },{
     versionKey: false, 
 });

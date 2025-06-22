@@ -24,7 +24,7 @@ export const description = "A bar chart showing message counts"
 const chartConfig = {
   count: {
     label: "Messages",
-    color: "var(--chart-1)", // 
+    color: "#9f1239",
   },
 } satisfies ChartConfig
 
@@ -111,7 +111,6 @@ export function BigAssChart() {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
-                      year: "numeric",
                     })
                   }}
                 />
@@ -119,7 +118,7 @@ export function BigAssChart() {
             />
             <Bar 
               dataKey="count" 
-              fill="var(--chart-1)" 
+              fill="#9f1239" 
               radius={[4, 4, 0, 0]} 
             />
           </BarChart>

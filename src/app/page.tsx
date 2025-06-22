@@ -13,7 +13,7 @@ import {
   ArrowRight,
   Star,
 } from "lucide-react"
-import Image from "next/image"
+import Image, { StaticImageData } from "next/image"
 import { 
   Card,  
   CardContent 
@@ -25,6 +25,10 @@ import {
 } from "@/components/ui/avatar"
 import { get4FiveStarFeedbacks } from "@/lib/db/feedback"
 import type { FeedbackDb } from "@/type"
+import image1 from './images/image1.jpg';
+import image2 from './images/image2.png';
+import image3 from './images/image3.png';
+import image4 from './images/image4.png';
 
 export default async function LandingPage() {
 
@@ -62,47 +66,71 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="container mx-auto px-30 py-20 flex flex-col md:flex-row items-center ">
-        <div className="md:w-1/2 mb-10 md:mb-0">
-          <h1 className=" font-bold mb-6">
-            <span className="text-4xl md:text-5xl text-gradient from-purple-600 to-pink-500">YapYap</span>
-            <br />
-            <span className="text-gray-800 text-xl md:text-2xl">For those who just cant stop yapping.</span>
-          </h1>
-          <p className="text-sm md:text-xl text-gray-600 mb-8">
-            Connect with friends, create private rooms, and express yourself with emojis in our beautiful, intuitive
-            chat platform.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href={'/sign-in'}>
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white"
-            >
-              Get Started <ArrowRight className="ml-2 size-4" />
-            </Button>
-            </Link>
-            <Button size="lg" variant="outline">
-              Learn More
-            </Button>
-          </div>
+      <section className="relative bg-white overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-purple-100 rounded-full opacity-40 blur-xl"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-pink-100 rounded-full opacity-40 blur-xl"></div>
+          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-purple-50 rounded-full opacity-30 blur-2xl"></div>
         </div>
-        <div className="md:w-1/2 relative">
-          <div className="relative z-10 rounded-xl shadow-2xl overflow-hidden border border-purple-100">
-            <Image 
-            height={600}
-            width={400}
-            src="/placeholder.svg?height=600&width=400" 
-            alt="YapYap App Interface" />
+
+        <div className="container mx-auto px-8 lg:px-12 py-20 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            {/* Text Content */}
+            <div className="lg:w-1/3 text-center lg:text-left">
+              <h1 className="font-bold mb-6">
+                <span className="text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+                  YapYap
+                </span>
+                <br />
+                <span className="mt-8 text-gray-800 text-sm md:text-xl lg:text-2xl font-medium">
+                  For those who just cant stop yapping.
+                </span>
+              </h1>
+              <p className=" text-base md:text-sm lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+                Connect with friends, create private rooms, and express yourself with emojis in our beautiful, intuitive
+                chat platform.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link href="/sign-in">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  >
+                    Get Started <ArrowRight className="ml-2 size-4" />
+                  </Button>
+                </Link>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white text-gray-700 border-gray-200 hover:bg-gray-50 shadow-md hover:shadow-lg transition-all duration-300"
+                >
+                  Learn More
+                </Button>
+              </div>
+            </div>
+
+            {/* Image - Hidden on small screens, visible on large screens */}
+            <div className="hidden lg:block lg:w-2/3 relative">
+              <div className=" border-blur relative z-10 rounded-2xl overflow-hidden bg-white aspect-[3/2] w-full">
+                <Image
+                  height={783}
+                  width={1175}
+                  src={image1}
+                  alt="YapYap App Interface"
+                  className="w-full h-full object-cove r"
+                />
+              </div>
+              {/* Decorative background elements */}
+              <div className="absolute -top-6 -right-6 w-64 h-64 bg-purple-200 rounded-full opacity-20 blur-3xl"></div>
+              <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-pink-200 rounded-full opacity-20 blur-3xl"></div>
+              <div className="absolute top-1/2 -right-4 w-20 h-20 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-10 blur-2xl"></div>
+            </div>
           </div>
-          <div className="absolute -top-6 -right-6 size-64 bg-purple-200 rounded-full opacity-30 blur-3xl"></div>
-          <div className="absolute -bottom-10 -left-10 size-72 bg-pink-200 rounded-full opacity-30 blur-3xl"></div>
         </div>
       </section>
-
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white px-20">
+      <section id="features" className="py-20 bg-white px-4 md:px-10 lg:px-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">Features Youll Love</h2>
           <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
@@ -135,7 +163,7 @@ export default async function LandingPage() {
       </section>
 
       {/* App Interface Showcase */}
-      <section id="interface" className="py-20 px-20 bg-gradient-to-b from-purple-50 to-white">
+      <section id="interface" className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-purple-50 to-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">Beautiful Interface</h2>
           <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
@@ -144,19 +172,19 @@ export default async function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <InterfaceCard
-              image="/placeholder.svg?height=400&width=300"
-              title="User Profiles"
-              description="Customize your profile with photos, status updates, and more."
+              image={image2}
+              title="User Dashboard"
+              description="Didn't really need it… but hey, who doesn't love a good dashboard?"
               icon={<UserCircle className="size-6" />}
             />
             <InterfaceCard
-              image="/placeholder.svg?height=400&width=300"
+              image={image3}
               title="Chat Rooms"
               description="Join public rooms or create private ones for your inner circle."
               icon={<Users className="size-6" />}
             />
             <InterfaceCard
-              image="/placeholder.svg?height=400&width=300"
+              image={image4}
               title="Profile Editing"
               description="Update your information and preferences with ease."
               icon={<Edit className="size-6" />}
@@ -166,7 +194,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-20 bg-white px-20">
+      <section id="testimonials" className="py-20 bg-white px-4 md:px-10 lg:px-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">What Users Say</h2>
           <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
@@ -225,7 +253,7 @@ export default async function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-20 bg-gradient-to-r from-purple-600 to-pink-500">
+      <section className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-r from-purple-600 to-pink-500">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Ready to Start Yapping?</h2>
           <p className="text-xl text-white mb-10 max-w-2xl mx-auto">
@@ -240,7 +268,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-20">
+      <footer className="bg-gray-900 text-white py-12 px-4 md:px-10 lg:px-20">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between">
             <div className="mb-8 md:mb-0">
@@ -383,14 +411,16 @@ function InterfaceCard({
     icon : unknown,
     title : string,
     description : string,
-    image : string
+    image : StaticImageData
 }) {
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
       <div className="relative">
-        <Image src={image || "/placeholder.svg"} alt={title} 
+        <Image src={image } alt={title} 
         height={250}
-        width={300} />
+        width={300} 
+        className="w-full h-full object-cove r"/>
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
           <div className="p-6">
             <h3 className="text-xl font-bold text-white mb-1">{title}</h3>

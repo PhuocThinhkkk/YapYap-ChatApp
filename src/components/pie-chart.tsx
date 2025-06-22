@@ -77,7 +77,7 @@ export function Component() {
         <CardTitle>Messages in your rooms</CardTitle>
         <CardDescription>{formattedTime}</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0 justify-center items-center flex">
+      <CardContent className="flex-1 pb-0 justify-center items-center flex text-xs lg:text-sm">
         { isClient ? 
           <PieChart width={430} height={250}>
             <Pie 
