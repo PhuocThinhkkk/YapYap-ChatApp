@@ -110,3 +110,12 @@ export type FeedbackFormType = {
     category: string,
     rating : number,
 }
+
+
+export type SmallUserInforType = {
+    _id : string,
+    name : string,
+    avatarUrl? : string,
+    email : string,
+    role? : string,
+}
