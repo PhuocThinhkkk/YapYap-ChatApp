@@ -20,7 +20,7 @@ export async function POST(req : NextRequest) {
         if ( !targetId ) {
             return NextResponse.json({message: 'missing field. '}, {status: 400})
         }
-        const isTargetUserExist = await getUserById(followerId);
+        const isTargetUserExist = await getUserById(targetId);
         console.log(isTargetUserExist)//
         if (!isTargetUserExist) {
             return NextResponse.json({message: 'Target user are not in our db. '}, {status: 400})

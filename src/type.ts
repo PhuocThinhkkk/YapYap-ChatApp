@@ -85,12 +85,15 @@ export type ContactFormData = z.infer<typeof formSchema>;
 
 
 export type RoomDb = {
-  _id: string;
-  roomName: string;
-  maxPeople: number,
-  leaderId: string;
-  users: UserDB[];
-  createdAt: Date;
+    _id: string;
+    roomName: string;
+    maxPeople: number,
+    leaderId: UserDB;
+    users: UserDB[];
+    createdAt: Date;
+    avatarUrl?: string
+    description?: string
+    category?: string
 }
 
 

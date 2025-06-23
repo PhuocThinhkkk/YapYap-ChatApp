@@ -8,6 +8,9 @@ import { RoomsLoadingSkeleton } from "@/components/RoomsLoadingSkeleton"
 import { Card, CardContent } from "@/components/ui/card"
 import { Plus } from "lucide-react"
 import UserIconWithSuspense from "@/components/UserIconWithSuspense"
+import { Users } from "lucide-react"
+import { FriendsLoadingSkeleton } from "@/components/skeleton-friends"
+import FriendsList from "@/components/FriendsList"
 
 const Page = () => {
   return (
@@ -46,6 +49,24 @@ const Page = () => {
                 </div>
               </div>
             </div>
+          </CardContent>
+        </Card>
+        <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-slate-50">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <div className="flex items-center">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mr-3">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Friends</h2>
+                  <p className="text-xs sm:text-sm text-slate-600">Connect with your friends</p>
+                </div>
+              </div>
+            </div>
+            <Suspense fallback={<FriendsLoadingSkeleton />}>
+              <FriendsList />
+            </Suspense>
           </CardContent>
         </Card>
 
