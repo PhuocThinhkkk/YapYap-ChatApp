@@ -66,65 +66,75 @@ export default async function LandingPage() {
         </div>
       </header>
 
+       {/* Hero Section */}
       <section className="relative bg-white overflow-hidden">
-        {/* Background decorative elements */}
+        {/* Animated Background decorative elements */}
         <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-purple-100 rounded-full opacity-40 blur-xl"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-pink-100 rounded-full opacity-40 blur-xl"></div>
-          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-purple-50 rounded-full opacity-30 blur-2xl"></div>
+          <div className="absolute top-20 left-10 w-32 h-32 bg-purple-100 rounded-full opacity-40 blur-xl animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-pink-100 rounded-full opacity-40 blur-xl animate-bounce"></div>
+          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-purple-50 rounded-full opacity-30 blur-2xl animate-pulse"></div>
+
+          {/* Additional floating elements */}
+          <div className="absolute top-1/3 left-1/3 w-16 h-16 bg-pink-200 rounded-full opacity-20 blur-lg animate-float"></div>
+          <div className="absolute bottom-1/3 right-1/3 w-20 h-20 bg-purple-200 rounded-full opacity-25 blur-xl animate-float-delayed"></div>
         </div>
 
         <div className="container mx-auto px-8 lg:px-12 py-20 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-16">
-            {/* Text Content */}
-            <div className="lg:w-1/3 text-center lg:text-left">
+            {/* Animated Text Content */}
+            <div className="lg:w-1/3 text-center lg:text-left animate-fade-in-up">
               <h1 className="font-bold mb-6">
-                <span className="text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+                <span className="text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent animate-gradient-x">
                   YapYap
                 </span>
                 <br />
-                <span className="mt-8 text-gray-800 text-sm md:text-xl lg:text-2xl font-medium">
+                <span className="mt-8 text-gray-800 text-sm md:text-xl lg:text-2xl font-medium animate-fade-in-up animation-delay-200">
                   For those who just cant stop yapping.
                 </span>
               </h1>
-              <p className=" text-base md:text-sm lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-base md:text-sm lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed animate-fade-in-up animation-delay-400">
                 Connect with friends, create private rooms, and express yourself with emojis in our beautiful, intuitive
                 chat platform.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up animation-delay-600">
                 <Link href="/sign-in">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
                   >
-                    Get Started <ArrowRight className="ml-2 size-4" />
+                    Get Started <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="bg-white text-gray-700 border-gray-200 hover:bg-gray-50 shadow-md hover:shadow-lg transition-all duration-300"
+                  className="bg-white text-gray-700 border-gray-200 hover:bg-gray-50 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
                 >
                   Learn More
                 </Button>
               </div>
             </div>
 
-            {/* Image - Hidden on small screens, visible on large screens */}
-            <div className="hidden lg:block lg:w-2/3 relative">
-              <div className=" border-blur relative z-10 rounded-2xl overflow-hidden bg-white aspect-[3/2] w-full">
+            {/* Animated Image - Hidden on small screens, visible on large screens */}
+            <div className="hidden lg:block lg:w-2/3 relative animate-fade-in-right animation-delay-300">
+              <div className="relative z-10 rounded-2xl overflow-hidden bg-white aspect-[3/2] w-full 
+              transition-all duration-500 hover:scale-105 hover:rotate-1 hover:shadow-2xl group
+              image-blur-edges">
                 <Image
                   height={783}
                   width={1175}
                   src={image1}
                   alt="YapYap App Interface"
-                  className="w-full h-full object-cove r"
+                  className="w-full h-full object-cover scale-[1.05] transition-transform duration-700 group-hover:scale-110"
                 />
+                {/* Animated overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              {/* Decorative background elements */}
-              <div className="absolute -top-6 -right-6 w-64 h-64 bg-purple-200 rounded-full opacity-20 blur-3xl"></div>
-              <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-pink-200 rounded-full opacity-20 blur-3xl"></div>
-              <div className="absolute top-1/2 -right-4 w-20 h-20 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-10 blur-2xl"></div>
+
+              {/* Animated Decorative background elements */}
+              <div className="absolute -top-6 -right-6 w-64 h-64 bg-purple-200 rounded-full opacity-20 blur-3xl animate-float"></div>
+              <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-pink-200 rounded-full opacity-20 blur-3xl animate-float-delayed"></div>
+              <div className="absolute top-1/2 -right-4 w-20 h-20 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-10 blur-2xl animate-pulse"></div>
             </div>
           </div>
         </div>
