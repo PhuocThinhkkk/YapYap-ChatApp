@@ -9,7 +9,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Plus } from "lucide-react"
 import UserIconWithSuspense from "@/components/UserIconWithSuspense"
 import { Users } from "lucide-react"
-import { FriendsLoadingSkeleton } from "@/components/skeleton-friends"
 import FriendsList from "@/components/FriendsList"
 
 const Page = () => {
@@ -64,9 +63,9 @@ const Page = () => {
                 </div>
               </div>
             </div>
-            <Suspense fallback={<FriendsLoadingSkeleton />}>
-              <FriendsList />
-            </Suspense>
+   
+            <FriendsList />
+
           </CardContent>
         </Card>
 

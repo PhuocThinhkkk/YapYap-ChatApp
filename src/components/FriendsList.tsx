@@ -1,58 +1,40 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { MessageCircle, UserPlus } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { SmallUserInforType } from "@/type"
+import { FriendsLoadingSkeleton } from "@/components/skeleton-friends"
+import { toast } from "sonner"
 
-// Enhanced sample data with role, location, and email
-const friends = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    avatarUrl: "/placeholder.svg?height=40&width=40",
-    role: "Pro Plan",
-    location: "New York, USA",
-    email: "alice.johnson@example.com",
-    status: "online",
-    lastSeen: "now",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    avatarUrl: "/placeholder.svg?height=40&width=40",
-    role: "Free Plan",
-    location: "London, UK",
-    email: "bob.smith@example.com",
-    status: "offline",
-    lastSeen: "2 hours ago",
-  },
-  {
-    id: 3,
-    name: "Carol Davis",
-    avatarUrl: "/placeholder.svg?height=40&width=40",
-    role: "Pro Plan",
-    location: "Toronto, Canada",
-    email: "carol.davis@example.com",
-    status: "online",
-    lastSeen: "now",
-  },
-  {
-    id: 4,
-    name: "David Wilson",
-    avatarUrl: "/placeholder.svg?height=40&width=40",
-    role: "Free Plan",
-    location: "Sydney, Australia",
-    email: "david.wilson@example.com",
-    status: "away",
-    lastSeen: "5 minutes ago",
-  },
-]
+
 
 export default function FriendsList() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['Friends'],
+    queryFn: async () => {
+      const response = await fetch(`/api/friends`)
+      const data = await response.json();
+      if (!response.ok) {
+          throw new Error(data.message || 'Network response was not ok')
+      }
+      return data as SmallUserInforType[];
+    },
+    staleTime: 0, 
+  })
+  if (isLoading) {
+    return <FriendsLoadingSkeleton />
+  }
+  if (error) {
+    toast.error(`${error}`)
+    return null
+  }
   return (
     <div className="space-y-3">
-      {friends.map((friend) => (
+      {data?.map((friend) => (
         <div
-          key={friend.id}
+          key={friend._id}
           className="flex items-start justify-between p-4 rounded-lg bg-white border border-slate-100 hover:border-slate-200 transition-colors"
         >
           <div className="flex items-start space-x-3 flex-1">
@@ -66,15 +48,6 @@ export default function FriendsList() {
                     .join("")}
                 </AvatarFallback>
               </Avatar>
-              <div
-                className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${
-                  friend.status === "online"
-                    ? "bg-green-500"
-                    : friend.status === "away"
-                      ? "bg-yellow-500"
-                      : "bg-slate-400"
-                }`}
-              />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
@@ -85,15 +58,9 @@ export default function FriendsList() {
               </div>
               <p className="text-sm text-slate-600 truncate mb-1">{friend.email}</p>
               <p className="text-xs text-slate-500 truncate mb-1">{friend.location}</p>
-              <p className="text-xs text-slate-500">
-                {friend.status === "online" ? "Online now" : `Last seen ${friend.lastSeen}`}
-              </p>
             </div>
           </div>
           <div className="flex flex-col items-end space-y-2 flex-shrink-0 ml-3">
-            <Badge variant={friend.status === "online" ? "default" : "secondary"} className="text-xs">
-              {friend.status}
-            </Badge>
             <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
               <MessageCircle className="h-4 w-4" />
             </Button>
@@ -101,7 +68,7 @@ export default function FriendsList() {
         </div>
       ))}
 
-      {friends.length === 0 && (
+      {data?.length === 0 && (
         <div className="text-center py-8">
           <UserPlus className="h-12 w-12 text-slate-400 mx-auto mb-4" />
           <p className="text-slate-600 mb-2">No friends yet</p>

@@ -65,8 +65,8 @@ const RoomCard = ({
         {/* Leader Info */}
         <div className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
           <Avatar className="h-6 w-6">
-            <AvatarImage src={room.leaderId.avatarUrl || "/placeholder.svg"} alt={room.leaderId.name} />
-            <AvatarFallback className="text-xs">{room.leaderId.name?.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarImage src={room.leaderId.avatarUrl} alt={room.leaderId.name} />
+            <AvatarFallback className="text-xs">{room.leaderId.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-xs text-slate-500">Room Leader</p>
@@ -80,14 +80,14 @@ const RoomCard = ({
           {room.createdAt && (
             <div className="flex items-center gap-1">
               <MapPin className="w-3 h-3" />
-              <span>Created {room.createdAt?.toString()}</span>
+              <span>Created {room.createdAt?.toDateString()}</span>
             </div>
           )}
         </div>
       </CardContent>
 
       <CardFooter className="pt-0">
-        <ButtonJoinRoom roomId={room._id} disabled={room.users.length >= room.maxPeople} className="w-full" />
+        <ButtonJoinRoom roomId={room._id} className="w-full hover:cursor-pointer duration-300 bg-blue-600" />
       </CardFooter>
     </Card>
   )

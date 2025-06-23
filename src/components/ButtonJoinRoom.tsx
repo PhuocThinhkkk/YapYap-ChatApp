@@ -8,7 +8,7 @@ type ButtonJoinRoomProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 
-const ButtonJoinRoom = ({ roomId, disabled, ...props }: ButtonJoinRoomProps) => {
+const ButtonJoinRoom = ({ roomId, ...props }: ButtonJoinRoomProps) => {
   const [isRedirect, setIsRedirect] = useState(false)
   const route = useRouter()
   async function handleOnclick(){
@@ -18,11 +18,10 @@ const ButtonJoinRoom = ({ roomId, disabled, ...props }: ButtonJoinRoomProps) => 
   return (
     <>
     <Button 
-    disabled={disabled} 
+    disabled={isRedirect} 
     onClick={handleOnclick} 
-    className='hover:cursor-pointer'
     {...props} >
-        Join
+        Join chat room
     </Button>
     <BananaLoading isRedirect={isRedirect}/>
     </>   

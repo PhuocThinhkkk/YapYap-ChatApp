@@ -72,49 +72,73 @@ export async function getUserAndRoomById(userId : string, roomId : string){
 
 
 
-export async function getUserByIdWithRoom(userId : string){
-    const users = await User.aggregate([
+export async function getUserByIdWithRoom(userId: string) {
+  const users = await User.aggregate([
     {
-        $match: { _id: new mongoose.Types.ObjectId(userId) }
+      $match: { _id: new mongoose.Types.ObjectId(userId) },
     },
     {
-        $lookup: {
-            from: "rooms", 
-            localField: "rooms",
-            foreignField: "_id",
-            as: "rooms"
-        }
+      $lookup: {
+        from: "rooms",
+        localField: "rooms",
+        foreignField: "_id",
+        as: "rooms",
+      },
+    },
+    { $unwind: "$rooms" },
+    {
+      $lookup: {
+        from: "users",
+        localField: "rooms.leaderId",
+        foreignField: "_id",
+        as: "rooms.leaderInfo",
+      },
     },
     {
-        $project: {
-            _id: { $toString: "$_id" },
-            name: 1, 
-            rooms: 1
-        }
+      $unwind: {
+        path: "$rooms.leaderInfo",
+        preserveNullAndEmptyArrays: true,
+      },
     },
     {
-        $addFields: {
-            rooms: {
-            $map: {
-                input: "$rooms",
-                as: "room",
-                in: {
-                _id: { $toString: "$$room._id" },
-                    roomName: "$$room.roomName",
-                    leaderId: { $toString: "$$room.leaderId" },
-                    password: "$$room.password",
-                    maxPeople: "$$room.maxPeople",
-                    createdAt: "$$room.createdAt",
-                    users: "$$room.users",
-                }
-            }
-            }
-        }
-    }
-    ]); 
-    const user = users[0]
-    return user as UserDB
+      $group: {
+        _id: "$_id",
+        name: { $first: "$name" },
+        rooms: { $push: "$rooms" },
+      },
+    },
+    {
+      $addFields: {
+        _id: { $toString: "$_id" },
+        rooms: {
+          $map: {
+            input: "$rooms",
+            as: "room",
+            in: {
+              _id: { $toString: "$$room._id" },
+              roomName: "$$room.roomName",
+              password: "$$room.password",
+              maxPeople: "$$room.maxPeople",
+              createdAt: "$$room.createdAt",
+              users: "$$room.users",
+              leaderId: {
+                _id: { $toString: "$$room.leaderInfo._id" },
+                name: "$$room.leaderInfo.name",
+                email: "$$room.leaderInfo.email",
+                location: "$$room.leaderInfo.location",
+                role: "$$room.leaderInfo.role",
+                avatarUrl: "$$room.leaderInfo.avatarUrl",
+                // add more fields as needed
+              },
+            },
+          },
+        },
+      },
+    },
+  ]);
 
+  const user = users[0];
+  return user as UserDB;
 }
 
 export async function get6RandomUsersNotIncludeCurrentUser(userId : string) {

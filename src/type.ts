@@ -121,4 +121,5 @@ export type SmallUserInforType = {
     avatarUrl? : string,
     email : string,
     role? : string,
+    location? : string
 }
