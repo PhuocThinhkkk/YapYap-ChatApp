@@ -2,7 +2,7 @@ import connectDB from "@/lib/mongoDb";
 import FriendRequest from "@/schema/friendrequest";
 import Friend from "@/schema/friend";
 import mongoose from "mongoose";
-import { SmallUserInforType } from "@/type";
+import { FriendRequestType, SmallUserInforType } from "@/type";
 
 
 
@@ -143,39 +143,56 @@ export async function getFollower(userId : string) {
     return followers as SmallUserInforType[]
 }
 
+export async function getPendingRequest(userId: string) {
+  await connectDB();
 
-export async function getPendingRequest(userId : string){
-    await connectDB()
-    const requests = await FriendRequest.aggregate([
-        {
-            $match: {
-            to: new mongoose.Types.ObjectId(userId),
-            status: 'pending'
-            }
-        },
-        {
-            $lookup: {
-            from: 'users',
-            localField: 'from',
-            foreignField: '_id',
-            as: 'user'
-            }
-        },
-        { $unwind: '$user' },
-        { $replaceRoot: { newRoot: '$user' } },
-        {
-            $project: {
-            _id: { $toString: '$_id' },
-            name: 1,
-            avatarUrl: 1,
-            email: 1,
-            role : 1,
-            }
+  const requests = await FriendRequest.aggregate([
+    {
+      $match: {
+        to: new mongoose.Types.ObjectId(userId),
+        status: 'pending'
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'from',
+        foreignField: '_id',
+        as: 'fromUser'
+      }
+    },
+    { $unwind: '$fromUser' },
+    {
+      $project: {
+        _id: { $toString: '$_id' },
+        status: 1,
+        createdAt: 1,
+        isNewToTarget: 1,
+
+        // Embed full info of `fromUser`
+        fromUser: {
+          _id: { $toString: '$fromUser._id' },
+          name: '$fromUser.name',
+          email: '$fromUser.email',
+          avatarUrl: '$fromUser.avatarUrl',
+          role: '$fromUser.role',
         }
-    ]);
-    return requests as SmallUserInforType[]
+      }
+    }
+  ]);
+
+  return requests as FriendRequestType[];
 }
 
+export async function updateIsReadByUserId(userId : string){
+    await connectDB();
+    const result = await FriendRequest.updateMany(
+    { to: userId, isNewToTarget: true }, // filter: unread requests sent **to** the user
+    { $set: { isNewToTarget: false } }     // update: mark them as read
+  );
+
+  return result;
+}
 
 export async function isFollowingExist(followerId : string, targetId : string ){
     await connectDB();

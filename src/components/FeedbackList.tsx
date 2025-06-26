@@ -53,7 +53,7 @@ export default function FeedbackList({ feedbacks }: FeedbackListProps) {
       feedback.user.name.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesCategory = filterCategory === "all" || feedback.category === filterCategory
-    const matchesRating = filterRating === "all" || feedback.rating.toString() === filterRating
+    const matchesRating = filterRating === "all" || feedback.rating?.toString() === filterRating
 
 
     return matchesSearch && matchesCategory && matchesRating 

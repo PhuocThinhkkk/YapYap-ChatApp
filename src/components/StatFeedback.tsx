@@ -21,11 +21,11 @@ const StatFeedback = async () => {
         }
         
     }
-    let averageRattingNumber = 0
+    let averageRatingNumber = 0
 
     if (numberFeedbacks) {
         const averageRating = totalRating / numberFeedbacks
-        averageRattingNumber = parseFloat(averageRating.toFixed(2))
+        averageRatingNumber = parseFloat(averageRating.toFixed(2))
     }
   return (
     <div className="container mx-auto px-4 -mt-8 relative z-10">
@@ -48,7 +48,7 @@ const StatFeedback = async () => {
                 <TrendingUp className="w-6 h-6 text-white" />
             </div>
             <div>
-                <p className="text-2xl font-bold text-gray-900">{averageRattingNumber.toString()}</p>
+                <p className="text-2xl font-bold text-gray-900">{averageRatingNumber.toString()}</p>
                 <p className="text-gray-600">Average Rating</p>
             </div>
             </div>

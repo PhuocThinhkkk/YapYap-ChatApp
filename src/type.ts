@@ -123,3 +123,11 @@ export type SmallUserInforType = {
     role? : string,
     location? : string
 }
+
+export type FriendRequestType = {
+    _id : string,
+    fromUser : UserDB,
+    to : UserDB,
+    isNewToTarget : boolean,
+    createdAt : Date | string
+}
