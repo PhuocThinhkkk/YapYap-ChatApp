@@ -233,7 +233,7 @@ export async function sendRequest(followerId : string, targetId : string ){
 
 export async function addFriend(followerId : string, targetId : string ){
     await connectDB();
-    const result = await Friend.deleteOne({
+    const result = await Friend.create({
         user1: followerId,
         user2: targetId,
     })
@@ -252,6 +252,14 @@ export async function unFriend(user1 : string, user2 : string ){
 
 
 
+export async function deleteRequestByTarget(requestId: string, targetId : string ){
+   await connectDB();
+    const result = await FriendRequest.deleteOne({
+        _id: requestId,
+        to : targetId,
+    })
+    return result;
+}
 export async function cancelRequest(followerId : string, targetId : string ){
    await connectDB();
     const result = await FriendRequest.deleteOne({
@@ -262,23 +270,26 @@ export async function cancelRequest(followerId : string, targetId : string ){
     return result;
 }
 
-export async function rejecteRequest(followerId : string, targetId : string ){
+
+export async function rejecteRequest(requestId : string, targetId : string ){
     await connectDB();
     const result = await FriendRequest.findOneAndUpdate({
-        from: followerId,
+        _id: requestId,
         to: targetId,
     },{
         $set: {
             status : "rejected",
         }
     })
+    console.log(result)
     return result;
+    
 }
 
-export async function accepteRequest(followerId : string, targetId : string ){
+export async function accepteRequest(requestId : string, targetId : string ){
     await connectDB();
     const result = await FriendRequest.findOneAndUpdate({
-        from: followerId,
+        _id : requestId,
         to: targetId,
     },{
         $set: {

@@ -12,11 +12,14 @@ const FriendRequestNotification = ({
   setNotifications : (value: FriendRequestType[] | ((prev: FriendRequestType[]) => FriendRequestType[])) => void
 }) => {
   const [isProcessing, setIsProcessing] = useState(false)
-  const handleAcceptRequest = async (notificationId: string) => {
+  const handleAcceptRequest = async (notificationId: string, fromUserId : string) => {
     try {
       const response = await fetch("/api/friend-requests/accept", {
         method: "POST",
-        body: notificationId,
+        body: JSON.stringify({ 
+          requestId : notificationId,
+          fromUserId : fromUserId
+        })
       })
 
       if (!response.ok) {
@@ -39,7 +42,7 @@ const FriendRequestNotification = ({
 
     try {
       const response = await fetch("/api/friend-requests/reject", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -64,7 +67,7 @@ const FriendRequestNotification = ({
     setIsProcessing(true)
 
     try {
-      const response = await fetch("/api/friend-requests/delete-notification", {
+      const response = await fetch("/api/notifications/delete-notification", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +130,7 @@ const FriendRequestNotification = ({
                 className="flex-1"
                 onClick={(e) => {
                     e.stopPropagation()
-                    handleAcceptRequest(notification._id)
+                    handleAcceptRequest(notification._id, notification.fromUser._id)
                 }}
                 disabled={isProcessing}
                 >
