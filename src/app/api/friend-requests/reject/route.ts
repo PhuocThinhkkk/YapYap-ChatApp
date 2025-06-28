@@ -1,20 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getUserIdInSession } from "@/lib/session";
-import {   accepteRequest, addFriend, } from "@/lib/db/friend";
+import {  rejecteRequest,} from "@/lib/db/friend";
 
-export async function  POST(req : NextRequest) { //eslint-disable-line
+export async function  PUT(req : NextRequest) {
     try{
         const userId = await getUserIdInSession();
         if (!userId) {
             return NextResponse.json({message: 'unauthorize. '}, {status: 400})
         }
-        const { requestId, fromUserId } = await req.json()
-        const res = await accepteRequest(requestId, userId)
-        if (!res.acknowledged) {
+        const { requestId } = await req.json()
+        const res = await rejecteRequest(requestId, userId)
+        if (!res) {
             return NextResponse.json({message: 'unauthorize. '}, {status: 400})
         }
-        await addFriend(requestId, fromUserId)
-
         return NextResponse.json( { message: "success" } ,{status: 200})
     }catch(e){
         console.error(e)

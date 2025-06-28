@@ -55,7 +55,7 @@ export function SearchBar({ onSearch, isLoading = false }: SearchBarProps) {
             <Button
               type="submit"
               disabled={isLoading}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold"
+              className="hover:cursor-pointer absolute right-3 top-1/2 transform -translate-y-1/2 px-8 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold"
             >
               {isLoading ? (
                 <div className="flex items-center">

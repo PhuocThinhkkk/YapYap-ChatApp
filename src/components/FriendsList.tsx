@@ -4,13 +4,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { MessageCircle, UserPlus } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { SmallUserInforType } from "@/type"
+import { FriendUser } from "@/type"
 import { FriendsLoadingSkeleton } from "@/components/skeleton-friends"
 import { toast } from "sonner"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import BananaLoading from "@/components/BananaLoading"
 
 
 
 export default function FriendsList() {
+  const [isRedirect, setIsRedirect] = useState(false)
   const { data, isLoading, error } = useQuery({
     queryKey: ['Friends'],
     queryFn: async () => {
@@ -19,10 +23,11 @@ export default function FriendsList() {
       if (!response.ok) {
           throw new Error(data.message || 'Network response was not ok')
       }
-      return data as SmallUserInforType[];
+      return data as FriendUser[];
     },
     staleTime: 0, 
   })
+  const route = useRouter()
   if (isLoading) {
     return <FriendsLoadingSkeleton />
   }
@@ -30,17 +35,35 @@ export default function FriendsList() {
     toast.error(`${error}`)
     return null
   }
+
+  async function handleRedirect(userId : string){
+    setIsRedirect(true)
+    route.push(`/users/${userId}`)
+  }
+
   return (
     <div className="space-y-3">
       {data?.map((friend) => (
         <div
           key={friend._id}
-          className="flex items-start justify-between p-4 rounded-lg bg-white border border-slate-100 hover:border-slate-200 transition-colors"
+          onClick={()=>{
+            handleRedirect(friend._id)
+          }}
+          className="
+          hover:cursor-pointer
+          flex 
+          items-start 
+          justify-between 
+          p-4 rounded-lg 
+          bg-white border
+          border-slate-100
+          hover:border-slate-200 
+          transition-colors"
         >
           <div className="flex items-start space-x-3 flex-1">
             <div className="relative flex-shrink-0">
               <Avatar className="h-12 w-12">
-                <AvatarImage src={friend.avatarUrl || "/placeholder.svg"} alt={friend.name} />
+                <AvatarImage src={friend.avatarUrl } alt={friend.name} />
                 <AvatarFallback>
                   {friend.name
                     .split(" ")
@@ -56,12 +79,12 @@ export default function FriendsList() {
                   {friend.role}
                 </Badge>
               </div>
-              <p className="text-sm text-slate-600 truncate mb-1">{friend.email}</p>
-              <p className="text-xs text-slate-500 truncate mb-1">{friend.location}</p>
+              <p className="text-sm text-slate-600 truncate mb-1">{friend.email || "unknown  email"}</p>
+              <p className="text-xs text-slate-500 truncate mb-1">{friend.location || "unknown location"}</p>
             </div>
           </div>
           <div className="flex flex-col items-end space-y-2 flex-shrink-0 ml-3">
-            <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+            <Button size="sm" variant="ghost" className="hover:cursor-pointer h-8 w-8 p-0">
               <MessageCircle className="h-4 w-4" />
             </Button>
           </div>
@@ -75,6 +98,8 @@ export default function FriendsList() {
           <p className="text-sm text-slate-500">Start connecting with people!</p>
         </div>
       )}
+
+      {isRedirect && <BananaLoading isRedirect={isRedirect}/>}
     </div>
   )
 }

@@ -13,7 +13,6 @@ export async function GET(req : NextRequest) {  //eslint-disable-line
 
         const requests = await getPendingRequest(userId);
 
-        
         return NextResponse.json( requests ,{status: 201})
     }catch(err){
         console.error(err)

@@ -82,7 +82,7 @@ export default function SearchPageContent() {
 
       <div className="relative z-10 max-w-7xl mx-auto p-6">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-6 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-6 shadow-lg">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -92,7 +92,7 @@ export default function SearchPageContent() {
               />
             </svg>
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-5xl font-bold bg-sky-500 bg-clip-text text-transparent mb-4">
             Discover People
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">

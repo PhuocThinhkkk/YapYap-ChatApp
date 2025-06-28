@@ -8,7 +8,7 @@ export async function  DELETE(req : NextRequest) { //eslint-disable-line
         if (!userId) {
             return NextResponse.json({message: 'unauthorize. '}, {status: 400})
         }
-        const requestId = await req.json()
+        const { requestId } = await req.json()
         const res = await deleteRequestByTarget(requestId, userId)
         if (!res.acknowledged) {
             return NextResponse.json({message: 'unauthorize. '}, {status: 400})

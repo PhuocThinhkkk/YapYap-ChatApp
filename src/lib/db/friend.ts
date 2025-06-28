@@ -2,61 +2,63 @@ import connectDB from "@/lib/mongoDb";
 import FriendRequest from "@/schema/friendrequest";
 import Friend from "@/schema/friend";
 import mongoose from "mongoose";
-import { FriendRequestType, SmallUserInforType } from "@/type";
+import { FriendRequestType, FriendUser } from "@/type";
 
 
-
-export async function getFriends(userId : string) {
+export async function getFriends(userId: string) {
     await connectDB();
-    
+
     const friends = await Friend.aggregate([
-    {
-        $match: {
-        $or: [
-            { user1: new mongoose.Types.ObjectId(userId) },
-            { user2: new mongoose.Types.ObjectId(userId) }
-        ]
+        {
+            $match: {
+                $or: [
+                    { user1: new mongoose.Types.ObjectId(userId) },
+                    { user2: new mongoose.Types.ObjectId(userId) }
+                ]
+            }
+        },
+        {
+            $addFields: {
+                friendId: {
+                    $cond: [
+                        { $eq: ['$user1', new mongoose.Types.ObjectId(userId)] },
+                        '$user2',
+                        '$user1'
+                    ]
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'friendId',
+                foreignField: '_id',
+                as: 'friend'
+            }
+        },
+        {
+            $unwind: {
+                path: '$friend',
+                preserveNullAndEmptyArrays: false // <-- filter out missing
+            }
+        },
+        {
+            $replaceRoot: { newRoot: '$friend' } // now safe
+        },
+        {
+            $project: {
+                _id: { $toString: '$_id' },
+                name: 1,
+                avatarUrl: 1,
+                email: 1,
+                role: 1,
+            }
         }
-    },
-    {
-        $addFields: {
-        friendId: {
-            $cond: [
-            { $eq: ['$user1', new mongoose.Types.ObjectId(userId)] },
-            '$user2',
-            '$user1'
-            ]
-        }
-        }
-    },
-    {
-        $lookup: {
-        from: 'users', // collection name in lowercase
-        localField: 'friendId',
-        foreignField: '_id',
-        as: 'friend'
-        }
-    },
-    {
-        $unwind: '$friend'
-    },
-    {
-        $project: {
-            _id: { $toString: '$_id' },
-            name: 1,
-            avatarUrl: 1,
-            email: 1,
-            role : 1,
-        }
-    },
-    {
-        $replaceRoot: { newRoot: '$friend' }
-    }
     ]);
 
-    
-    return friends as SmallUserInforType[]
+    return friends as FriendUser[];
 }
+
 
 export async function getFollowing(userId : string) {
     await connectDB();
@@ -97,7 +99,7 @@ export async function getFollowing(userId : string) {
     ]);
 
     
-    return followings as SmallUserInforType[]
+    return followings as FriendUser[]
 }
 
 
@@ -140,7 +142,7 @@ export async function getFollower(userId : string) {
     ]);
 
     
-    return followers as SmallUserInforType[]
+    return followers as FriendUser[]
 }
 
 export async function getPendingRequest(userId: string) {

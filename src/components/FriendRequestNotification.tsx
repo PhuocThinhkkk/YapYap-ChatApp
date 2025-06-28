@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { FriendRequestType } from "@/type"
+import { useQueryClient } from "@tanstack/react-query"
 
 const FriendRequestNotification = ({
   notification, setNotifications
@@ -12,6 +13,7 @@ const FriendRequestNotification = ({
   setNotifications : (value: FriendRequestType[] | ((prev: FriendRequestType[]) => FriendRequestType[])) => void
 }) => {
   const [isProcessing, setIsProcessing] = useState(false)
+  const clientQuery = useQueryClient();
   const handleAcceptRequest = async (notificationId: string, fromUserId : string) => {
     try {
       const response = await fetch("/api/friend-requests/accept", {
@@ -21,18 +23,16 @@ const FriendRequestNotification = ({
           fromUserId : fromUserId
         })
       })
-
+      const data = await response.json()
       if (!response.ok) {
-        throw new Error("Failed to accept friend request")
+        throw new Error(data.message || "Failed to accept friend request")
       }
 
-      // Remove the notification after successful acceptance
       setNotifications((prev ) => prev.filter((n : FriendRequestType) => n._id !== notificationId)) 
-
+      clientQuery.invalidateQueries({ queryKey: ["Friends"] });
       console.log("Friend request accepted successfully")
     } catch (error) {
       console.error("Failed to accept friend request:", error)
-      // Optionally show error toast
     }
       
   }
@@ -46,14 +46,15 @@ const FriendRequestNotification = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: notificationId
-      })
+        body: JSON.stringify({
+          requestId : notificationId,
+        }
+      )})
 
       if (!response.ok) {
         throw new Error("Failed to reject friend request")
       }
 
-      // Remove the notification after successful rejection
       setNotifications((prev) => prev.filter((n) => n._id !== notificationId))
 
       console.log("Friend request rejected successfully")
@@ -72,20 +73,20 @@ const FriendRequestNotification = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: notificationId
+        body: JSON.stringify({
+          requestId : notificationId,
+        })
       })
 
       if (!response.ok) {
         throw new Error("Failed to delete notification")
       }
 
-      // Remove the notification after successful deletion
       setNotifications((prev) => prev.filter((n) => n._id !== notificationId))
 
       console.log("Notification deleted successfully")
     } catch (error) {
       console.error("Failed to delete notification:", error)
-      // Optionally show error toast
     } 
   }
   return (
@@ -114,7 +115,7 @@ const FriendRequestNotification = ({
             <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                className="hover:cursor-pointer h-6 w-6 text-muted-foreground hover:text-foreground"
                 onClick={(e) => {
                     e.stopPropagation()
                     handleDeleteNotification(notification._id)
@@ -127,7 +128,7 @@ const FriendRequestNotification = ({
         <div className="flex gap-2 mt-3">
             <Button
                 size="sm"
-                className="flex-1"
+                className="flex-1 hover:cursor-pointer"
                 onClick={(e) => {
                     e.stopPropagation()
                     handleAcceptRequest(notification._id, notification.fromUser._id)
@@ -140,7 +141,7 @@ const FriendRequestNotification = ({
             <Button
                 size="sm"
                 variant="outline"
-                className="flex-1"
+                className="flex-1 hover:cursor-pointer"
                 onClick={(e) => {
                     e.stopPropagation()
                     handleRejectRequest(notification._id)

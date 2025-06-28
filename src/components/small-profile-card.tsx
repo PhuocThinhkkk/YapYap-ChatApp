@@ -28,10 +28,14 @@ export function UserCard({ user }: {user : UserDB}) {
         return
       }
 
-      const res = await fetch(`/api/add-friend`,
+      const res = await fetch(`/api/friend-requests`,
         {
           method: "POST",
-          body: userFollowingId,
+          body: JSON.stringify(
+            {
+              toUserId : userFollowingId,
+            }
+          )
         }
       )
       const data = await res.json()
@@ -54,7 +58,7 @@ export function UserCard({ user }: {user : UserDB}) {
             <AvatarFallback className="bg-orange-500 text-white">{getInitials(user.name)}</AvatarFallback>
           </Avatar>
           <h3 className="font-bold text-xl text-gray-900 mb-1">{user.name}</h3>
-          <p className="text-sm text-gray-600">{user.email}</p>
+          <p className="text-sm text-gray-600">{user.email || "unknown email"}</p>
           <Badge className="mt-2 bg-orange-100 text-orange-800 border-orange-200">
             {user.role == "Pro Plan" && <Crown className="h-3 w-3 mr-1" />}
             {user?.role?.replace(" Plan", "")}
@@ -70,17 +74,17 @@ export function UserCard({ user }: {user : UserDB}) {
 
         <div className="flex justify-center gap-8 mb-4 p-3 border border-gray-200 rounded">
           <div className="text-center">
-            <div className="font-bold text-lg text-gray-900">{user?.roomsOwn?.length}</div>
+            <div className="font-bold text-lg text-gray-900">{user?.roomsOwn?.length || 0 }</div>
             <div className="text-xs text-gray-500 uppercase tracking-wide">Owned</div>
           </div>
           <div className="text-center">
-            <div className="font-bold text-lg text-gray-900">{user?.rooms?.length}</div>
+            <div className="font-bold text-lg text-gray-900">{user?.rooms?.length || 0 }</div>
             <div className="text-xs text-gray-500 uppercase tracking-wide">Joined</div>
           </div>
         </div>
 
         <div className="flex gap-2">
-          <Button onClick={handleAddFriend} className="flex-1 bg-orange-600 hover:bg-orange-700 text-white">
+      <Button onClick={handleAddFriend} className="hover:cursor-pointer flex-1 bg-lime-500 hover:bg-lime-700 text-white">
             <UserPlus className=  "h-4 w-4 mr-2" />
             Add Friend
           </Button>

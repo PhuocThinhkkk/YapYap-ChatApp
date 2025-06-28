@@ -61,4 +61,4 @@ async function seedFriendRequests(count = 10) {
   }
 }
 
-seedFriendRequests(10); // call with desired number
+seedFriendRequests(100); // call with desired number

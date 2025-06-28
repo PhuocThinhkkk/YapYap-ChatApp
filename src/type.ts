@@ -115,7 +115,7 @@ export type FeedbackFormType = {
 }
 
 
-export type SmallUserInforType = {
+export type FriendUser = {
     _id : string,
     name : string,
     avatarUrl? : string,
