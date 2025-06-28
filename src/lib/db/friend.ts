@@ -2,7 +2,7 @@ import connectDB from "@/lib/mongoDb";
 import FriendRequest from "@/schema/friendrequest";
 import Friend from "@/schema/friend";
 import mongoose from "mongoose";
-import { FriendRequestType, FriendUser } from "@/type";
+import { FriendRequestType, FriendUser, UserDB, UserSearchingType } from "@/type";
 
 
 export async function getFriends(userId: string) {
@@ -186,6 +186,35 @@ export async function getPendingRequest(userId: string) {
   return requests as FriendRequestType[];
 }
 
+
+export async function processingRelation(userNeedSearching : UserDB, userId : string | null | undefined) : Promise<void>{
+    await connectDB()
+    const user = userNeedSearching as UserSearchingType
+    user.isFriend = false
+    user.isFollower = false
+    user.isFollowing = false
+    user.requestId = undefined
+    if (!userId) {
+        return
+    }
+    const isFriend = await isFriendExist(userId, user._id)
+    if (isFriend) {
+        user.isFriend = true;
+        return              // dont need following or follower if they were friend
+    }
+    const isExistFollow = await isFollowExist(userId, user._id)
+    if (isExistFollow) {
+        if (user._id == isExistFollow.from) {
+            user.isFollower = true
+            user.requestId = isExistFollow._id
+        }
+        if (user._id == isExistFollow.to) {
+            user.isFollowing = true
+            user.requestId = isExistFollow._id
+        }
+    }
+}
+
 export async function updateIsReadByUserId(userId : string){
     await connectDB();
     const result = await FriendRequest.updateMany(
@@ -216,7 +245,17 @@ export async function isFriendExist(user1 : string, user2 : string ){
             { user1: user1, user2: user2 },
             { user2: user1, user1: user2 }
         ],
-        status: { $in: ['pending', 'accepted'] }
+    });
+    return existing;
+
+}
+export async function isFollowExist(user1 : string, user2 : string ){
+    await connectDB();
+    const existing = await FriendRequest.findOne({
+        $or: [
+            { from : user1, to: user2 },
+            { to : user1, from: user2 }
+        ],
     });
     return existing;
 

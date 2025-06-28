@@ -64,8 +64,8 @@ export async function DELETE(req : NextRequest){
         if (!targetId) {
             return NextResponse.json({message: 'unauthorize. '}, {status: 400})
         }
-
-        const followerId = await req.json()
+        const { friendId } = await req.json()
+        const followerId = friendId
         if ( !followerId ) {
           return NextResponse.json({message: 'missing field. '}, {status: 400})
         }

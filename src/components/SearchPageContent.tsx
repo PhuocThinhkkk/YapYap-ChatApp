@@ -5,13 +5,13 @@ import { SearchBar } from "@/components/search-bar"
 import { UserGrid } from "@/components/grid-profile-card"
 import { SearchResults } from "@/components/search-result"
 import { useQuery,} from "@tanstack/react-query"
-import { UserDB } from "@/type"
+import { UserSearchingType } from "@/type"
 import { toast } from "sonner"
 import { UIError } from "./ui-error"
 
 export default function SearchPageContent() {
   const [searchQuery, setSearchQuery] = useState<string>("")
-  const [searchResults, setSearchResults] = useState<UserDB[] >([])
+  const [searchResults, setSearchResults] = useState<UserSearchingType[] >([])
   const [isSearching, setIsSearching] = useState(false)
   const initialFetch = useQuery({
     queryKey: ['Search'],
@@ -48,13 +48,11 @@ export default function SearchPageContent() {
         return;
       } 
       
-      
-      // Simulate API call delay
       const res = await fetch(`/api/search?userName=${query}`)
       if(!res.ok){
         throw new Error(`${(await res.json()).message}`)
       }
-      const data = await res.json() as UserDB[]
+      const data = await res.json() as UserSearchingType[]
       const filtered = data.filter(
         (user) =>
           user.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -73,7 +71,6 @@ export default function SearchPageContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 relative overflow-hidden">
-      {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl"></div>

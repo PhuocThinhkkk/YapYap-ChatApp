@@ -131,3 +131,10 @@ export type FriendRequestType = {
     isNewToTarget : boolean,
     createdAt : Date | string
 }
+
+export type UserSearchingType = UserDB & {
+    isFriend : boolean,
+    isFollowing : boolean,
+    isFollower : boolean,
+    requestId? : string,
+}

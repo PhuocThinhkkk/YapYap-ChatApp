@@ -1,9 +1,9 @@
-import { UserCard } from "@/components/small-profile-card"
-import { UserCardSkeleton } from "@/components/small-profile-card-skeleton"
-import { UserDB } from "@/type"
+import { UserCard } from "@/components/UserCard"
+import { UserCardSkeleton } from "@/components/UserCard-skeleton"
+import {  UserSearchingType } from "@/type"
 
 interface UserGridProps {
-  users: UserDB[]
+  users: UserSearchingType[]
   isLoading?: boolean
 }
 
