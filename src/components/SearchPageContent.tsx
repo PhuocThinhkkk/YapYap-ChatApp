@@ -5,13 +5,13 @@ import { SearchBar } from "@/components/search-bar"
 import { UserGrid } from "@/components/grid-profile-card"
 import { SearchResults } from "@/components/search-result"
 import { useQuery,} from "@tanstack/react-query"
-import { UserDB } from "@/type"
+import { UserSearchingType } from "@/type"
 import { toast } from "sonner"
 import { UIError } from "./ui-error"
 
 export default function SearchPageContent() {
   const [searchQuery, setSearchQuery] = useState<string>("")
-  const [searchResults, setSearchResults] = useState<UserDB[] >([])
+  const [searchResults, setSearchResults] = useState<UserSearchingType[] >([])
   const [isSearching, setIsSearching] = useState(false)
   const initialFetch = useQuery({
     queryKey: ['Search'],
@@ -48,13 +48,11 @@ export default function SearchPageContent() {
         return;
       } 
       
-      
-      // Simulate API call delay
       const res = await fetch(`/api/search?userName=${query}`)
       if(!res.ok){
         throw new Error(`${(await res.json()).message}`)
       }
-      const data = await res.json() as UserDB[]
+      const data = await res.json() as UserSearchingType[]
       const filtered = data.filter(
         (user) =>
           user.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -73,7 +71,6 @@ export default function SearchPageContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 relative overflow-hidden">
-      {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl"></div>
@@ -82,7 +79,7 @@ export default function SearchPageContent() {
 
       <div className="relative z-10 max-w-7xl mx-auto p-6">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-6 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-6 shadow-lg">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -92,7 +89,7 @@ export default function SearchPageContent() {
               />
             </svg>
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-5xl font-bold bg-sky-500 bg-clip-text text-transparent mb-4">
             Discover People
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">

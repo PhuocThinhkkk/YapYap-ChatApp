@@ -20,22 +20,27 @@ const AllRooms = async () => {
     if(!user) {
       return <UIError className="w-full text-center" title="Please sign in to see your rooms "/>
     }
-    if(!user.rooms) {
-      return <UIError className="w-full text-center" title="You dont have any room, get start by click in create room button "/>
+
+    if(!user.rooms || user.rooms.length == 0) {
+      return (
+        <div className="text-center py-12">
+          <Users className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+          <p className="text-slate-600 mb-2">No rooms available</p>
+          <p className="text-sm text-slate-500">Create the first room to get started!</p>
+        </div>)
     }
+    
     
     
     return (
     <>
+
       <RoomsStats rooms={user.rooms} userId={userIdInSession}/>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full">
-        {user.rooms?.map((room , index) =>
-          <div key={index}>
-              <RoomCard room={room}/>
-          </div>
-          
-        )}
-    </div>
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+        {user.rooms.map((room) => (
+          <RoomCard key={room._id} room={room} />
+        ))}
+      </div>
     
     </>  
    

@@ -15,12 +15,12 @@ export async function POST(req : NextRequest) {
         if (!isFollowerUserExist) {
             return NextResponse.json({message: 'You are not in our db. '}, {status: 400})
         }
-
-        const targetId = await req.json()
+        const { toUserId } = await req.json()
+        const targetId = toUserId
         if ( !targetId ) {
             return NextResponse.json({message: 'missing field. '}, {status: 400})
         }
-        const isTargetUserExist = await getUserById(followerId);
+        const isTargetUserExist = await getUserById(targetId);
         console.log(isTargetUserExist)//
         if (!isTargetUserExist) {
             return NextResponse.json({message: 'Target user are not in our db. '}, {status: 400})
@@ -53,7 +53,8 @@ export async function DELETE(req : NextRequest){
             return NextResponse.json({message: 'unauthorize. '}, {status: 400})
         }
 
-        const targetId = await req.json()
+        const { toUserId } = await req.json()
+        const targetId = toUserId
         if ( !targetId ) {
           return NextResponse.json({message: 'missing field. '}, {status: 400})
         }

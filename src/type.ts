@@ -85,12 +85,15 @@ export type ContactFormData = z.infer<typeof formSchema>;
 
 
 export type RoomDb = {
-  _id: string;
-  roomName: string;
-  maxPeople: number,
-  leaderId: string;
-  users: UserDB[];
-  createdAt: Date;
+    _id: string;
+    roomName: string;
+    maxPeople: number,
+    leaderId: UserDB;
+    users: UserDB[];
+    createdAt: Date;
+    avatarUrl?: string
+    description?: string
+    category?: string
 }
 
 
@@ -112,10 +115,26 @@ export type FeedbackFormType = {
 }
 
 
-export type SmallUserInforType = {
+export type FriendUser = {
     _id : string,
     name : string,
     avatarUrl? : string,
     email : string,
     role? : string,
+    location? : string
+}
+
+export type FriendRequestType = {
+    _id : string,
+    fromUser : UserDB,
+    to : UserDB,
+    isNewToTarget : boolean,
+    createdAt : Date | string
+}
+
+export type UserSearchingType = UserDB & {
+    isFriend : boolean,
+    isFollowing : boolean,
+    isFollower : boolean,
+    requestId? : string,
 }

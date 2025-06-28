@@ -88,7 +88,7 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
             variant="ghost"
             size="icon"
             className="hover:bg-slate-50 hover:cursor-pointer"
-            onClick={() => route.push("/rooms/create-room")}
+            onClick={() => route.push("/create-room")}
           >
             <Plus className="h-5 w-5" />
           </Button>
