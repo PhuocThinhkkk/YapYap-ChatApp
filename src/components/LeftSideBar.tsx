@@ -73,9 +73,9 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
 
   return (
     <div
-      className={`fixed lg:block lg:static z-20 w-80 h-screen ${isOpen ? "-translate-x-0" : "-translate-x-full"} transition-transform transform duration-300 lg:translate-x-0`}
+      className={`top-0 h-[calc(100vh-7rem)] fixed lg:block lg:static z-20 w-80 ${isOpen ? "-translate-x-0" : "-translate-x-full"} transition-transform transform duration-300 lg:translate-x-0`}
     >
-      <div className="grid-cols-1 h-screen w-full max-w-xs border-r bg-background">
+      <div className="grid-cols-1 h-full w-full max-w-xs border-r bg-background">
         <Link href="/rooms">
           <Button className="hover:bg-slate-50 hover:cursor-pointer w-15 h-7 bg-background text-black border-0">
             <ArrowLeftFromLine />
@@ -119,7 +119,13 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
         ) : (
           <ScrollArea className="h-[calc(100vh-1500px)]">
             <div className="px-2 py-2">
-              {filteredConversations.length === 0 && searchTerm ? (
+              {conversations.length === 0 ? (
+                <div className="px-4 py-8 text-center text-muted-foreground">
+                  <p>No conversations found</p>
+                  <p className="text-sm">Adding new friends or joining rooms to start chatting</p>
+                </div>
+              ) : null}
+              {(filteredConversations.length === 0 && searchTerm) ? (
                 <div className="px-4 py-8 text-center text-muted-foreground">
                   <p>No conversations found</p>
                   <p className="text-sm">{"Try searching for something else"}</p>
