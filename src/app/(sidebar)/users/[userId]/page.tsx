@@ -1,6 +1,6 @@
 import ProfileComponent from '@/components/UserProfile';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import UserIconWithSuspense from '@/components/UserIconWithSuspense';
+import UserInformation from '@/components/UserInformation';
 const Page = async () => {
   
   return (
@@ -11,7 +11,7 @@ const Page = async () => {
           <SidebarTrigger className="md:hidden" />
           <h1 className="ml-2 text-lg font-semibold">Profile</h1>
           <div className="absolute right-8">
-            <UserIconWithSuspense/>
+            <UserInformation/>
           </div>
         </header>
       <ProfileComponent />

@@ -44,10 +44,8 @@ export default function NotificationBell() {
     if (unreadCount > 0 && !isUpdating) {
       setIsUpdating(true)
 
-      // Store original state in case we need to revert
       const originalNotifications = [...notifications]
 
-      // Mark all as read locally first for immediate UI feedback
       setNotifications((prev) => prev.map((notification) => ({ ...notification, isNewToTarget: false })))
 
       try {
@@ -70,14 +68,12 @@ export default function NotificationBell() {
       }
     }
   }
-  console.log("notisajdf",notifications)
 
   return (
     <Popover
       open={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open)
-        // When popover closes, mark all as read
         if (!open && isOpen) {
           markAllAsReadOnClose()
         }

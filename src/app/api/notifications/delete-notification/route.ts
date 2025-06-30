@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getUserIdInSession } from "@/lib/session";
 import {   deleteRequestByTarget,} from "@/lib/db/friend";
 
-export async function  DELETE(req : NextRequest) { //eslint-disable-line
+export async function  DELETE(req : NextRequest) { 
     try{
         const userId = await getUserIdInSession();
         if (!userId) {

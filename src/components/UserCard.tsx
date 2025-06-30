@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Crown, MapPin, MessageCircle, UserPlus, UserMinus, UserCheck, Users } from 'lucide-react'
 import { toast } from "sonner"
 import { UserSearchingType } from "@/type"
+import { useQueryClient } from "@tanstack/react-query"
 
 export function UserCard({ user }: { user: UserSearchingType }) {
   const [relationshipState, setRelationshipState] = useState({
@@ -16,7 +17,7 @@ export function UserCard({ user }: { user: UserSearchingType }) {
     isFollower: user.isFollower
   })
   const [isLoading, setIsLoading] = useState(false)
-
+  const clientQuery = useQueryClient()
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -49,7 +50,6 @@ export function UserCard({ user }: { user: UserSearchingType }) {
       }
 
       toast.success("Friend request sent!")
-    
 
     } catch (e) {
       console.error(e);
@@ -80,6 +80,7 @@ export function UserCard({ user }: { user: UserSearchingType }) {
         throw new Error(data.message || "Server error.")
       }
 
+      clientQuery.invalidateQueries({ queryKey: ["Friends"] });
       toast.success("Friend removed")
     } catch (e) {
       console.error(e);
@@ -140,6 +141,7 @@ export function UserCard({ user }: { user: UserSearchingType }) {
       toast.success("you two now are friend!")
       setRelationshipState(prev => ({ ...prev, isFollowing: true }))
 
+      clientQuery.invalidateQueries({ queryKey: ["Friends"] });
     } catch (e) {
       console.error(e);
       toast.error(`${e}`)

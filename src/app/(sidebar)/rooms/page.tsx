@@ -7,7 +7,7 @@ import { Suspense } from "react"
 import { RoomsLoadingSkeleton } from "@/components/RoomsLoadingSkeleton"
 import { Card, CardContent } from "@/components/ui/card"
 import { Plus } from "lucide-react"
-import UserIconWithSuspense from "@/components/UserIconWithSuspense"
+import UserInformation from "@/components/UserInformation"
 import { Users } from "lucide-react"
 import FriendsList from "@/components/FriendsList"
 
@@ -19,7 +19,7 @@ const Page = () => {
         <SidebarTrigger className="md:hidden" />
         <h1 className="ml-2 text-base sm:text-lg font-semibold">Rooms</h1>
         <div className="absolute right-3 sm:right-8">
-          <UserIconWithSuspense />
+          <UserInformation />
         </div>
       </header>
 

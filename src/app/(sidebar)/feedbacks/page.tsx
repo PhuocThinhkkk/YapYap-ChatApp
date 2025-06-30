@@ -1,6 +1,6 @@
 
 import { SidebarTrigger, } from "@/components/ui/sidebar"
-import UserIconWithSuspense from "@/components/UserIconWithSuspense"
+import UserInformation from "@/components/UserInformation"
 import { MessageSquareHeart, } from "lucide-react"
 import StatFeedback from "@/components/StatFeedback"
 
@@ -20,7 +20,7 @@ export default async function FeedbackPage() {
         <SidebarTrigger className="md:hidden" />
         <h1 className="ml-2 font-semibold text-2xl">Feekback Center</h1>
         <div className="absolute right-8">
-            <UserIconWithSuspense/>
+            <UserInformation/>
           </div>
       </header>
       

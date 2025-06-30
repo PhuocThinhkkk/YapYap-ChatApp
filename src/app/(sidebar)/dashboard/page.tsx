@@ -3,7 +3,7 @@ import { Area_Chart } from "@/components/area-chart"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Component } from "@/components/pie-chart"
 import { BigAssChart } from "@/components/big-area-chart"
-import UserIconWithSuspense from "@/components/UserIconWithSuspense"
+import UserInformation from "@/components/UserInformation"
 
 const page = () => {
   return (
@@ -13,7 +13,7 @@ const page = () => {
           <SidebarTrigger className="md:hidden" />
           <h1 className="ml-2 text-lg font-semibold">Dashboard</h1>
           <div className="absolute right-8">
-            <UserIconWithSuspense/>
+            <UserInformation/>
           </div>
         </header>
         

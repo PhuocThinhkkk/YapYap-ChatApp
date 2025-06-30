@@ -1,35 +1,42 @@
-
-import { getUserIdInSession } from "@/lib/session"
+'use client'
 import ButtonLinkSignIn from "./ButtonLinkSignIn";
 import UserDropDown from "./UserDropDown";
-import { getUserById } from "@/lib/db/userdb";
+import { useQuery } from "@tanstack/react-query";
+import { UserDB } from "@/type";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
-
-const UserIconSignIn = async () => {
-    try{
-        const userIdInSession = await getUserIdInSession();
-        let user
-        console.log(user)
-        if (userIdInSession) {
-            user  = await getUserById(userIdInSession)     
-        }
-        console.log(user)
-        return (
-            
-            <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-slate-200">
-                {  
-                    (userIdInSession && user) ?
-                        <UserDropDown 
-                        userIdInSession={userIdInSession}
-                        user={user}
-                        /> : <ButtonLinkSignIn/>
+const UserIconSignIn = () => {
+    const {data, isLoading, error} = useQuery(
+        {
+            queryKey: ['UserInfor'],
+            queryFn: async () => {
+                const response = await fetch(`/api/users/current`)
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Network response was not ok')
                 }
-            </div>
-        )
-    }catch(e){
-        console.error(e)
-        return
+                return data as UserDB
+            },
+        }
+    )
+    if (isLoading) {
+        return <Loader2 className="animate-spin text-primary h-10 w-10" />
     }
+    if(error || !data){
+        toast.error(`${error}`)
+        return <ButtonLinkSignIn/>
+    }
+   
+    return (
+        
+        <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-slate-200">
+            <UserDropDown 
+            userIdInSession={data._id}
+            user={data}
+            /> :
+        </div>
+    )
 }
 
 export default UserIconSignIn

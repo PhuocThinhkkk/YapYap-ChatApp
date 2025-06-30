@@ -4,7 +4,7 @@ import { getSession } from './lib/session'
 
 
 const rateLimitWindow = 60 * 1000; // 1 minute
-const maxRequests = 30;
+const maxRequests = 100; 
 const ipStore = new Map<string, { count: number; time: number }>();
  
 // This function can be marked `async` if using `await` inside

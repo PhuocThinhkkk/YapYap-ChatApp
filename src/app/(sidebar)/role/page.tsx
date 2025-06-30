@@ -2,7 +2,7 @@ import HeroPricing from "@/components/HeroPricing"
 import PricingSection from "@/components/PricingSection"
 import FeaturesComparision from "@/components/FeaturesComparision"
 import FeedbackSection from "@/components/FeedbackSection"
-import UserIconWithSuspense from "@/components/UserIconWithSuspense"
+import UserInformation from "@/components/UserInformation"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
 
@@ -15,7 +15,7 @@ export default async function Page() {
           <SidebarTrigger className="md:hidden" />
           <h1 className="ml-2 text-lg font-semibold">Pricing</h1>
           <div className="absolute right-8">
-            <UserIconWithSuspense/>
+            <UserInformation/>
           </div>
         </header>
       <div className="h-full bg-gradient-to-br from-slate-50 to-slate-100">
