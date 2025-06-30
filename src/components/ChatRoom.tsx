@@ -11,10 +11,8 @@ import React,
 } from 'react';
 import { 
 	Send, 
-	SidebarOpenIcon 
 } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import LeftSideBar from "@/components/LeftSideBar";
 import { toast } from "sonner";
 import {
 	Avatar, 
@@ -24,14 +22,13 @@ import {
 import { ResponseMessage, RoomDb, UserDB } from "@/type";
 
 
-export default function LiveChat( { 
+export default function ChatRoom( { 
 	userId,
 	room,
 } : { 
 	userId : string,
 	room : RoomDb,
 }) {
-	const [isOpen, setIsOpen] = useState<boolean>(true)
 	const [messages, setMessages] = useState<ResponseMessage[]>([]);
 	const [user, setUser] = useState<UserDB | null>(null)
 	const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
@@ -114,6 +111,7 @@ export default function LiveChat( {
 			const formData = new FormData(form);
 			const info = formData.get('message') as string
 			if(!info || !user || !room || !room._id || !userId ) {
+				console.log(info)
 				throw new Error('some information is missing!')
 			}
 			const now = new Date()
@@ -149,97 +147,100 @@ export default function LiveChat( {
 
 	return (
 		<>
-		 <div className="flex h-screen w-screen">
-			<div className="fixed top-8 left-4 z-30 lg:hidden border rounded-sm">
-				<Button className="bg-white hover:bg-slate-100 hover:cursor-pointer text-black text-sm" onClick={()=> setIsOpen(!isOpen)}>
-					<SidebarOpenIcon/>
-				</Button>
-			</div>
-			<LeftSideBar isOpen={isOpen}/>
-			<div className="grid-cols-1 flex-1 h-screen">
-				<h1 className="text-left font-bold p-3 pl-16 mb-5 top-0 sticky bg-white h-12 z-10 border-b text-lg "> Room : {room.roomName}</h1>
-				
-				<ScrollArea className="h-[calc(100vh-200px)]">
-					<div className="px-20 py-5">
-					<div className="space-y-4 mb-5">
-						{messages?.map((message, index) => {
-						
-						const showDateHeader = index === 0 || !isSameDay(message.createdAt, messages[index - 1].createdAt)
-						
-
-						return (
-							<div key={index}>
-							{/* Date Header */}
-							{showDateHeader && (
-								<div className="flex justify-center mb-4">
-								<div className="bg-muted px-3 py-1 rounded-full text-sm text-muted-foreground">
-									{formatDate(message.createdAt)}
-								</div>
-								</div>
-							)}
-
-							{/* Message */}
-							<div
-								className={`flex items-start gap-3 ${message.user._id === userId ? "justify-end" : "justify-start"}`}
-							>
-								{message.user._id !== userId && (
-									<Avatar className="w-8 h-8 mt-1">
-										<AvatarImage src={message.user.avatarUrl} alt={message.user.name} />
-										<AvatarFallback>
-											{message.user.name?.split(" ")
-												.map((n) => n[0])
-												.join("")}
-										</AvatarFallback>
-									</Avatar>
-								)}
-
-								<div className={`flex flex-col ${message.user._id === userId ? "items-end" : "items-start"}`}>
-								{message.user._id !== userId ? (
-									<div className="text-xs text-muted-foreground mb-1 px-1">{message.user.name}</div>
-								) : <div className="text-xs text-muted-foreground mb-1 px-1">You</div>}
-
-								<div
-									className={`max-w-[70%] rounded-lg px-4 py-2 ${
-										message.user._id === userId ? "bg-primary text-primary-foreground" : "bg-muted"
-									}`}
-								>
-									<p className="min-w-20 pr-4 text-sm whitespace-pre-wrap break-words overflow-ellipsis">
-									{message.info}
-									</p>
-								</div>
-
-								<div className="text-xs text-muted-foreground mt-1 px-1">{formatTime(message.createdAt)}</div>
-								</div>
-
-								{message.user._id === userId && (
-								<Avatar className="w-8 h-8 mt-1">
-									<AvatarImage src={message.user.avatarUrl || "/placeholder.svg"} alt={message.user.name} />
-									<AvatarFallback>
-									{message.user.name
-										.split(" ")
-										.map((n) => n[0])
-										.join("")}
-									</AvatarFallback>
-								</Avatar>
-								)}
-							</div>
-							</div>
-						)
-						})}
-					</div>
-					<div ref={endOfMessagesRef} />
-					</div>
-				</ScrollArea>
-
-				<form onSubmit={sendMessage} className="flex space-x-2 sticky z-10 bottom-5 px-20 py-5">
-						<Input type="text" name='message' placeholder="Type a message" />
-						<Button size="icon" className="hover:cursor-pointer" >
-							<Send className="h-5 w-5" />
-						</Button>
-				</form>
-			</div>
-		</div>
+		<div className="flex-1 flex flex-col h-full">
 		
+		<h1 className="text-center sm:text-left font-bold p-3 px-4  sm:px-15 lg:px-30 mb-5 top-0 sticky bg-white h-12 z-10 border-b text-lg">
+			Room: {room.roomName}
+		</h1>
+
+		<ScrollArea className="flex-1 h-[calc(100vh-500px)]">
+			<div className="px-4 sm:px-8 lg:px-20 py-5">
+			<div className="space-y-4 mb-5">
+				{messages?.map((message, index) => {
+				const showDateHeader = index === 0 || !isSameDay(message.createdAt, messages[index - 1].createdAt)
+
+				return (
+					<div key={index}>
+					{showDateHeader && (
+						<div className="flex justify-center mb-4">
+						<div className="bg-muted px-3 py-1 rounded-full text-sm text-muted-foreground">
+							{formatDate(message.createdAt)}
+						</div>
+						</div>
+					)}
+
+					<div
+						className={`flex items-start gap-2 sm:gap-3 ${
+						message.user._id === userId ? "justify-end" : "justify-start"
+						}`}
+					>
+						{message.user._id !== userId && (
+						<Avatar className="w-6 h-6 sm:w-8 sm:h-8 mt-1 flex-shrink-0">
+							<AvatarImage src={message.user.avatarUrl || "/placeholder.svg"} alt={message.user.name} />
+							<AvatarFallback className="text-xs">
+							{message.user.name
+								?.split(" ")
+								.map((n) => n[0])
+								.join("")}
+							</AvatarFallback>
+						</Avatar>
+						)}
+
+						<div
+						className={`flex flex-col ${
+							message.user._id === userId ? "items-end" : "items-start"
+						} min-w-0 flex-1 max-w-[85%] sm:max-w-[75%] lg:max-w-[70%]`}
+						>
+						<div className="text-xs text-muted-foreground mb-1 px-1">
+							{message.user._id !== userId ? message.user.name : "You"}
+						</div>
+
+						<div
+							className={` max-w-[150px] sm:max-w-[250px] lg:max-w-[500px] inline-block rounded-lg px-3 py-2 sm:px-4 sm:py-2 ${
+							message.user._id === userId ? "bg-primary text-primary-foreground" : "bg-muted"
+							}`}
+						>
+							<p className="text-sm break-words hyphens-auto overflow-wrap-anywhere">{message.info}</p>
+						</div>
+
+						<div className="text-xs text-muted-foreground mt-1 px-1">{formatTime(message.createdAt)}</div>
+						</div>
+
+						{message.user._id === userId && (
+						<Avatar className="w-6 h-6 sm:w-8 sm:h-8 mt-1 flex-shrink-0">
+							<AvatarImage src={message.user.avatarUrl || "/placeholder.svg"} alt={message.user.name} />
+							<AvatarFallback className="text-xs">
+							{message.user.name
+								.split(" ")
+								.map((n) => n[0])
+								.join("")}
+							</AvatarFallback>
+						</Avatar>
+						)}
+					</div>
+					</div>
+				)
+				})}
+			</div>
+			<div ref={endOfMessagesRef} />
+			</div>
+		</ScrollArea>
+
+		<form
+			onSubmit={sendMessage}
+			className="flex space-x-2 sticky z-10 bottom-0 px-4 sm:px-8 lg:px-20 py-5 bg-white border-t"
+		>
+			<Input
+				name="message"
+				type="text"
+				placeholder="Type a message"
+				className="flex-1 min-w-0"
+			/>
+			<Button size="icon" type="submit" className="hover:cursor-pointer flex-shrink-0">
+			<Send className="h-4 w-4 sm:h-5 sm:w-5" />
+			</Button>
+		</form>
+		</div>
 		</>
 	);
 }

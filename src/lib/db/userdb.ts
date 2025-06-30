@@ -19,6 +19,7 @@ export async function getUserById(id : string) : Promise<UserDB> {
 
 
 export async function getUserAndRoomById(userId : string, roomId : string){
+  await connectDB()
     const users = await User.aggregate([
     {
         $match: { _id: new mongoose.Types.ObjectId(userId) }
