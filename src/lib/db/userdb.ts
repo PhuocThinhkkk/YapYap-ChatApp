@@ -73,7 +73,9 @@ export async function getUserAndRoomById(userId : string, roomId : string){
 
 
 
-export async function getUserByIdWithRoom(userId: string) {
+export async function getUserByIdWithRoom(userId: string) 
+{
+  await connectDB()
   const users = await User.aggregate([
     {
       $match: { _id: new mongoose.Types.ObjectId(userId) },
