@@ -91,6 +91,7 @@ export default function ChatRoom( {
 				console.log(info)
 				throw new Error('some information is missing!')
 			}
+			console.log(user)
 			const now = new Date()
 			const message = {
 				userId: user._id,
@@ -114,7 +115,7 @@ export default function ChatRoom( {
 			if(!res.ok ) {
 				return  //
 			}
-			socket.emit('sendMessage',{roomId : room._id, message} );
+			socket.emit('sendMessage',{roomId : room._id, fullInforMessage} );
 			form.reset();
 		}catch(err){
 			toast.error(`Error when sending message: ${err}`)
