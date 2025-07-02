@@ -20,7 +20,6 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{roo
     }
 
     const messages = await getMessagesWithUserByRoomId(roomid)
-    if(messages.length === 0 || !messages ) return NextResponse.json({messages: "no data in this room"}, {status : 400});
     return NextResponse.json(messages, {status: 200})
 
   }catch(err){
