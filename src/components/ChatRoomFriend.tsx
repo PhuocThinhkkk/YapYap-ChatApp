@@ -14,18 +14,21 @@ import {
 } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { toast } from "sonner";
-import { ResponseMessage, RoomDb, UserDB } from "@/type";
+import { ResponseMessage, SimpleUserType } from "@/type";
 import Message from './Message';
 import { formatDate, isSameDay } from '@/lib/utils';
+import { ChatUserHeader } from './chat-user-header';
 
-export default function ChatRoom( { 
-	user,
-	room,
+export default function ChatRoomFriend( { 
+    currentUser,
+    ortherUser,
+    friendId,
 } : { 
-	user : UserDB,
-	room : RoomDb,
+    currentUser : SimpleUserType,
+    ortherUser : SimpleUserType,
+    friendId : string,
 }) {
-	const [messages, setMessages] = useState<ResponseMessage[]>([]);
+	const [messages, setMessages] = useState<ResponseMessage[] | null>(null);
 	const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
 	
 	useEffect(() => {
@@ -38,7 +41,7 @@ export default function ChatRoom( {
 		const messageFetching = async () => {
 			try {
 
-				const resForMessage = await fetch(`/api/rooms/${room._id}/messages`,
+				const resForMessage = await fetch(`/api/friends/${friendId}/messages`,
 					{
 						cache: 'no-store',
 					}
@@ -47,10 +50,7 @@ export default function ChatRoom( {
 				if(!resForMessage.ok ) {
 					throw new Error(data.message)
 				}
-				const newDate = new Date(data.createdAt)
-				data.createAt = newDate
 				setMessages(data);
-
 			}catch (err) {
 				console.error(err)
 				toast.error("Failed to get messages");
@@ -65,9 +65,11 @@ export default function ChatRoom( {
 	useEffect(() => {
 
 		if (!socket) return;
-		socket.emit("join_room", room._id);
+		socket.emit("join_friend_room", friendId);
 		socket.on("sendMessage", (message: ResponseMessage) => {
-			setMessages((prevMessages) => [...prevMessages, message]);
+            if(messages){
+                setMessages((prevMessages) => [...(prevMessages ?? []), message]);
+            }
 		});
 
 		return () => {
@@ -75,46 +77,49 @@ export default function ChatRoom( {
 			socket.off('user_joined');
 		};
 
-	}, [socket, room._id]);
+	}, [socket, friendId]);
 
 	const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
 		try{
+            
 			if (!socket) {
 				throw new Error('Socket not connected'); 
 			}
-			
+			if (messages === null) {
+                return
+            }
 			e.preventDefault();
 			const form = e.currentTarget
 			const formData = new FormData(form);
 			const info = formData.get('message') as string
-			if(!info || !user || !room || !room._id ) {
+			if(!info || !currentUser || !ortherUser || !friendId ) {
 				console.log(info)
 				throw new Error('some information is missing!')
 			}
 			const now = new Date()
 			const message = {
-				userId: user._id,
-				roomId : room._id,
+				userId: currentUser._id,
+				roomId : friendId,
 				info,
 			}
 
 			const fullInforMessage : ResponseMessage = {
-				user,
-				room,
+				user : currentUser,
 				info,
+                friendId : friendId,
 				createdAt: now.toISOString()
 			}
 			setMessages([...messages, 
 				fullInforMessage
 			]);
-			const res = await fetch(`/api/rooms/${room._id}/messages`,{
+			const res = await fetch(`/api/friends/${friendId}/messages`,{
 				method: "POST",
 				body: JSON.stringify(message),
 			});
 			if(!res.ok ) {
 				return  //
 			}
-			socket.emit('sendMessage',{roomId : room._id, message} );
+			socket.emit('sendMessage',{roomId : friendId, message} );
 			form.reset();
 		}catch(err){
 			toast.error(`Error when sending message: ${err}`)
@@ -126,9 +131,7 @@ export default function ChatRoom( {
 		<>
 		<div className="flex-1 flex flex-col h-full">
 		
-		<h1 className="text-center sm:text-left font-bold p-3 px-4  sm:px-15 lg:px-30 mb-5 top-0 sticky bg-white h-12 z-10 border-b text-lg">
-			Room: {room.roomName}
-		</h1>
+		<ChatUserHeader user={ortherUser}/>
 
 		<ScrollArea className="flex-1 h-[calc(100vh-500px)]">
 			<div className="px-4 sm:px-8 lg:px-20 py-5">
@@ -145,7 +148,7 @@ export default function ChatRoom( {
 							</div>
 							</div>
 						)}
-						<Message message={message} user={user}/>
+						<Message message={message} user={currentUser}/>
 					</div>
 				)
 				})}

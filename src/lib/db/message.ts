@@ -31,3 +31,62 @@ export async function getMessagesWithUserByRoomId(roomId : string) {
     ]);
     return messages as MessageDB[]
 }
+export async function getMessagesByFriendId(friendId: string) {
+  await connectDB();
+  const messages = await MESSAGE.aggregate([
+    { $match: { friendId: friendId } },
+    {
+      $addFields: {
+        _id: { $toString: '$_id' },
+        user: { $toString: '$user' },
+        room: {
+          $cond: [
+            { $eq: ['$room', null] },
+            null,
+            { $toString: '$room' }
+          ]
+        },
+        friendId: {
+          $cond: [
+            { $eq: ['$friendId', null] },
+            null,
+            { $toString: '$friendId' }
+          ]
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    { $unwind: '$user' },
+    {
+      $project: {
+        _id: 1,
+        info: 1,
+        createdAt: 1,
+        room: 1,
+        friendId: 1,
+        roomName: 1,
+        user: {
+          _id: 1,
+          createdAt: 1,
+          name: 1,
+          email: 1,
+          avatarUrl: 1,
+          role: 1,
+          bio: 1,
+          location: 1,
+          backgroundUrl: 1
+        }
+      }
+    },
+    { $sort: { createdAt: 1 } }
+  ]);
+
+  return messages as MessageDB[];
+}

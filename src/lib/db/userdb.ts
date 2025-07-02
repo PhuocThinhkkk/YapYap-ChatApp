@@ -1,19 +1,19 @@
 import 'server-only'
-import { UserDB } from '@/type';
+import { SimpleUserType, UserDB } from '@/type';
 import User from '@/schema/user';
 import connectDB from "@/lib/mongoDb"
 import mongoose from 'mongoose';
 
 export async function getUserById(id : string) : Promise<UserDB> {
-    await connectDB()
-    const userdb = await User.findById(id).select('-password')
-    if (!userdb) {
-      throw new Error('There is no one like that in db.')
-    }
-    const user = JSON.parse(JSON.stringify(userdb)) 
-    const createdAt = new Date(user.createdAt)
-    user.createdAt = createdAt
-    return user as UserDB
+  await connectDB()
+  const userdb = await User.findById(id).select('-password')
+  if (!userdb) {
+    throw new Error('There is no one like that in db.')
+  }
+  const user = JSON.parse(JSON.stringify(userdb)) 
+  const createdAt = new Date(user.createdAt)
+  user.createdAt = createdAt
+  return user as SimpleUserType
 }
 
 

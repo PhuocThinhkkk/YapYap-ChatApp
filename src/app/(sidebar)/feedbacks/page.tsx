@@ -26,11 +26,11 @@ export default async function FeedbackPage() {
       
     <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
+      <div className="relative overflow-hidden bg-blue-500">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative container mx-auto px-4 py-16">
           <div className="text-center text-white">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-red-400 rounded-full mb-6">
               <MessageSquareHeart className="w-8 h-8" />
             </div>
 

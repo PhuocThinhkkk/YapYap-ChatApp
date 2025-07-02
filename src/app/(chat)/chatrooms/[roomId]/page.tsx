@@ -27,7 +27,7 @@ export default async function Page({
     const roomData = user.rooms[0]  
 
     return (
-      <ChatRoom userId={user._id} room={roomData}></ChatRoom>
+      <ChatRoom user={user} room={roomData}></ChatRoom>
     )
   }catch(e){
     console.error(e)

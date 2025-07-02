@@ -46,9 +46,6 @@ export default function FriendsList() {
       {data?.map((friend) => (
         <div
           key={friend._id}
-          onClick={()=>{
-            handleRedirect(friend._id)
-          }}
           className="
           hover:cursor-pointer
           flex 
@@ -62,7 +59,11 @@ export default function FriendsList() {
         >
           <div className="flex items-start space-x-3 flex-1">
             <div className="relative flex-shrink-0">
-              <Avatar className="h-12 w-12">
+              <Avatar 
+              onClick={()=>{
+                handleRedirect(friend._id)
+              }}
+              className="h-12 w-12">
                 <AvatarImage src={friend.avatarUrl } alt={friend.name} />
                 <AvatarFallback>
                   {friend.name
@@ -84,7 +85,9 @@ export default function FriendsList() {
             </div>
           </div>
           <div className="flex flex-col items-end space-y-2 flex-shrink-0 ml-3">
-            <Button size="sm" variant="ghost" className="hover:cursor-pointer h-8 w-8 p-0">
+            <Button onClick={()=>{
+                route.push(`/chatfriends/${friend.friendRelationId}`)
+              }} size="sm" variant="ghost" className="hover:cursor-pointer h-8 w-8 p-0">
               <MessageCircle className="h-4 w-4" />
             </Button>
           </div>

@@ -50,7 +50,7 @@ const TabFeedBack = ( { feedbacks }: { feedbacks : FeedbackDb[]} ) => {
           <div ref={tabsListRef} className="grid grid-cols-2 relative">
             {/* Animated Background Indicator */}
             <div
-              className="absolute top-1 bottom-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl shadow-lg transition-all duration-500 ease-out z-0"
+              className=" absolute top-1 bottom-1 bg-sky-500 rounded-xl shadow-lg transition-all duration-500 ease-out z-0"
               style={{
                 left: `${indicatorStyle.left}px`,
                 width: `${indicatorStyle.width}px`,
@@ -62,7 +62,7 @@ const TabFeedBack = ( { feedbacks }: { feedbacks : FeedbackDb[]} ) => {
             <button
               ref={submitTabRef}
               onClick={() => handleTabChange("submit")}
-              className={`relative z-10 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+              className={`hover:cursor-pointer relative z-10 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
                 activeTab === "submit" ? "text-white shadow-lg" : "text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -72,7 +72,7 @@ const TabFeedBack = ( { feedbacks }: { feedbacks : FeedbackDb[]} ) => {
                 <button
                   ref={viewTabRef}
                   onClick={() => handleTabChange("view")}
-                  className={`relative z-10 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                  className={`hover:cursor-pointer relative z-10 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
                     activeTab === "view" ? "text-white shadow-lg" : "text-gray-600 hover:text-gray-900"
                   }`}
                 >

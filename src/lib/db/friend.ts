@@ -1,8 +1,9 @@
+import 'server-only'
 import connectDB from "@/lib/mongoDb";
 import FriendRequest from "@/schema/friendrequest";
 import Friend from "@/schema/friend";
 import mongoose from "mongoose";
-import { FriendRequestType, FriendUser, UserDB, UserSearchingType } from "@/type";
+import { FriendRequestType, FriendUser, UserDB, UserSearchingType, FriendType } from "@/type";
 
 
 export async function getFriends(userId: string) {
@@ -17,46 +18,127 @@ export async function getFriends(userId: string) {
                 ]
             }
         },
-        {
-            $addFields: {
-                friendId: {
-                    $cond: [
-                        { $eq: ['$user1', new mongoose.Types.ObjectId(userId)] },
-                        '$user2',
-                        '$user1'
-                    ]
-                }
-            }
-        },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'friendId',
-                foreignField: '_id',
-                as: 'friend'
-            }
-        },
-        {
-            $unwind: {
-                path: '$friend',
-                preserveNullAndEmptyArrays: false // <-- filter out missing
-            }
-        },
-        {
-            $replaceRoot: { newRoot: '$friend' } // now safe
-        },
-        {
-            $project: {
-                _id: { $toString: '$_id' },
-                name: 1,
-                avatarUrl: 1,
-                email: 1,
-                role: 1,
+    {
+        $addFields: {
+            friendId: {
+                $cond: [
+                { $eq: ['$user1', new mongoose.Types.ObjectId(userId)] },
+                '$user2',
+                '$user1'
+                ]
             }
         }
+    },
+    {
+        $lookup: {
+            from: 'users',
+            localField: 'friendId',
+            foreignField: '_id',
+            as: 'friend'
+            }
+    },
+    {
+        $unwind: {
+            path: '$friend',
+            preserveNullAndEmptyArrays: false
+        }
+    },
+    {
+        $addFields: {
+            friendRelationId: { $toString: '$_id' } // keep original Friend._id
+        }
+    },
+    {
+        $replaceRoot: {
+            newRoot: {
+                $mergeObjects: ['$friend', { friendRelationId: '$friendRelationId' }]
+            }
+        }
+    },
+    {
+        $project: {
+            _id: { $toString: '$_id' }, // user._id
+            name: 1,
+            avatarUrl: 1,
+            email: 1,
+            role: 1,
+            friendRelationId: 1 // Friend._id
+        }
+    }
     ]);
 
     return friends as FriendUser[];
+}
+
+export async function getFriendById(friendId: string) {
+  await connectDB();
+
+  const relation = await Friend.aggregate([
+    {
+      $match: { _id: new mongoose.Types.ObjectId(friendId) }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "user1",
+        foreignField: "_id",
+        as: "user1"
+      }
+    },
+    { $unwind: "$user1" },
+    {
+      $addFields: {
+        "user1._id": { $toString: "$user1._id" }
+      }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "user2",
+        foreignField: "_id",
+        as: "user2"
+      }
+    },
+    { $unwind: "$user2" },
+    {
+      $addFields: {
+        "user2._id": { $toString: "$user2._id" }
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        createdAt: 1,
+        user1: {
+            _id: 1,
+            email: 1,
+            name: 1,
+            avatarUrl: 1,
+            bio : 1,
+            location : 1,
+            backgroundUrl : 1,
+            role : 1,
+        },
+        user2: {
+            _id: 1,
+            email: 1,
+            name: 1,
+            avatarUrl: 1,
+            bio : 1,
+            location : 1,
+            backgroundUrl : 1,
+            role : 1,
+        }
+      }
+    },
+    {
+      $addFields: {
+        _id: { $toString: "$_id" }
+      }
+    }
+  ]);
+
+  return relation[0] as FriendType; 
 }
 
 

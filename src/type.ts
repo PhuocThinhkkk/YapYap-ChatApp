@@ -1,47 +1,45 @@
 import * as z from "zod";
 import { formSchema } from "./components/ButtonEditProfile";
-export type UserDB = {
-    _id : string;
-    name: string,
-    email: string ,
+
+
+export type UserDB = SimpleUserType & {
     roomsOwn?: RoomDb[],
     rooms?: RoomDb[],
-    createdAt : Date,
-    location? : string,
-    avatarUrl? : string,
-    role? : string,
-    bio? : string,
-    backgroundUrl? : string
 }
 
-export type UserCookie = {
-    _id : string;
-    name: string,
-    email: string ,
-    roomsOwnLength?: number,
-    roomsLength?: number,
+export type SimpleUserType = {
+    _id : string,
+    name : string,
+    email : string,
     createdAt : Date,
     location? : string,
     avatarUrl? : string,
     role? : string,
     bio? : string,
-    backgroundUrl? : string
+    backrondUrl? : string,
+}
+
+export type UserCookie = SimpleUserType & {
+    roomsOwnLength?: number,
+    roomsLength?: number,
 }
 
 
 export type MessageDB = {
 	_id? : string
 	user: UserDB,
-	room: RoomDb,
+	room?: RoomDb,
+    friendId?: string,
 	createdAt? : Date,
 	info: string;
 }
 export type ResponseMessage = {
 	_id? : string
 	user: UserDB,
-	room: RoomDb,
+	room?: RoomDb,
 	createdAt? : string,
 	info: string;
+    friendId? : string
 }
 
 
@@ -114,6 +112,12 @@ export type FeedbackFormType = {
     rating : number,
 }
 
+export type FriendType = {
+    _id : string,
+    user1 : SimpleUserType,
+    user2 : SimpleUserType,
+    createAt : Date,
+}
 
 export type FriendUser = {
     _id : string,
@@ -121,7 +125,8 @@ export type FriendUser = {
     avatarUrl? : string,
     email : string,
     role? : string,
-    location? : string
+    location? : string,
+    friendRelationId : string,
 }
 
 export type FriendRequestType = {

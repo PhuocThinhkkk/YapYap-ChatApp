@@ -80,7 +80,7 @@ export default function FeedbackForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto bg-white/80 backdrop-blur-sm border border-white/20 shadow-2xl">
       <CardHeader className="text-center pb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-cyan-500 rounded-full mx-auto mb-4">
           <Sparkles className="w-8 h-8 text-white" />
         </div>
         <CardTitle className="text-2xl bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
