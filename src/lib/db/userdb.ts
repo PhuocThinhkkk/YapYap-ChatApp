@@ -35,7 +35,12 @@ export async function getUserAndRoomById(userId : string, roomId : string){
     {
         $project: {
             _id: { $toString: "$_id" },
-            name: 1, 
+            name: 1,
+            avatarUrl : 1,
+            role : 1,
+            backgroundUrl : 1,
+            location : 1,
+            bio : 1, 
             rooms: {
                 $filter: {
                     input: "$rooms",
