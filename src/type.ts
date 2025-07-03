@@ -143,3 +143,7 @@ export type UserSearchingType = UserDB & {
     isFollower : boolean,
     requestId? : string,
 }
+
+export type Conversations = (RoomDb | FriendType) & {
+  type: "room" | "friend";
+}

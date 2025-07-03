@@ -67,9 +67,7 @@ export default function ChatRoomFriend( {
 		if (!socket) return;
 		socket.emit("join_friend_room", friendId);
 		socket.on("sendMessage", (message: ResponseMessage) => {
-            if(messages){
-                setMessages((prevMessages) => [...(prevMessages ?? []), message]);
-            }
+            setMessages((prevMessages) => [...(prevMessages ?? []), message]);
 		});
 
 		return () => {
