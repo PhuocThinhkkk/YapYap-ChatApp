@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { SidebarOpenIcon } from "lucide-react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LeftSideBar from "@/components/LeftSideBar";
 
 export default function RootLayout({
@@ -13,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
     const [isOpen, setIsOpen] = useState(false)
-  
+    const queryClient = new QueryClient()
   return (
     <SocketProvider>
      `<div className="flex h-[calc(100vh-1rem)] w-screen border-4 ">
@@ -22,8 +23,10 @@ export default function RootLayout({
             <SidebarOpenIcon/>
           </Button>
         </div>
-        <LeftSideBar isOpen={isOpen}/>
-        {children}
+        <QueryClientProvider client={queryClient}>  
+          <LeftSideBar isOpen={isOpen}/>
+          {children}
+        </QueryClientProvider>
       </div>
     </SocketProvider>
   );
