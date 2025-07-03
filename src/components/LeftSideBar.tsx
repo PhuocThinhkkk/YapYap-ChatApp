@@ -3,7 +3,7 @@ import type React from "react"
 import { useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
-import { Search, Plus, ArrowLeftFromLine } from "lucide-react"
+import { Search, Plus, ArrowLeftFromLine, Loader2 } from "lucide-react"
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
@@ -11,57 +11,100 @@ import Link from "next/link"
 import Cookie from "js-cookie"
 import { useParams, useRouter } from "next/navigation"
 import { UIError } from "@/components/ui-error"
-import type { RoomDb } from "@/type"
+import type { Conversations, FriendType, RoomDb } from "@/type"
+import { useQuery } from "@tanstack/react-query"
+import { toast } from "sonner"
+
+type ParamsType = {
+  roomId? : string,
+  friendId? : string
+}
 
 const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
-  const [conversations, setConversations] = useState<RoomDb[]>([])
   const [searchTerm, setSearchTerm] = useState("")
-  const params = useParams<{ roomid: string }>()
-  const [activeConversation, setActiveConversation] = useState<RoomDb | null>(null)
-  const [isError, setIsError] = useState(false)
+  const params = useParams<ParamsType>()
+  const [userId, setUserId] = useState<string | null>(null)
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['UserInfor', userId],
+    enabled: !!userId,
+    queryFn: async () => {
+        const response = await fetch(`/api/users/${userId}/data`)
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Network response was not ok')
+        }
+        return data as Conversations[];
+    },
+  })
   const route = useRouter()
+  
+  const isRoomRoute = params.roomId ? true : false
 
-  // Filter conversations based on search term
-  const filteredConversations = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return conversations
+   useEffect(()=>{
+    try {
+      const userCookie = Cookie.get('user')
+      if (!userCookie) {
+        throw new Error("Please sign in to continue")
+      }
+      const user = JSON.parse(userCookie);
+      if (!user?._id) {
+        throw new Error("Please sign in to continue")
+      }
+      setUserId(user._id)
+    } catch (error) {
+      toast.error(`${error}`)
     }
+  },[])
 
-    return conversations.filter((conversation) =>
-      conversation.roomName.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
-  }, [conversations, searchTerm])
+  let activeConversation : Conversations;
+  if (data) {
+    for (let index = 0; index < data.length; index++) {
+      if (isRoomRoute && data[index]._id === params.roomId) {
+        activeConversation = data[index]
+        break;
+      }
+      if (!isRoomRoute && data[index]._id === params.friendId) {
+        activeConversation = data[index]
+        break;
+      }
+    
+    }
+  }
+  
 
-  useEffect(() => {
-    const userCookie = Cookie.get("user")
-    if (!userCookie) {
-      alert("you need to sign in to continue !")
+  const filteredConversations = useMemo(() => {
+    if (!data) {
       return
     }
-    const parsed = JSON.parse(userCookie)
-    const userId = parsed._id
-    console.log("user cookie :", userId)
-    async function fetchData() {
-      const res = await fetch(`/api/rooms?userId=${userId}`, { next: { revalidate: 30 } })
-      if (!res.ok) {
-        setIsError(true)
-        return
-      }
-      const data = await res.json()
-      console.log(data)
-      setConversations(data)
-      for (let i = 0; i < conversations.length; i++) {
-        if (params.roomid === conversations[i].roomName) {
-          setActiveConversation(conversations[i])
-          return
-        }
-      }
+    if (!searchTerm.trim()) {
+      return data
     }
 
-    fetchData()
+      return data.filter((conversation) => {
+      if (conversation.type === 'room') {
+        const temp = conversation as RoomDb
+        return temp.roomName 
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+      }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+      if (conversation.type === 'friend') {
+        const temp = conversation as FriendType
+        const otherUser =
+          temp.user1._id === userId
+            ? temp.user2
+            : temp.user1;
+
+        return otherUser.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+      }
+
+      return false;
+    });
+  }, [data, searchTerm])
+
+  
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
@@ -114,20 +157,24 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
             )}
           </div>
         </div>
-        {isError ? (
+        {isLoading && <div className="h-full w-full flex justify-center items-center">
+            <Loader2 className="animate-spin text-primary h-10 w-10 " />
+          </div>
+        }
+        {error ? (
           <UIError title="Failed to get rooms" description="Maybe server is down, please wait and then try again." />
         ) : (
           <ScrollArea className="h-[calc(100vh-1500px)]">
             <div className="px-2 py-2">
-              {conversations.length === 0 ? (
+              {data?.length === 0 ? (
                 <div className="px-4 py-8 text-center text-muted-foreground">
-                  <p>No conversations found</p>
+                  <p>No data found</p>
                   <p className="text-sm">Adding new friends or joining rooms to start chatting</p>
                 </div>
               ) : null}
-              {(filteredConversations.length === 0 && searchTerm) ? (
+              {(filteredConversations?.length === 0 && searchTerm) ? (
                 <div className="px-4 py-8 text-center text-muted-foreground">
-                  <p>No conversations found</p>
+                  <p>No data found</p>
                   <p className="text-sm">{"Try searching for something else"}</p>
                 </div>
               ) : (
