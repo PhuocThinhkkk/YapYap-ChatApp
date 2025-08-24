@@ -58,9 +58,6 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
               <Button disabled={pending} type="submit" className="w-full">
                 Sign up
               </Button>
-              <Button disabled={pending} variant="outline" className="w-full">
-                Login with Google
-              </Button>
             </div>
           </form>
         </CardContent>
