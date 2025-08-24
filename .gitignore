@@ -41,13 +41,6 @@ yarn-error.log*
 next-env.d.ts
 
 
-Dockerfile
-.dockerignore
-
-package.json
-package-lock.json
-tsconfig.json
-next.config.js
 .VSCodeCounter
 
 todo.md

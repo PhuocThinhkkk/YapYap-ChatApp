@@ -12,7 +12,8 @@ const Page = async () => {
           <h1 className="ml-2 text-lg font-semibold">Profile</h1>
           <div className="absolute right-8">
             <UserInformation/>
-          </div>
+	
+           </div>
         </header>
       <ProfileComponent />
     </>

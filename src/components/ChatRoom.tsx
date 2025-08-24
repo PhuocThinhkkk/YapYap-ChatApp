@@ -91,7 +91,6 @@ export default function ChatRoom( {
 				console.log(info)
 				throw new Error('some information is missing!')
 			}
-			console.log(user)
 			const now = new Date()
 			const message = {
 				userId: user._id,
