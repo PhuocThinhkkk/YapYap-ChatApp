@@ -3,9 +3,7 @@ import { getUserIdInSession } from "@/lib/session";
 import MESSAGE from "@/schema/message";
 import { MessageDB } from "@/type";
 
-export async function GET(
-  request: Request,
-) {
+export async function GET() {
   try {
     const userIdSession = await getUserIdInSession();
 

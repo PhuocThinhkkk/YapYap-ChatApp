@@ -5,7 +5,7 @@ import User from "@/schema/user";
 
 import MESSAGE from "@/schema/message";
 import dayjs from "dayjs";
-import { NextRequest, NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 import { getUserIdInSession } from "@/lib/session";
 import { roomMessageChartData, MessageDB } from "@/type";
 
@@ -19,7 +19,7 @@ const dayWeek = [
   "Saturday",
 ] as const;
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const userIdInSession = await getUserIdInSession();
 

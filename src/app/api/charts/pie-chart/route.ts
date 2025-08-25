@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { getUserIdInSession } from "@/lib/session";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import User from "@/schema/user";
 import MESSAGE from "@/schema/message";
 import Room from "@/schema/room";
@@ -26,7 +26,7 @@ import {  resPieChart } from "@/type";
         { name: "Blush Pink", hex: "#FFB6C1" },
     ]
 
-export async function GET (req : NextRequest) {
+export async function GET () {
     try{
         const userIdSession = await getUserIdInSession()
 
