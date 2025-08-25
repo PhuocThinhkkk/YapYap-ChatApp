@@ -36,17 +36,7 @@ export function BigAssChart() {
     
     const initialFetching = async () =>{
       try { 
-        const res = await fetch("/api/session")
-        const data = await res.json();
-
-        if(!res.ok) {
-          throw new Error(`status: ${res.status}, ${data.message}`)
-        }
-        
-        if (!data) {
-          throw new Error(`No session. Please sign in to continue`)
-        }
-        const res2 = await fetch(`/api/users/${data}/dashboard/big-chart`, {
+        const res2 = await fetch(`/api/charts/big-area-chart`, {
           cache: 'no-store'
         })
         const data2 = await res2.json()

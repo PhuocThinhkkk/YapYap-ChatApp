@@ -26,16 +26,15 @@ import {  resPieChart } from "@/type";
         { name: "Blush Pink", hex: "#FFB6C1" },
     ]
 
-export async function GET (req : NextRequest, {params}:  { params : Promise<{userId : string}>}) {
+export async function GET (req : NextRequest) {
     try{
-        const { userId } = await params;
         const userIdSession = await getUserIdInSession()
 
-        if(userId != userIdSession) {
+        if(!userIdSession) {
             return NextResponse.json({message: "unauthorized "}, {status: 400})
         }
         await connectDB()
-        const user = await User.findById(userId);
+        const user = await User.findById(userIdSession);
         if(!user) {
             return NextResponse.json({message: "unauthorized "}, {status: 400})
         }
