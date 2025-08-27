@@ -36,7 +36,15 @@ export async function POST( req : NextRequest ) {
   try{
     const data = await req.json();
     if(!data)  return NextResponse.json({ message: 'Content is required' },{ status: 400 });
+
     const { userId , friendId , info,  } : {userId: string, friendId : string, info: string,}= data;
+
+    if (!userId || !friendId || !info) {
+        console.log("Missing required fields: userId, friendId or info");
+        return NextResponse.json({ message: 'userId, friendId and info are required' },{ status: 400 });
+    }
+
+    console.log("Creating message with data:", { userId, friendId, info });
 
     await connectDB(); 
 

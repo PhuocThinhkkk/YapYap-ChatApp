@@ -100,8 +100,10 @@ export default function ChatRoomFriend( {
 			const form = e.currentTarget
 			const formData = new FormData(form);
 			const info = formData.get('message') as string
-			if(!info || !currentUser || !ortherUser || !FriendRoom || !friendId ) {
-				console.log(info)
+            if(!info || info.trim() === '') {
+                return
+            }
+			if(!currentUser || !ortherUser || !FriendRoom || !friendId ) {
 				throw new Error('some information is missing!')
 			}
 			const now = new Date()
@@ -120,6 +122,9 @@ export default function ChatRoomFriend( {
 			setMessages([...messages, 
 				fullInforMessage
 			]);
+
+			socket.emit('sendMessage',{roomId : FriendRoom, message} );
+
 			const res = await fetch(`/api/friends/${friendId}/messages`,{
 				method: "POST",
 				body: JSON.stringify(message),
@@ -128,7 +133,6 @@ export default function ChatRoomFriend( {
                 const data = await res.json()  as {message : string};
                 throw new Error(data.message)
 			}
-			socket.emit('sendMessage',{roomId : FriendRoom, message} );
 			form.reset();
 		}catch(err){
 			toast.error(`Error when sending message: ${err}`)
