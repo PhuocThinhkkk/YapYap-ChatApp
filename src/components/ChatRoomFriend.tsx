@@ -22,10 +22,12 @@ import { ChatUserHeader } from './chat-user-header';
 export default function ChatRoomFriend( { 
     currentUser,
     ortherUser,
+    friendId,
     FriendRoom,
 } : { 
     currentUser : SimpleUserType,
     ortherUser : SimpleUserType,
+    friendId : string,
     FriendRoom : string,
 }) {
 	const [messages, setMessages] = useState<ResponseMessage[] | null>(null);
@@ -44,7 +46,12 @@ export default function ChatRoomFriend( {
                     toast.error("Some information is missing!")
                     return
                 }
-				const resForMessage = await fetch(`/api/friends/${ortherUser._id}/messages`,
+                if(!ortherUser._id || !currentUser._id ){
+                    console.error("how tf some id is missing", currentUser, ortherUser)
+                    toast.error("Some information is missing!")
+                    return
+                }
+				const resForMessage = await fetch(`/api/friends/${friendId}/messages`,
 					{
 						cache: 'no-store',
 					}
@@ -93,32 +100,33 @@ export default function ChatRoomFriend( {
 			const form = e.currentTarget
 			const formData = new FormData(form);
 			const info = formData.get('message') as string
-			if(!info || !currentUser || !ortherUser || !FriendRoom ) {
+			if(!info || !currentUser || !ortherUser || !FriendRoom || !friendId ) {
 				console.log(info)
 				throw new Error('some information is missing!')
 			}
 			const now = new Date()
 			const message = {
 				userId: currentUser._id,
-				roomId : FriendRoom,
+                friendId,
 				info,
 			}
 
 			const fullInforMessage : ResponseMessage = {
 				user : currentUser,
 				info,
-                friendId : ortherUser._id,
+                friendId,
 				createdAt: now.toISOString()
 			}
 			setMessages([...messages, 
 				fullInforMessage
 			]);
-			const res = await fetch(`/api/friends/${FriendRoom}/messages`,{
+			const res = await fetch(`/api/friends/${friendId}/messages`,{
 				method: "POST",
 				body: JSON.stringify(message),
 			});
 			if(!res.ok ) {
-				return  //
+                const data = await res.json()  as {message : string};
+                throw new Error(data.message)
 			}
 			socket.emit('sendMessage',{roomId : FriendRoom, message} );
 			form.reset();

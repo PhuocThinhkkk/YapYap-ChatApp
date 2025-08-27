@@ -44,7 +44,7 @@ export default async function Page({
     let FriendRoom = getFriendRoom(currentUser._id, ortherUser._id)
     console.log("FriendRoom: ", FriendRoom)
     return (
-      <ChatRoomFriend currentUser={currentUser} ortherUser={ortherUser} FriendRoom={FriendRoom}></ChatRoomFriend>
+      <ChatRoomFriend currentUser={currentUser} ortherUser={ortherUser} friendId={friendId} FriendRoom={FriendRoom}></ChatRoomFriend>
     )
   }catch(e){
     console.error(e)

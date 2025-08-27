@@ -15,6 +15,9 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{fri
       return NextResponse.json({messages: "Unauthorize."}, {status : 400});
     }
     const relationship = await getFriendById(friendId)
+    if(!relationship){
+      return NextResponse.json({messages: "Unauthorize."}, {status : 400});
+    }
     if (!(relationship.user1._id === userIdInSession) && !(relationship.user2._id === userIdInSession)) {
       return NextResponse.json({messages: "Unauthorize."}, {status : 400});
     }
