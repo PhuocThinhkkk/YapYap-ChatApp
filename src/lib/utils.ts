@@ -54,3 +54,14 @@ export function formatDate(dateString : string | undefined) : string {
 	
     return date1.toDateString() === date2.toDateString()
   }
+
+
+  export function getFriendRoom(userId1 : string, userId2 : string) : string {
+    let name = ""
+    if (userId1 < userId2) {
+        name = `${userId1}-${userId2}`
+    } else {
+        name =  `${userId2}-${userId1}`
+    }
+    return name.trim()
+  }

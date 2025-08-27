@@ -2,6 +2,7 @@ import ChatRoomFriend from "@/components/ChatRoomFriend";
 import { getUserIdInSession } from "@/lib/session";
 import { UIError } from "@/components/ui-error";
 import { getFriendById } from "@/lib/db/friend";
+import { getFriendRoom } from "@/lib/utils";
 
 
 
@@ -33,8 +34,17 @@ export default async function Page({
       throw new Error("Unauthorize.")
     }
 
+    if(!currentUser?._id || !ortherUser?._id ){
+        throw new Error("Some information is missing.")
+    }
+
+    if(currentUser._id === ortherUser._id){
+        throw new Error("You cant chat with yourself.")
+    }
+    let FriendRoom = getFriendRoom(currentUser._id, ortherUser._id)
+    console.log("FriendRoom: ", FriendRoom)
     return (
-      <ChatRoomFriend currentUser={currentUser} ortherUser={ortherUser} friendId={friendId}></ChatRoomFriend>
+      <ChatRoomFriend currentUser={currentUser} ortherUser={ortherUser} FriendRoom={FriendRoom}></ChatRoomFriend>
     )
   }catch(e){
     console.error(e)
