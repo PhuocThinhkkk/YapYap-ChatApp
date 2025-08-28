@@ -66,9 +66,13 @@ This project was built for learning and experimentation.
    ```sh
    git clone https://github.com/PhuocThinhkkk/YapYap-ChatApp.git
    ```
-2. Install NPM packages
+2. Install NPM packages 
    ```sh
-   npm install
+    npm install
+
+    cd ws
+    npm install
+
    ```
 ### Environment Variables
 
@@ -106,5 +110,7 @@ This project requires environment variables for both the main app and the WebSoc
    npm run dev
    ```
 3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The Nextjs app will run on [http://localhost:3000](http://localhost:3000) by default.
+The WebSocket server will run on [http://localhost:3005](http://localhost:3005) by default.
 
 
