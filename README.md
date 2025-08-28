@@ -1,9 +1,6 @@
 <a id="readme-top"></a>
-
-<br />
 <div align="center">
-
-  <h3 align="center">YapYap</h3>
+  <h2 align="center">YapYap</h3>
 
   <p align="center">
     An awesome chat app create with Nextjs 15!
@@ -34,6 +31,7 @@
 
 ## About The Project
 
+[product-screenshot]: ./showcase/demo.png
 [![Product Name Screen Shot][product-screenshot]](./showcase/demo.png)
 
 YapYap is a chat platform. 
@@ -41,6 +39,13 @@ Connect with friends, create private chat rooms, express yourself, and enjoy a b
 This project was built for learning and experimentation.
 
 ### Built With
+[Next.js]: https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js
+[Next-url]: https://nextjs.org/
+[Node.js]: https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white
+[Node-url]: https://nodejs.org/
+[MongoDB]: https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white
+[MongoDB-url]: https://www.mongodb.com/
+
 
 * [![Next][Next.js]][Next-url]
 * [![Node][Node.js]][Node-url]
