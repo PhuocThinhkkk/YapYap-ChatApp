@@ -1,6 +1,6 @@
 <a id="readme-top"></a>
 <div align="center">
-  <h2 align="center">YapYap</h3>
+  <h1 align="center">YapYap</h3>
 
   <p align="center">
     An awesome chat app create with Nextjs 15!
