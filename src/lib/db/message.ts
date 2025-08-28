@@ -16,7 +16,6 @@ export async function getMessagesWithUserByRoomId(roomId : string) {
         }
     },
     { $unwind: '$user' }, // flatten array
-    // Optional: project only fields you want
     {
         $project: {
             info: 1,
@@ -34,7 +33,7 @@ export async function getMessagesWithUserByRoomId(roomId : string) {
 export async function getMessagesByFriendId(friendId: string) {
   await connectDB();
   const messages = await MESSAGE.aggregate([
-    { $match: { friendId: friendId } },
+    { $match: { friendId: new mongoose.Types.ObjectId(friendId)  } },
     {
       $addFields: {
         _id: { $toString: '$_id' },

@@ -21,8 +21,12 @@ export async function GET( req : NextRequest , {params} : {params : Promise<{fri
     if (!(relationship.user1._id === userIdInSession) && !(relationship.user2._id === userIdInSession)) {
       return NextResponse.json({messages: "Unauthorize."}, {status : 400});
     }
+    console.log("Fetching messages for friendId:", friendId);
 
     const messages = await getMessagesByFriendId(friendId)
+    if(messages.length === 0){
+        console.log("No messages found for friendId:", friendId);
+    }
     return NextResponse.json(messages, {status: 200})
 
   }catch(err){

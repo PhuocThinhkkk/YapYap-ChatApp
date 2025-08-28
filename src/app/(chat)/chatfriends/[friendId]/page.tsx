@@ -17,9 +17,8 @@ export default async function Page({
     if (!userIdInSession) {
      throw new Error("You dont have session. Please sign in to continue.")
     }
-    console.log("user Id", userIdInSession)
     const relation = await getFriendById(friendId)
-    console.log(relation)
+
     let currentUser
     let ortherUser
     if(relation.user1._id == userIdInSession){
@@ -41,6 +40,7 @@ export default async function Page({
     if(currentUser._id === ortherUser._id){
         throw new Error("You cant chat with yourself.")
     }
+
     let FriendRoom = getFriendRoom(currentUser._id, ortherUser._id)
     console.log("FriendRoom: ", FriendRoom)
     return (

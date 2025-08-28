@@ -1,1 +1,105 @@
-This is a real-time chat application built with Next.js for the frontend and a separate Node.js server using Socket.IO for WebSocket communication. 
+<a id="readme-top"></a>
+
+<br />
+<div align="center">
+
+  <h3 align="center">YapYap</h3>
+
+  <p align="center">
+    An awesome chat app create with Nextjs 15!
+    <br />
+    <a href="https://fullstack-chat-app-theta-three.vercel.app/"><strong>View Demo<strong></a>
+    <br />
+  </p>
+</div>
+
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+  </ol>
+</details>
+
+
+## About The Project
+
+[![Product Name Screen Shot][product-screenshot]](./showcase/demo.png)
+
+YapYap is a chat platform. 
+Connect with friends, create private chat rooms, express yourself, and enjoy a beautiful, customizable dashboard. 
+This project was built for learning and experimentation.
+
+### Built With
+
+* [![Next][Next.js]][Next-url]
+* [![Node][Node.js]][Node-url]
+* [![MongoDB][MongoDB]][MongoDB-url]
+
+### Features
+- **Private Rooms:** Create secure, invitation-only spaces for chatting.
+- **Beautiful Dashboard:** Navigate your chats easily with a clean interface.
+- **Add Friends:** Connect and grow your network.
+- **Profile Editing:** Update your information and preferences.
+
+
+## Getting Started
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/PhuocThinhkkk/YapYap-ChatApp.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+### Environment Variables
+
+This project requires environment variables for both the main app and the WebSocket server.
+1. Root directory (.env)
+   ```env
+    MONGODB_URI=
+    SESSION_SECRET=
+    URL=http://localhost:3000
+    NEXT_PUBLIC_SOCKET_SERVER_URL=http://localhost:3005
+
+    # Pinata (for image uploads)
+    PINATA_API_KEY=
+    PINATA_API_SECRET=
+    PINATA_JWT=
+    NEXT_PUBLIC_PINATA_GATEWAY_URL=
+   ```
+2. WebSocket Server (ws) folder .env file
+
+    ```env
+    MONGODB_URI=
+    DOMAIN_CHAT_APP=http://localhost:3000
+    PORT=3005
+    SESSION_SECRET=
+    ```
+### Usage
+1. Start the WebSocket server
+   ```sh
+   cd ws
+   node server.js
+   ```
+2. Start the main app
+   ```sh
+   cd ..
+   npm run dev
+   ```
+3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
