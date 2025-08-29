@@ -92,29 +92,30 @@ export default function ChatRoom( {
 				throw new Error('some information is missing!')
 			}
 			const now = new Date()
-			const message = {
-				userId: user._id,
-				roomId : room._id,
-				info,
-			}
 
-			const fullInforMessage : ResponseMessage = {
+			const message : ResponseMessage = {
 				user,
 				room,
 				info,
 				createdAt: now.toISOString()
 			}
 			setMessages([...messages, 
-				fullInforMessage
+				message
 			]);
+			socket.emit('sendMessage',{roomId : room._id, message} );
+
+			const messageSaving  = {
+				userId: user._id,
+				roomId : room._id,
+				info,
+			}
 			const res = await fetch(`/api/rooms/${room._id}/messages`,{
 				method: "POST",
-				body: JSON.stringify(message),
+				body: JSON.stringify(messageSaving),
 			});
 			if(!res.ok ) {
 				return  //
 			}
-			socket.emit('sendMessage',{roomId : room._id, fullInforMessage} );
 			form.reset();
 		}catch(err){
 			toast.error(`Error when sending message: ${err}`)

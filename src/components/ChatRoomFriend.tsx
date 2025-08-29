@@ -77,6 +77,10 @@ export default function ChatRoomFriend( {
 		if (!socket) return;
 		socket.emit("join_room", FriendRoom);
 		socket.on("sendMessage", (message: ResponseMessage) => {
+            if(!message ) {
+                console.error("No message received from server")
+                return
+            }
             setMessages((prevMessages) => [...(prevMessages ?? []), message]);
 		});
 
@@ -106,28 +110,34 @@ export default function ChatRoomFriend( {
 			if(!currentUser || !ortherUser || !FriendRoom || !friendId ) {
 				throw new Error('some information is missing!')
 			}
-			const now = new Date()
-			const message = {
-				userId: currentUser._id,
-                friendId,
-				info,
-			}
+            if(!currentUser._id ){
+                throw new Error('some id is missing!')
+            }
 
-			const fullInforMessage : ResponseMessage = {
+			const now = new Date()
+
+			const message : ResponseMessage = {
 				user : currentUser,
 				info,
                 friendId,
 				createdAt: now.toISOString()
 			}
+
 			setMessages([...messages, 
-				fullInforMessage
+				message
 			]);
 
 			socket.emit('sendMessage',{roomId : FriendRoom, message} );
 
+			const messageSaving  = {
+				userId: currentUser._id,
+                friendId,
+				info,
+			}
+
 			const res = await fetch(`/api/friends/${friendId}/messages`,{
 				method: "POST",
-				body: JSON.stringify(message),
+				body: JSON.stringify(messageSaving),
 			});
 			if(!res.ok ) {
                 const data = await res.json()  as {message : string};
