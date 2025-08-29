@@ -75,7 +75,7 @@ export default function ChatRoomFriend( {
 	useEffect(() => {
 
 		if (!socket) return;
-		socket.emit("join_friend_room", FriendRoom);
+		socket.emit("join_room", FriendRoom);
 		socket.on("sendMessage", (message: ResponseMessage) => {
             setMessages((prevMessages) => [...(prevMessages ?? []), message]);
 		});
