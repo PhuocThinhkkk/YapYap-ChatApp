@@ -41,8 +41,7 @@ export default async function Page({
         throw new Error("You cant chat with yourself.")
     }
 
-    let FriendRoom = getFriendRoom(currentUser._id, ortherUser._id)
-    console.log("FriendRoom: ", FriendRoom)
+    const FriendRoom = getFriendRoom(currentUser._id, ortherUser._id)
     return (
       <ChatRoomFriend currentUser={currentUser} ortherUser={ortherUser} friendId={friendId} FriendRoom={FriendRoom}></ChatRoomFriend>
     )

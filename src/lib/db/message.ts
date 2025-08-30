@@ -37,7 +37,6 @@ export async function getMessagesByFriendId(friendId: string) {
     {
       $addFields: {
         _id: { $toString: '$_id' },
-        user: { $toString: '$user' },
         room: {
           $cond: [
             { $eq: ['$room', null] },
@@ -72,7 +71,7 @@ export async function getMessagesByFriendId(friendId: string) {
         friendId: 1,
         roomName: 1,
         user: {
-          _id: 1,
+          _id: { $toString: '$user._id' },
           createdAt: 1,
           name: 1,
           email: 1,
