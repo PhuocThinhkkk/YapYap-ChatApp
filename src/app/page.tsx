@@ -98,7 +98,7 @@ export default async function LandingPage() {
               </h1>
               <p className="text-base md:text-sm lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed animate-fade-in-up animation-delay-400">
                 Connect with friends, create private rooms, and express yourself
-                with emojis in our beautiful, intuitive chat platform.
+                with in our beautiful, intuitive chat platform.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up animation-delay-600">
                 <Link href="/sign-in">
@@ -174,8 +174,8 @@ export default async function LandingPage() {
             />
             <FeatureCard
               icon={<Smile className="size-10 text-purple-600" />}
-              title="Emoji Support"
-              description="Express yourself with a wide range of emojis and reactions."
+              title="Personal Profiles"
+              description="Showcase your personality with customizable profiles."
             />
             <FeatureCard
               icon={<LayoutDashboard className="size-10 text-purple-600" />}
@@ -191,7 +191,6 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* App Interface Showcase */}
       <section
         id="interface"
         className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-purple-50 to-white"
@@ -296,7 +295,6 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-r from-purple-600 to-pink-500">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
