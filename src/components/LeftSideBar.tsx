@@ -58,15 +58,15 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
     }
   },[])
 
-  let activeConversation : Conversations;
+  let activeConversation : Conversations
   if (data) {
     for (let index = 0; index < data.length; index++) {
       if (isRoomRoute && data[index]._id === params.roomId) {
-        activeConversation = data[index]
+          activeConversation = data[index]
         break;
       }
       if (!isRoomRoute && data[index]._id === params.friendId) {
-        activeConversation = data[index]
+          activeConversation = data[index]
         break;
       }
     
@@ -182,14 +182,18 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
                 </div>
               ) : (
               
-              <ScrollArea className="flex-1 h-[calc(100vh-200px)] w-full border-5 rounded-2xl border-slate-200">
+              <ScrollArea className="flex-1 h-[calc(100vh-200px)] w-full rounded-2xl border-slate-200">
                 {filteredConversations?.map((conversation) => {
                   if (conversation.type === "room") {
                     const temp = conversation as RoomDb
                     const temp2 = activeConversation as RoomDb
                     return (
                       <div key={conversation._id.toString()}>
-                        <RoomConversation conversation={temp} searchTerm={searchTerm} activeConversation={temp2} />
+                        <RoomConversation 
+                        conversation={temp} 
+                        searchTerm={searchTerm}
+                        activeConversation={temp2}
+                        />
                       </div>
                     )
                   }
@@ -218,7 +222,6 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
   )
 }
 
-// Helper component to highlight search terms
 const HighlightText = ({ text, highlight }: { text: string; highlight: string }) => {
   if (!highlight.trim()) {
     return <span>{text}</span>
@@ -258,13 +261,24 @@ function RoomConversation ({
   return (
     <button
       key={conversation._id.toString()}
-      className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
+      className={`chat-button flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
         activeConversation?._id.toString() === conversation?._id.toString()
           ? "bg-slate-300"
           : "hover:bg-muted"
       }`}
-      onClick={() => route.push(`/chatrooms/${conversation._id}`)}
-    >
+      
+      onClick={(e) => {
+          // remove highlight from all buttons in the list
+          // add highlight to the clicked one
+          document.querySelectorAll(".chat-button").forEach((btn) => {
+              btn.classList.remove("bg-slate-300");
+          });
+
+          (e.currentTarget as HTMLButtonElement).classList.add("!bg-slate-300");
+
+          route.push(`/chatrooms/${conversation._id}`)
+      }}
+      >
       <div className="w-10 h-10 flex justify-center items-center border text-xl rounded-full font-bold hover:cursor-pointer">
       
         <Avatar>
@@ -305,12 +319,21 @@ function FriendConversation ({
   return (
     <button
       key={conversation._id.toString()}
-      className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
+      className={`chat-button flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
         activeConversation?._id.toString() === conversation?._id.toString()
           ? "bg-slate-300"
           : "hover:bg-muted"
       }`}
-      onClick={() => route.push(`/chatfriends/${conversation._id}`)}
+      onClick={(e) => {
+          document.querySelectorAll(".chat-button").forEach((btn) => {
+              btn.classList.remove("bg-slate-300");
+          });
+
+          (e.currentTarget as HTMLButtonElement).classList.add("!bg-slate-300");
+
+
+          route.push(`/chatfriends/${conversation._id}`)
+      }}
     >
       <div className="w-10 h-10 flex justify-center items-center border text-xl rounded-full font-bold hover:cursor-pointer">
       
