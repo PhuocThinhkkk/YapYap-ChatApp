@@ -10,6 +10,7 @@ import React,
 	useRef 
 } from 'react';
 import { 
+    Loader2,
 	Send, 
 } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -31,6 +32,7 @@ export default function ChatRoomFriend( {
     FriendRoom : string,
 }) {
 	const [messages, setMessages] = useState<ResponseMessage[] | null>(null);
+    const [isFetching, setIsFetching] = useState(true)
 	const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
 	
 	useEffect(() => {
@@ -61,6 +63,7 @@ export default function ChatRoomFriend( {
 					throw new Error(data.message)
 				}
 				setMessages(data);
+                setIsFetching(false)
 			}catch (err) {
 				console.error(err)
 				toast.error("Failed to get messages");
@@ -155,6 +158,7 @@ export default function ChatRoomFriend( {
 		<div className="flex-1 flex flex-col h-full">
 		
 		<ChatUserHeader user={ortherUser}/>
+        { isFetching && <Loader2 className='animate-spin h-10 mx-auto' />}
 
 		<ScrollArea className="flex-1 h-[calc(100vh-500px)]">
 			<div className="px-4 sm:px-8 lg:px-20 py-5">

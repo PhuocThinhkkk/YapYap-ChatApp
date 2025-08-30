@@ -10,6 +10,7 @@ import React,
 	useRef 
 } from 'react';
 import { 
+    Loader2,
 	Send, 
 } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -26,6 +27,7 @@ export default function ChatRoom( {
 	room : RoomDb,
 }) {
 	const [messages, setMessages] = useState<ResponseMessage[]>([]);
+    const [isFetching, setIsFetching] = useState(true)
 	const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
 	
 	useEffect(() => {
@@ -50,6 +52,8 @@ export default function ChatRoom( {
 				const newDate = new Date(data.createdAt)
 				data.createAt = newDate
 				setMessages(data);
+                setIsFetching(false)
+
 
 			}catch (err) {
 				console.error(err)
@@ -104,6 +108,7 @@ export default function ChatRoom( {
 			]);
 			socket.emit('sendMessage',{roomId : room._id, message} );
 
+      {/* CTA Section */}
 			const messageSaving  = {
 				userId: user._id,
 				roomId : room._id,
@@ -130,6 +135,7 @@ export default function ChatRoom( {
 		<h1 className="text-center sm:text-left font-bold p-3 px-4  sm:px-15 lg:px-30 mb-5 top-0 sticky bg-white h-12 z-10 border-b text-lg">
 			Room: {room.roomName}
 		</h1>
+        { isFetching && <Loader2 className='animate-spin h-10 mx-auto' />}
 
 		<ScrollArea className="flex-1 h-[calc(100vh-500px)]">
 			<div className="px-4 sm:px-8 lg:px-20 py-5">
