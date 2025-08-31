@@ -5,7 +5,7 @@ export class FriendConn extends BaseConn {
   async validate(): Promise<boolean> {
     try {
       const friendRoom = this.getRoomID();
-      const userId = this.getUserId()
+      const userId = this.getUserId();
       const [id1, id2] = friendRoom.split("-");
       if (userId !== id1 && userId !== id2) {
         return false;

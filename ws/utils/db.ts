@@ -1,6 +1,6 @@
-import User from "../schema/user.ts";
-import Friend from "../schema/friend.ts";
-import Room from "../schema/room.ts";
+import User from "../schema/user";
+import Friend from "../schema/friend";
+import Room from "../schema/room";
 import { Types } from "mongoose";
 
 

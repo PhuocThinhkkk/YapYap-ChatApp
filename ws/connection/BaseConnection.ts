@@ -39,7 +39,7 @@ export abstract class BaseConn implements ConnectionHandler {
   public getUserId(){
       return this.payload.userId
   }
-  pulic getRoomID(){
+  public getRoomID(){
       return this.roomId
   }
 }
