@@ -4,6 +4,15 @@ const socketHandler = (socket, io) => {
   console.log('A user connected:', socket.id);
  
   socket.on('join_room', (roomId)=>{
+    let isRoomFriend = false
+    for (let i = 0; i < roomId.length; i++) {
+        if (roomId[i] == "-"){
+            isRoomFriend = true
+            break
+        }
+    }
+    if(isRoomFriend) console.log("f")
+
     socket.join(roomId);
     console.log(` user ${socket.id} has joined ${roomId}`)
   } )
