@@ -43,7 +43,7 @@ export async function createSession(userId: string) {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
-    sameSite: 'lax',
+    sameSite: 'none',
     path: '/',
   })
   console.log("create session susseccfully")

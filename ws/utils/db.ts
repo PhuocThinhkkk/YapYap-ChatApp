@@ -1,12 +1,14 @@
-import User from "../schema/user.js";
-import Friend from "../schema/friend.js"; // adjust path
-import Room from "../schema/room.js";
+import User from "../schema/user.ts";
+import Friend from "../schema/friend.ts";
+import Room from "../schema/room.ts";
+import { Types } from "mongoose";
 
-export async function checkUserRoom(userId, roomId) {
+
+export async function checkUserRoom(userId : string, roomId: string,) : Promise<boolean>{
   try {
     const [user, room] = await Promise.all([
-      User.findById(userId).lean(),
-      Room.findById(roomId).lean(),
+      User.findById(userId),
+      Room.findById(roomId),
     ]);
 
     if (!user) {
@@ -19,7 +21,7 @@ export async function checkUserRoom(userId, roomId) {
       return false;
     }
 
-    const userHasRoom = user.rooms.some((rId) => rId.toString() === roomId);
+    const userHasRoom = user.rooms.some((rId : Types.ObjectId) => rId.toString() === roomId);
     if (!userHasRoom) {
       console.error(
         `User ${userId} does not have room ${roomId} in their rooms array.`,
@@ -27,7 +29,7 @@ export async function checkUserRoom(userId, roomId) {
       return false;
     }
 
-    const roomHasUser = room.users.some((uId) => uId.toString() === userId);
+    const roomHasUser = room.users.some((uId: Types.ObjectId) => uId.toString() === userId);
     if (!roomHasUser) {
       console.error(
         `Room ${roomId} does not contain user ${userId} in its users array.`,
@@ -42,7 +44,7 @@ export async function checkUserRoom(userId, roomId) {
   }
 }
 
-export async function areFriends(userId1, userId2) {
+export async function areFriends(userId1: string, userId2: string): Promise<boolean>{
   try {
     const exists = await Friend.exists({
       $or: [
@@ -50,8 +52,8 @@ export async function areFriends(userId1, userId2) {
         { user1: userId2, user2: userId1 },
       ],
     });
+    return !!exists
 
-    return !!exists;
   } catch (err) {
     console.error("Error checking friendship:", err);
     return false;
