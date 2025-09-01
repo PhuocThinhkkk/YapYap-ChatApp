@@ -11,7 +11,8 @@ console.log("DOMAIN:", DOMAIN);
 const io = new Server({
     cors: {
         origin: DOMAIN,  
-        methods: ["GET", "POST"]
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
