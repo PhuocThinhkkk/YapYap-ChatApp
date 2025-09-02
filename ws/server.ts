@@ -16,8 +16,8 @@ const io = new Server({
     }
 });
 
-io.on('connection', (socket) => {
-    socketHandler(socket, io);
+io.on('connection', async (socket) => {
+    await socketHandler(socket, io);
 });
 
 //@ts-ignore

@@ -2,10 +2,12 @@ import User from "../schema/user";
 import Friend from "../schema/friend";
 import Room from "../schema/room";
 import { Types } from "mongoose";
+import connectDB from "./mongo";
 
 
 export async function checkUserRoom(userId : string, roomId: string,) : Promise<boolean>{
   try {
+    await connectDB()
     const [user, room] = await Promise.all([
       User.findById(userId),
       Room.findById(roomId),
@@ -46,6 +48,7 @@ export async function checkUserRoom(userId : string, roomId: string,) : Promise<
 
 export async function areFriends(userId1: string, userId2: string): Promise<boolean>{
   try {
+    await connectDB()
     const exists = await Friend.exists({
       $or: [
         { user1: userId1, user2: userId2 },

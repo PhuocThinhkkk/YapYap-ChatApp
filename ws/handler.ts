@@ -1,8 +1,10 @@
 import { Server, Socket } from "socket.io";
 import { parse } from "cookie";
 import { connFactory } from "./connection/ConnectionFactory";
+import connectDB from "./utils/mongo";
 
-const socketHandler = (socket: Socket, io: Server) => {
+const socketHandler = async (socket: Socket, io: Server) => {
+  await connectDB();
   console.log("A user connected:", socket.id);
 
   socket.on("join_room", (roomId) => {
@@ -12,18 +14,22 @@ const socketHandler = (socket: Socket, io: Server) => {
       const sessionCookie = cookies["session"];
       if (!sessionCookie) return;
 
-      const conn = connFactory(sessionCookie, roomId)
-      const isValid = conn.validate()
-      if(!isValid) return
+      const conn = connFactory(sessionCookie, roomId);
+      const isValid = conn.validate();
+      if (!isValid) {
+        console.log("conn isnt valid");
+        return;
+      }
 
       socket.join(roomId);
       console.log(` user ${socket.id} has joined ${roomId}`);
     } catch (e) {
+      console.log("conn isnt valid");
       return;
     }
   });
   socket.on("sendMessage", ({ roomId, message }) => {
-    socket.to(roomId).emit("sendMessage", message);
+    socket.to(roomId).emit("sendMessage", message, roomId);
     console.log("message: ");
   });
 

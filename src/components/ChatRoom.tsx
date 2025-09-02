@@ -70,13 +70,19 @@ export default function ChatRoom( {
 
 		if (!socket) return;
 		socket.emit("join_room", room._id);
-		socket.on("sendMessage", (message: ResponseMessage) => {
+		socket.on("sendMessage", (message: ResponseMessage , roomId : string) => {
+            
+            if(roomId != room._id) {
+                console.log("get msg from other room!")
+                return 
+            }
 			setMessages((prevMessages) => [...prevMessages, message]);
 		});
 
 		return () => {
 			socket.off("sendMessage");
-			socket.off('user_joined');
+			socket.off("join_room");
+            console.log("clean ws in room")
 		};
 
 	}, [socket, room._id]);

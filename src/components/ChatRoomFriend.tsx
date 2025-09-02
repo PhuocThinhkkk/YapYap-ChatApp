@@ -79,17 +79,22 @@ export default function ChatRoomFriend( {
 
 		if (!socket) return;
 		socket.emit("join_room", FriendRoom);
-		socket.on("sendMessage", (message: ResponseMessage) => {
+		socket.on("sendMessage", (message: ResponseMessage, roomId: string) => {
             if(!message ) {
                 console.error("No message received from server")
                 return
+            }
+            if(roomId != FriendRoom) {
+                console.log("get msg from other room!")
+                return 
             }
             setMessages((prevMessages) => [...(prevMessages ?? []), message]);
 		});
 
 		return () => {
 			socket.off("sendMessage");
-			socket.off('user_joined');
+			socket.off("join_room");
+            console.log("clean ws")
 		};
 
 	}, [socket, FriendRoom]);

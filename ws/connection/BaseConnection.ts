@@ -24,8 +24,9 @@ export abstract class BaseConn implements ConnectionHandler {
           }
           const decoded = jwt.verify(userToken, secretKey) as SessionPayload;
           console.log("user pay load: ", decoded);
+          const exp = new Date(decoded.expiresAt)
 
-          if (decoded.expiresAt <= new Date()) {
+          if (exp <= new Date()) {
               throw new Error("expired token");
           }
           return decoded as SessionPayload;
