@@ -10,6 +10,8 @@
 </div>
 The app is live and available to try <a href="https://fullstack-chat-app-theta-three.vercel.app/">here</a> <br>
 (sometime the websocket server not working well cause i use free tier when deploying on Render)
+
+<br />
 <details>
   <summary>Table of Contents</summary>
   <ol>
