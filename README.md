@@ -5,11 +5,11 @@
   <p align="center">
     An awesome chat app create with Nextjs 15!
     <br />
-    <a href="https://fullstack-chat-app-theta-three.vercel.app/"><strong>View Demo<strong></a>
     <br />
   </p>
 </div>
-
+The app is live and available to try <a href="https://fullstack-chat-app-theta-three.vercel.app/">here</a> <br>
+(sometime the websocket server not working well cause i use free tier when deploying on Render)
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -17,12 +17,15 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#features">Features</a></li>
       </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#installation">Installation</a></li>
+         <li><a href="#environment-variables">Environment Variables</a></li>
+        <li><a href="#usage">Usage</a></li>
       </ul>
     </li>
   </ol>
