@@ -67,50 +67,51 @@ async function RoomsStats ({ rooms, userId } : { rooms : RoomDb[], userId : stri
     }
 });
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2 mx-4">
-      <Card className="bg-gradient-to-r from-brand-900 to-brand-700 text-white border-0">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-brand-200">Total Rooms</p>
-              <p className="text-3xl font-bold">{rooms.length}</p>
+    <div className="mb-8">
+      <Card className="bg-white border border-brand-100/30 shadow-sm overflow-hidden rounded-2xl">
+        <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-brand-100/30">
+          
+          <div className="p-4 sm:p-6 flex items-center gap-4 bg-brand-100/5 hover:bg-brand-100/10 transition-colors">
+            <div className="w-12 h-12 rounded-full bg-brand-900/10 flex items-center justify-center flex-shrink-0">
+              <MessageCircle className="w-6 h-6 text-brand-900" />
             </div>
-            <MessageCircle className="w-8 h-8 text-brand-100/50" />
-          </div>
-        </CardContent>
-      </Card>
-      <Card className="bg-gradient-to-r from-brand-700 to-brand-400 text-white border-0">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
             <div>
-              <p className="text-brand-100">Maximum Users</p>
-              <p className="text-3xl font-bold">{rooms.reduce((sum, room) => sum + room.maxPeople, 0)}</p>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">Total Rooms</p>
+              <p className="text-2xl font-bold text-slate-800">{rooms.length}</p>
             </div>
-            <Users className="w-8 h-8 text-brand-100/50" />
           </div>
-        </CardContent>
-      </Card>
-      <Card className="bg-gradient-to-r from-brand-400 to-brand-200 text-brand-900 border-0">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
+
+          <div className="p-4 sm:p-6 flex items-center gap-4 bg-white hover:bg-brand-100/5 transition-colors">
+            <div className="w-12 h-12 rounded-full bg-brand-700/10 flex items-center justify-center flex-shrink-0">
+              <Users className="w-6 h-6 text-brand-700" />
+            </div>
             <div>
-              <p className="text-brand-900/80 font-medium">Total Members</p>
-              <p className="text-3xl font-bold">{rooms.reduce((sum, room) => sum + room.users.length, 0)}</p>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">Maximum Users</p>
+              <p className="text-2xl font-bold text-slate-800">{rooms.reduce((sum, room) => sum + room.maxPeople, 0)}</p>
             </div>
-            <TrendingUp className="w-8 h-8 text-brand-900/50" />
           </div>
-        </CardContent>
-      </Card>
-      <Card className="bg-gradient-to-r from-brand-200 to-white text-brand-900 border border-brand-100/50 shadow-sm">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between">
+
+          <div className="p-4 sm:p-6 flex items-center gap-4 bg-brand-100/5 hover:bg-brand-100/10 transition-colors">
+            <div className="w-12 h-12 rounded-full bg-brand-400/10 flex items-center justify-center flex-shrink-0">
+              <TrendingUp className="w-6 h-6 text-brand-400" />
+            </div>
             <div>
-              <p className="text-brand-900/80 font-medium">Messages Today</p>
-              <p className="text-3xl font-bold">{countMessage}</p>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">Total Members</p>
+              <p className="text-2xl font-bold text-slate-800">{rooms.reduce((sum, room) => sum + room.users.length, 0)}</p>
             </div>
-            <Zap className="w-8 h-8 text-brand-900/50" />
           </div>
-        </CardContent>
+
+          <div className="p-4 sm:p-6 flex items-center gap-4 bg-white hover:bg-brand-100/5 transition-colors">
+            <div className="w-12 h-12 rounded-full bg-brand-200/30 flex items-center justify-center flex-shrink-0">
+              <Zap className="w-6 h-6 text-brand-900" />
+            </div>
+            <div>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">Messages Today</p>
+              <p className="text-2xl font-bold text-slate-800">{countMessage}</p>
+            </div>
+          </div>
+
+        </div>
       </Card>
     </div>
 

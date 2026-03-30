@@ -24,32 +24,24 @@ const Page = () => {
       </header>
 
       <div className="px-3 sm:px-6 py-4 sm:py-6">
-        <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-brand-100/10">
-          <CardContent className="p-4 sm:pb-4 sm:px-8">
-            <div className="text-center mb-4 sm:mb-6">
-              <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-1 sm:mb-2">Quick Join</h2>
-              <p className="text-sm sm:text-base text-slate-600">Enter a room name or browse available rooms below</p>
-            </div>
+        {/* Toolbar Section */}
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-4 mb-6 sm:mb-8 bg-white p-4 rounded-2xl border border-brand-100/30 shadow-sm">
+          <div className="w-full lg:w-1/2 xl:w-1/3">
             <SearchRoom />
-            {/* Create Room Section */}
-            <div className=" text-center mt-4 sm:mt-6">
-              <div className="max-w-2xl w-full inline-flex flex-wrap sm:flex-nowrap justify-between items-center p-3 sm:p-4 bg-gradient-to-r from-brand-100/30 to-brand-100/10 rounded-xl border border-brand-200">
-                <div className="hidden sm:flex flex-shrink-0 mr-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-brand-900 to-brand-700 rounded-full flex items-center justify-center">
-                    <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                  </div>
-                </div>
-                <div className="text-center md:text-left flex-grow mb-2 sm:mb-0">
-                  <h3 className="font-semibold text-slate-900">Start Your Own Room</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">Create a space for your community</p>
-                </div>
-                <div className="w-full sm:w-auto">
-                  <ButtonCreateRoom />
-                </div>
-              </div>
+          </div>
+          
+          <div className="hidden lg:block w-px h-10 bg-slate-200"></div>
+          
+          <div className="w-full lg:w-auto flex items-center justify-between lg:justify-end gap-4">
+            <div className="text-left lg:text-right">
+              <h3 className="font-semibold text-slate-800 text-sm sm:text-base">Start Your Own Room</h3>
+              <p className="text-xs text-slate-500 hidden sm:block">Create a space for your community</p>
             </div>
-          </CardContent>
-        </Card>
+            <div className="flex-shrink-0">
+               <ButtonCreateRoom />
+            </div>
+          </div>
+        </div>
         <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-brand-100/10">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
