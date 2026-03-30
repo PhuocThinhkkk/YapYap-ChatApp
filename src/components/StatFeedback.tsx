@@ -32,7 +32,7 @@ const StatFeedback = async () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-brand-900 to-brand-700 rounded-xl flex items-center justify-center">
                 <Users className="w-6 h-6 text-white" />
             </div>
             <div>

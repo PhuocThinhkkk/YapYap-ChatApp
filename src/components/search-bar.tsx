@@ -27,7 +27,7 @@ export function SearchBar({ onSearch, isLoading = false }: SearchBarProps) {
   return (
     <div className="max-w-3xl mx-auto mb-12">
       <form onSubmit={handleSubmit} className="relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+        <div className="absolute -inset-1 bg-gradient-to-r from-brand-900 via-brand-700 to-brand-400 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
         <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl">
           <div className="relative">
             <div className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400">

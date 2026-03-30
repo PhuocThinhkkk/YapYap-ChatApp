@@ -28,7 +28,7 @@ export default async function Home() {
       </header>
       
       {/* Main content */}
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen bg-gradient-to-br from-brand-100/30 to-brand-100/10">
         <main className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="text-center mb-12">
@@ -42,14 +42,14 @@ export default async function Home() {
        <AllCardFeature userId={userId}/>
 
         {/* Premium Section */}
-        <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
+        <Card className="bg-gradient-to-r from-brand-900 to-brand-700 text-white border-0 mt-8">
           <CardContent className="p-8">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-2xl font-bold mb-2">Upgrade to Premium</h3>
-                <p className="text-blue-100 mb-4">Unlock unlimited rooms, advanced search, and exclusive features</p>
+                <p className="text-brand-100 mb-4">Unlock unlimited rooms, advanced search, and exclusive features</p>
                 <Link href="/role">
-                  <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50">
+                  <Button variant="secondary" className="bg-white text-brand-900 hover:bg-brand-100/30 border border-transparent shadow-sm">
                     <CreditCard className="h-4 w-4 mr-2" />
                     View Pricing
                   </Button>

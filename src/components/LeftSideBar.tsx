@@ -120,25 +120,29 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
     <div
       className={`flex flex-col  top-0 fixed lg:block lg:static z-20 w-80 ${isOpen ? "-translate-x-0" : "-translate-x-full"} transition-transform transform duration-300 lg:translate-x-0`}
     >
-      <div className="grid-cols-1 h-full w-full max-w-xs border-r bg-background">
-        <Link href="/rooms">
-          <Button className="hover:bg-slate-50 hover:cursor-pointer w-15 h-7 bg-background text-black border-0">
-            <ArrowLeftFromLine />
-          </Button>
-        </Link>
-        <div className="flex h-16 items-center justify-between px-4">
-          <div className="w-5"></div>
+      <div className="grid-cols-1 h-full w-full max-w-xs border-r border-brand-100/50 bg-brand-100/10">
+        <div className="flex items-center gap-2 border-b border-brand-100/30 px-4 py-4 h-16">
+          <Link href="/rooms">
+            <Button variant="ghost" className="hover:bg-brand-100/30 hover:cursor-pointer p-2 h-auto text-brand-900">
+              <ArrowLeftFromLine className="size-5" />
+            </Button>
+          </Link>
+          <div className="flex-1 flex justify-center">
+             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-900 to-brand-700">
+               YapYap
+             </span>
+          </div>
           <h2 className="text-lg text-center font-semibold">Messages</h2>
           <Button
             variant="ghost"
             size="icon"
-            className="hover:bg-slate-50 hover:cursor-pointer"
+            className="hover:bg-brand-100/30 text-brand-900 hover:cursor-pointer p-2 h-auto"
             onClick={() => route.push("/create-room")}
           >
             <Plus className="h-5 w-5" />
           </Button>
         </div>
-        <div className="px-4 py-2">
+        <div className="px-4 py-4">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -258,14 +262,14 @@ function RoomConversation ({
   return (
     <button
       key={conversation._id.toString()}
-      className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
+      className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 transition-colors ${
         activeConversation?._id.toString() === conversation?._id.toString()
-          ? "bg-slate-300"
-          : "hover:bg-muted"
+          ? "bg-brand-100/50 text-brand-900 border border-brand-200"
+          : "hover:bg-brand-100/20 text-gray-700"
       }`}
       onClick={() => route.push(`/chatrooms/${conversation._id}`)}
     >
-      <div className="w-10 h-10 flex justify-center items-center border text-xl rounded-full font-bold hover:cursor-pointer">
+      <div className="w-10 h-10 flex justify-center items-center rounded-full font-bold hover:cursor-pointer bg-brand-100/30 text-brand-900">
       
         <Avatar>
           <AvatarFallback>{conversation.roomName.charAt(0).toUpperCase()}</AvatarFallback>
@@ -305,14 +309,14 @@ function FriendConversation ({
   return (
     <button
       key={conversation._id.toString()}
-      className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 ${
+      className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 transition-colors ${
         activeConversation?._id.toString() === conversation?._id.toString()
-          ? "bg-slate-300"
-          : "hover:bg-muted"
+          ? "bg-brand-100/50 text-brand-900 border border-brand-200"
+          : "hover:bg-brand-100/20 text-gray-700"
       }`}
       onClick={() => route.push(`/chatfriends/${conversation._id}`)}
     >
-      <div className="w-10 h-10 flex justify-center items-center border text-xl rounded-full font-bold hover:cursor-pointer">
+      <div className="w-10 h-10 flex justify-center items-center rounded-full font-bold hover:cursor-pointer bg-brand-100/30 text-brand-900 border border-brand-200">
       
         <Avatar className="rounded-full">
           <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>

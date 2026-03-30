@@ -23,7 +23,7 @@ export function UserGrid({ users, isLoading = false }: UserGridProps) {
       <div className="text-center py-16">
         <div className="relative mb-8">
           <div className="text-8xl mb-4">🔍</div>
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-900/10 to-brand-400/10 rounded-full blur-3xl"></div>
         </div>
         <h3 className="text-2xl font-bold text-gray-700 mb-3">No users found</h3>
         <p className="text-gray-500 text-lg max-w-md mx-auto">

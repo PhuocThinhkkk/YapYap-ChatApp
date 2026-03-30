@@ -233,7 +233,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
                                 <Users className="mr-2 h-4 w-4" />
                                 <span>100 people</span>
                               </div>
-                              <Badge variant="outline" className="ml-2 text-xs border-purple-200 text-purple-600">
+                              <Badge variant="outline" className="ml-2 text-xs border-brand-200 text-brand-900">
                                 Enterprise
                               </Badge>
                             </div>

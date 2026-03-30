@@ -24,7 +24,7 @@ const Page = () => {
       </header>
 
       <div className="px-3 sm:px-6 py-4 sm:py-6">
-        <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-slate-50">
+        <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-brand-100/10">
           <CardContent className="p-4 sm:pb-4 sm:px-8">
             <div className="text-center mb-4 sm:mb-6">
               <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-1 sm:mb-2">Quick Join</h2>
@@ -33,9 +33,9 @@ const Page = () => {
             <SearchRoom />
             {/* Create Room Section */}
             <div className=" text-center mt-4 sm:mt-6">
-              <div className="max-w-2xl w-full inline-flex flex-wrap sm:flex-nowrap justify-between items-center p-3 sm:p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
+              <div className="max-w-2xl w-full inline-flex flex-wrap sm:flex-nowrap justify-between items-center p-3 sm:p-4 bg-gradient-to-r from-brand-100/30 to-brand-100/10 rounded-xl border border-brand-200">
                 <div className="hidden sm:flex flex-shrink-0 mr-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-brand-900 to-brand-700 rounded-full flex items-center justify-center">
                     <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                 </div>
@@ -50,11 +50,11 @@ const Page = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-slate-50">
+        <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-brand-100/10">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mr-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-brand-700 to-brand-400 rounded-full flex items-center justify-center mr-3">
                   <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
                 <div>

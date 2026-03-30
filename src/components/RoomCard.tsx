@@ -20,7 +20,7 @@ const RoomCard = ({
           <div className="relative flex-shrink-0">
             <Avatar className="h-12 w-12">
               <AvatarImage src={room.avatarUrl} alt={room.roomName} />
-              <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold">
+              <AvatarFallback className="bg-gradient-to-r from-brand-900 to-brand-700 text-white font-semibold">
                 {room.roomName.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>

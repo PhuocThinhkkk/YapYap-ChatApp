@@ -68,47 +68,47 @@ async function RoomsStats ({ rooms, userId } : { rooms : RoomDb[], userId : stri
 });
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2 mx-4">
-      <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0">
+      <Card className="bg-gradient-to-r from-brand-900 to-brand-700 text-white border-0">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100">Total Rooms</p>
+              <p className="text-brand-200">Total Rooms</p>
               <p className="text-3xl font-bold">{rooms.length}</p>
             </div>
-            <MessageCircle className="w-8 h-8 text-blue-200" />
+            <MessageCircle className="w-8 h-8 text-brand-100/50" />
           </div>
         </CardContent>
       </Card>
-      <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white border-0">
+      <Card className="bg-gradient-to-r from-brand-700 to-brand-400 text-white border-0">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-100">Maximum Users</p>
+              <p className="text-brand-100">Maximum Users</p>
               <p className="text-3xl font-bold">{rooms.reduce((sum, room) => sum + room.maxPeople, 0)}</p>
             </div>
-            <Users className="w-8 h-8 text-green-200" />
+            <Users className="w-8 h-8 text-brand-100/50" />
           </div>
         </CardContent>
       </Card>
-      <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white border-0">
+      <Card className="bg-gradient-to-r from-brand-400 to-brand-200 text-brand-900 border-0">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-purple-100">Total Members</p>
+              <p className="text-brand-900/80 font-medium">Total Members</p>
               <p className="text-3xl font-bold">{rooms.reduce((sum, room) => sum + room.users.length, 0)}</p>
             </div>
-            <TrendingUp className="w-8 h-8 text-purple-200" />
+            <TrendingUp className="w-8 h-8 text-brand-900/50" />
           </div>
         </CardContent>
       </Card>
-      <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white border-0">
+      <Card className="bg-gradient-to-r from-brand-200 to-white text-brand-900 border border-brand-100/50 shadow-sm">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-orange-100">Messages Today</p>
+              <p className="text-brand-900/80 font-medium">Messages Today</p>
               <p className="text-3xl font-bold">{countMessage}</p>
             </div>
-            <Zap className="w-8 h-8 text-orange-200" />
+            <Zap className="w-8 h-8 text-brand-900/50" />
           </div>
         </CardContent>
       </Card>

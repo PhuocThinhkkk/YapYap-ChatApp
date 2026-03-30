@@ -64,7 +64,7 @@ const UserDropDown = (
                 
                 <Avatar className="w-12 h-12 border-2 border-indigo-200">
                     <AvatarImage src={user.avatarUrl} />
-                    <AvatarFallback className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold">
+                    <AvatarFallback className="bg-gradient-to-r from-brand-900 to-brand-700 text-white font-semibold">
                         {user.name?.charAt(0)}
                     </AvatarFallback>
                 </Avatar>

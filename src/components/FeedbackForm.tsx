@@ -113,7 +113,7 @@ export default function FeedbackForm() {
 
           <div className="space-y-4">
             <Label className="text-sm font-semibold text-gray-700">Rating *</Label>
-            <div className="flex flex-col items-center gap-4 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border border-blue-100">
+            <div className="flex flex-col items-center gap-4 p-6 bg-gradient-to-r from-brand-100/30 to-brand-100/10 rounded-2xl border border-brand-100">
               <div className="flex items-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -177,7 +177,7 @@ export default function FeedbackForm() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-14 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+            className="w-full h-14 bg-gradient-to-r from-brand-900 to-brand-700 hover:from-brand-900/90 hover:to-brand-700/90 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
           >
             {isSubmitting ? (
               <div className="flex items-center gap-2">

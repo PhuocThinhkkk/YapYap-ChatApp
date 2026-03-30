@@ -43,7 +43,7 @@ const quickActions = [
       description: "Discover and connect with new people",
       icon: UserPlus,
       href: "/search-friends",
-      color: "bg-purple-500",
+      color: "bg-brand-900",
       badge: "I havent programmed it yet",
     },
     {
