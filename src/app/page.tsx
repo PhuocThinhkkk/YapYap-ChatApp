@@ -18,6 +18,7 @@ import Image, { StaticImageData } from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { get4FiveStarFeedbacks } from "@/lib/db/feedback";
+import { getPlatformStats } from "@/lib/db/stats";
 import type { FeedbackDb } from "@/type";
 import image1 from "./images/image1.jpg";
 import image2 from "./images/image2.png";
@@ -26,32 +27,33 @@ import image4 from "./images/image4.png";
 
 export default async function LandingPage() {
   const initialFeedbacks: FeedbackDb[] = await get4FiveStarFeedbacks();
+  const stats = await getPlatformStats();
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-b from-brand-100/30 to-white text-gray-800">
       {/* Navigation */}
       <header className="container mx-auto py-6 px-20 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <MessageCircle className="size-8 text-purple-600" />
-          <span className="text-2xl font-bold text-gradient from-purple-600 to-pink-500">
+          <MessageCircle className="size-8 text-brand-900" />
+          <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-900 to-brand-700">
             YapYap
           </span>
         </div>
         <nav className="hidden md:flex items-center gap-6">
           <Link
             href="#features"
-            className="text-gray-600 hover:text-purple-600 transition-colors"
+            className="text-gray-600 hover:text-brand-900 transition-colors"
           >
             Features
           </Link>
           <Link
             href="#interface"
-            className="text-gray-600 hover:text-purple-600 transition-colors"
+            className="text-gray-600 hover:text-brand-900 transition-colors"
           >
             Interface
           </Link>
           <Link
             href="#testimonials"
-            className="text-gray-600 hover:text-purple-600 transition-colors"
+            className="text-gray-600 hover:text-brand-900 transition-colors"
           >
             Testimonials
           </Link>
@@ -63,7 +65,7 @@ export default async function LandingPage() {
             </Button>
           </Link>
           <Link href={"/sign-up"}>
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white">
+            <Button className="bg-gradient-to-r from-brand-900 to-brand-700 hover:from-brand-900/90 hover:to-brand-700/90 text-white">
               Sign up free
             </Button>
           </Link>
@@ -71,16 +73,10 @@ export default async function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-white overflow-hidden">
+      <section className="relative bg-transparent overflow-hidden">
         {/* Animated Background decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-purple-100 rounded-full opacity-40 blur-xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-pink-100 rounded-full opacity-40 blur-xl animate-bounce"></div>
-          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-purple-50 rounded-full opacity-30 blur-2xl animate-pulse"></div>
-
-          {/* Additional floating elements */}
-          <div className="absolute top-1/3 left-1/3 w-16 h-16 bg-pink-200 rounded-full opacity-20 blur-lg animate-float"></div>
-          <div className="absolute bottom-1/3 right-1/3 w-20 h-20 bg-purple-200 rounded-full opacity-25 blur-xl animate-float-delayed"></div>
+        <div className="absolute top-0 left-0 w-full h-full -z-10 flex items-center justify-center opacity-40">
+           <Image src="/blob-transparent-bg.png" alt="blob background" fill className="object-cover" priority />
         </div>
 
         <div className="container mx-auto px-8 lg:px-12 py-20 relative z-10">
@@ -88,7 +84,7 @@ export default async function LandingPage() {
             {/* Animated Text Content */}
             <div className="lg:w-1/3 text-center lg:text-left animate-fade-in-up">
               <h1 className="font-bold mb-6">
-                <span className="text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent animate-gradient-x">
+                <span className="text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-brand-900 to-brand-700 bg-clip-text text-transparent animate-gradient-x">
                   YapYap
                 </span>
                 <br />
@@ -104,7 +100,7 @@ export default async function LandingPage() {
                 <Link href="/sign-in">
                   <Button
                     size="lg"
-                    className="h-12 w-48 hover:cursor-pointer  bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
+                    className="h-12 w-48 hover:cursor-pointer bg-gradient-to-r from-brand-900 to-brand-700 hover:from-brand-900/90 hover:to-brand-700/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
                   >
                     Get Started{" "}
                     <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
@@ -113,7 +109,7 @@ export default async function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="bg-white text-gray-700 border-gray-200 hover:bg-gray-50 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 w-48 h-12 gap-2"
+                  className="bg-white text-brand-900 border-brand-200 hover:bg-brand-100/30 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 w-48 h-12 gap-2"
                   asChild
                 >
                   <a
@@ -134,7 +130,7 @@ export default async function LandingPage() {
               <div
                 className="relative z-10 rounded-2xl overflow-hidden bg-white aspect-[3/2] w-full 
               transition-all duration-500 hover:scale-105 hover:rotate-1 hover:shadow-2xl group
-              image-blur-edges"
+              image-blur-edges border-4 border-brand-100/50"
               >
                 <Image
                   height={783}
@@ -144,13 +140,41 @@ export default async function LandingPage() {
                   className="w-full h-full object-cover scale-[1.05] transition-transform duration-700 group-hover:scale-110"
                 />
                 {/* Animated overlay */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-brand-900/10 to-brand-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
 
               {/* Animated Decorative background elements */}
-              <div className="absolute -top-6 -right-6 w-64 h-64 bg-purple-200 rounded-full opacity-20 blur-3xl animate-float"></div>
-              <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-pink-200 rounded-full opacity-20 blur-3xl animate-float-delayed"></div>
-              <div className="absolute top-1/2 -right-4 w-20 h-20 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-10 blur-2xl animate-pulse"></div>
+              <div className="absolute -top-6 -right-6 w-64 h-64 bg-brand-400 rounded-full opacity-20 blur-3xl animate-float"></div>
+              <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-brand-200 rounded-full opacity-40 blur-3xl animate-float-delayed"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Stats Section */}
+      <section className="py-12 bg-white relative z-20 shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.05)] border-y border-brand-100/50">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="grid grid-cols-2 gap-8 text-center divide-x divide-brand-100">
+            <div className="flex flex-col items-center animate-fade-in-up">
+              <div className="p-4 bg-brand-100/30 rounded-full mb-4">
+                <Users className="size-8 text-brand-900" />
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl md:text-5xl font-black text-brand-900">{stats.totalUsers}</span>
+                <span className="text-xl text-brand-700 font-medium">+</span>
+              </div>
+              <p className="text-gray-600 mt-2 font-medium">Active YapYappers</p>
+            </div>
+            
+            <div className="flex flex-col items-center animate-fade-in-up animation-delay-200">
+              <div className="p-4 bg-brand-100/30 rounded-full mb-4">
+                <MessageCircle className="size-8 text-brand-900" />
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl md:text-5xl font-black text-brand-900">{stats.totalRooms}</span>
+                <span className="text-xl text-brand-700 font-medium">+</span>
+              </div>
+              <p className="text-gray-600 mt-2 font-medium">Chat Rooms Created</p>
             </div>
           </div>
         </div>
@@ -168,22 +192,22 @@ export default async function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <FeatureCard
-              icon={<Lock className="size-10 text-purple-600" />}
+              icon={<Lock className="size-10 text-brand-900" />}
               title="Private Rooms"
               description="Create secure, invitation-only spaces for your conversations."
             />
             <FeatureCard
-              icon={<Smile className="size-10 text-purple-600" />}
+              icon={<Smile className="size-10 text-brand-900" />}
               title="Personal Profiles"
               description="Showcase your personality with customizable profiles."
             />
             <FeatureCard
-              icon={<LayoutDashboard className="size-10 text-purple-600" />}
+              icon={<LayoutDashboard className="size-10 text-brand-900" />}
               title="Beautiful Dashboard"
               description="Navigate your chats with our intuitive, customizable interface."
             />
             <FeatureCard
-              icon={<UserPlus className="size-10 text-purple-600" />}
+              icon={<UserPlus className="size-10 text-brand-900" />}
               title="Add Friends"
               description="Grow your network and connect with new people easily."
             />
@@ -193,7 +217,7 @@ export default async function LandingPage() {
 
       <section
         id="interface"
-        className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-purple-50 to-white"
+        className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-brand-100/30 to-white"
       >
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">
@@ -295,19 +319,19 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-r from-purple-600 to-pink-500">
+      <section className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-r from-brand-900 to-brand-700">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Start Yapping?
           </h2>
-          <p className="text-xl text-white mb-10 max-w-2xl mx-auto">
+          <p className="text-xl text-brand-100 mb-10 max-w-2xl mx-auto">
             Join thousands of users already connecting, sharing, and expressing
             themselves on YapYap.
           </p>
           <Link href={"/sign-up"}>
             <Button
               size="lg"
-              className="bg-white text-purple-600 hover:bg-gray-100"
+              className="bg-white text-brand-900 hover:bg-gray-100"
             >
               Sign Up Now <ArrowRight className="ml-2 size-4" />
             </Button>
@@ -321,7 +345,7 @@ export default async function LandingPage() {
           <div className="flex flex-col md:flex-row justify-between">
             <div className="mb-8 md:mb-0">
               <div className="flex items-center gap-2 mb-4">
-                <MessageCircle className="size-6 text-purple-400" />
+                <MessageCircle className="size-6 text-brand-400" />
                 <span className="text-xl font-bold text-white">YapYap</span>
               </div>
               <p className="text-gray-400 max-w-xs">
@@ -408,7 +432,7 @@ function FeatureCard({
 }) {
   return (
     <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
-      <div className="mb-6 p-3 bg-purple-50 rounded-full">{icon as true}</div>
+      <div className="mb-6 p-3 bg-brand-100/30 rounded-full">{icon as true}</div>
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600">{description}</p>
     </div>

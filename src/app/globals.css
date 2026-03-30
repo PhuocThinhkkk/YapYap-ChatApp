@@ -6,6 +6,11 @@
 @import "../styles/animations.css";
 
 @theme inline {
+  --color-brand-900: #537D5D;
+  --color-brand-700: #73946B;
+  --color-brand-400: #9EBC8A;
+  --color-brand-200: #D2D0A0;
+  
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
