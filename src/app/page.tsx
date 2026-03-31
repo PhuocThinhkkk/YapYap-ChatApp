@@ -31,13 +31,13 @@ export default async function LandingPage() {
   return (
     <div className="min-h-screen relative bg-transparent from-brand-100/30 to-white text-gray-800">
       {/* BACKGROUND IMAGE */}
-      <div className="absolute h-screen w-screen inset-0 -z-10 opacity-40">
+      <div className="absolute w-full h-screen inset-0 -z-10 opacity-40 overflow-visible">
         <Image
           src="/blob-transparent-bg.png"
           alt="blob background"
-          fill
-          className="object-cover"
-          priority
+          width={1920}
+        height={1080}
+          className="w-[120%] h-auto -translate-y-[350px]"
         />
       </div>
 
@@ -187,7 +187,7 @@ export default async function LandingPage() {
         </div>
       </section>
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white px-4 md:px-10 lg:px-20">
+      <section id="features" className="py-20 bg-transparent px-4 md:px-10 lg:px-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">
             Features Youll Love
@@ -224,7 +224,7 @@ export default async function LandingPage() {
 
       <section
         id="interface"
-        className="py-20 px-4 md:px-10 lg:px-20 bg-gradient-to-b from-brand-100/30 to-white"
+        className="py-20 px-4 md:px-10 lg:px-20 bg-transparent"
       >
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">
@@ -261,7 +261,7 @@ export default async function LandingPage() {
       {/* Testimonials */}
       <section
         id="testimonials"
-        className="py-20 bg-white px-4 md:px-10 lg:px-20"
+        className="py-20 bg-transparent px-4 md:px-10 lg:px-20"
       >
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">
