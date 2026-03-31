@@ -21,11 +21,6 @@ export function UserCardSkeleton() {
                 <Skeleton className="h-4 w-40" />
               </div>
             </div>
-
-            {/* Badge Skeleton */}
-            <div className="flex-shrink-0">
-              <Skeleton className="h-6 w-20 rounded-full" />
-            </div>
           </div>
 
           {/* Location Skeleton */}

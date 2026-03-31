@@ -11,22 +11,22 @@ type ButtonJoinRoomProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 const ButtonJoinRoom = ({ roomId, ...props }: ButtonJoinRoomProps) => {
   const [isRedirect, setIsRedirect] = useState(false)
   const route = useRouter()
-  async function handleOnclick(){
+  async function handleOnclick() {
     setIsRedirect(true)
     route.push(`/chatrooms/${roomId}`)
   }
   return (
     <>
-    <Button 
-    disabled={isRedirect} 
-    onClick={handleOnclick} 
-    {...props} >
+      <Button
+        disabled={isRedirect}
+        onClick={handleOnclick}
+        {...props} >
         Join chat room
-    </Button>
-    <BananaLoading isRedirect={isRedirect}/>
-    </>   
-    
-    
+      </Button>
+      <BananaLoading isRedirect={isRedirect} />
+    </>
+
+
   )
 }
 

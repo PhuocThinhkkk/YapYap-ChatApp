@@ -184,7 +184,7 @@ export function UserCard({ user }: { user: UserSearchingType }) {
         <Button 
         disabled = {isLoading}
           onClick={handleAccept} 
-          className="flex-1 hover:cursor-pointer bg-blue-500 hover:bg-blue-600 text-white"
+          className="flex-1 hover:cursor-pointer bg-brand-900 hover:bg-brand-900/90 text-white"
         >
           <Users className="h-4 w-4 mr-2" />
           Accept
@@ -208,13 +208,13 @@ export function UserCard({ user }: { user: UserSearchingType }) {
     <Card className="bg-white border-2 border-gray-300 shadow-sm hover:border-orange-300 hover:shadow-md transition-all duration-200 rounded-lg">
       <CardContent className="p-6">
         <div className="text-center mb-4">
-          <Avatar className="h-16 w-16 mx-auto mb-3 border-2 border-orange-200">
+          <Avatar className="h-16 w-16 mx-auto mb-3 border-2 border-brand-200">
             <AvatarImage src={user.avatarUrl || "/placeholder.svg"} alt={user.name} />
-            <AvatarFallback className="bg-orange-500 text-white">{getInitials(user.name)}</AvatarFallback>
+            <AvatarFallback className="bg-brand-700 text-white">{getInitials(user.name)}</AvatarFallback>
           </Avatar>
           <h3 className="font-bold text-xl text-gray-900 mb-1">{user.name}</h3>
           <p className="text-sm text-gray-600">{user.email || "unknown email"}</p>
-          <Badge className="mt-2 bg-orange-100 text-orange-800 border-orange-200">
+          <Badge className="mt-2 bg-brand-100 text-brand-900 border-brand-200">
             {user.role == "Pro Plan" && <Crown className="h-3 w-3 mr-1" />}
             {user?.role?.replace(" Plan", "")}
           </Badge>
@@ -222,7 +222,7 @@ export function UserCard({ user }: { user: UserSearchingType }) {
 
         {user.location && (
           <div className="flex items-center justify-center text-gray-600 text-sm mb-4 p-2 bg-gray-50 rounded">
-            <MapPin className="h-4 w-4 mr-2 text-orange-500" />
+            <MapPin className="h-4 w-4 mr-2 text-brand-700" />
             <span>{user.location}</span>
           </div>
         )}
@@ -240,7 +240,7 @@ export function UserCard({ user }: { user: UserSearchingType }) {
 
         <div className="flex gap-2">
           {renderActionButton()}
-          <Button variant="outline" size="icon" className=" hover:cursor-pointer border-orange-200 hover:bg-orange-50">
+          <Button variant="outline" size="icon" className=" hover:cursor-pointer border-brand-200 hover:bg-brand-100/30">
             <MessageCircle className="h-4 w-4" />
           </Button>
         </div>

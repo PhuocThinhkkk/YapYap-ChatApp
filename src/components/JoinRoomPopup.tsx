@@ -37,7 +37,7 @@ const JoinRoomPopup = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange} >
         <DialogTrigger asChild>
-            <Button variant="outline" className='hover:cursor-pointer h-14 w-30 px-8 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white' >
+            <Button variant="outline" className='hover:cursor-pointer h-14 w-30 px-8 bg-gradient-to-r from-brand-900 to-brand-700 hover:from-brand-900/90 hover:to-brand-700/90 text-white border-0' >
                 <Search className="w-5 h-5 mr-2" />
                 Join
             </Button>
@@ -75,7 +75,7 @@ function FormActionSearch ( { roomName } : { roomName : string }) {
         <div className='flex flex-col items-center justify-center'>
             <Input name="password" type="password" placeholder="Password" className='border-2 border-gray-300 rounded-md p-2 mb-4' />
             <Button disabled={pending}
-            type="submit" className='bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer'>Join Room</Button>
+            type="submit" className='bg-brand-900 hover:bg-brand-900/90 text-white px-4 py-2 rounded-md cursor-pointer'>Join Room</Button>
         </div>
     </form>
     )

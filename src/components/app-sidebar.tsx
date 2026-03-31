@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
- 
+
 // Menu items.
 const items = [
   {
@@ -45,7 +45,7 @@ const items = [
     icon: LayoutDashboardIcon,
   },
 ]
- 
+
 export function AppSidebar() {
   return (
     <Sidebar className="border-r border-brand-100/50 bg-brand-100/10">

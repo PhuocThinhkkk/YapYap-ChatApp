@@ -1,4 +1,4 @@
-import { Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { RoomDb } from "@/type"
 import ButtonJoinRoom from "./ButtonJoinRoom"
@@ -7,14 +7,15 @@ import { Badge } from "@/components/ui/badge"
 import { MapPin, Crown, Users } from "lucide-react"
 
 const RoomCard = ({
-    room
+  room
 }: {
-    room: RoomDb
-}) => {const memberPercentage = (room.users.length / room.maxPeople) * 100
+  room: RoomDb
+}) => {
+  const memberPercentage = (room.users.length / room.maxPeople) * 100
 
   return (
     <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-200 border-slate-200 hover:border-slate-300">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-1">
         {/* Room Header with Avatar and Name */}
         <div className="flex items-start gap-3">
           <div className="relative flex-shrink-0">
@@ -26,7 +27,7 @@ const RoomCard = ({
             </Avatar>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
+            <div className="flex items-center justify-between gap-2">
               <h3 className="font-bold text-lg text-slate-900 truncate leading-tight">{room.roomName}</h3>
               {room.category && (
                 <Badge variant="secondary" className="text-xs flex-shrink-0">
@@ -34,12 +35,12 @@ const RoomCard = ({
                 </Badge>
               )}
             </div>
-            {room.description && <p className="text-sm text-slate-600 mt-1 line-clamp-2">{room.description}</p>}
+            <p className="text-sm text-slate-600 mt-1 line-clamp-2">{room.description ?? "No description for this room."}</p>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 space-y-4">
+      <CardContent className="flex-1 space-y-1">
         {/* Member Count with Progress */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
@@ -86,9 +87,9 @@ const RoomCard = ({
         </div>
       </CardContent>
 
-      <CardFooter className="pt-0">
-        <ButtonJoinRoom roomId={room._id} className="w-full hover:cursor-pointer duration-300 bg-blue-600" />
-      </CardFooter>
+      <div className="pl-4 pr-40">
+        <ButtonJoinRoom roomId={room._id} className="w-full hover:cursor-pointer duration-300 bg-brand-900 text-white hover:bg-brand-900/90" />
+      </div>
     </Card>
   )
 }

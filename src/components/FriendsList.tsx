@@ -53,8 +53,9 @@ export default function FriendsList() {
           justify-between 
           p-4 rounded-lg 
           bg-white border
-          border-slate-100
-          hover:border-slate-200 
+          border-brand-100/30
+          hover:border-brand-200
+          hover:bg-brand-100/5 
           transition-colors"
         >
           <div className="flex items-start space-x-3 flex-1">

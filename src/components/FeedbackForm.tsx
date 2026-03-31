@@ -14,71 +14,71 @@ import { FeedbackFormType } from "@/type"
 
 
 export default function FeedbackForm() {
-    const [rating, setRating] = useState(0)
-    const [hoveredRating, setHoveredRating] = useState(0)
-    const [formData, setFormData] = useState<FeedbackFormType>({
-      title: "",
-      message: "",
-      category: "",
-      rating : 0,
-    })
-    const [isSubmitting, setIsSubmitting] = useState(false)
-  
+  const [rating, setRating] = useState(0)
+  const [hoveredRating, setHoveredRating] = useState(0)
+  const [formData, setFormData] = useState<FeedbackFormType>({
+    title: "",
+    message: "",
+    category: "",
+    rating: 0,
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const handleSubmit = async (e: React.FormEvent) => {
-      try{
-        e.preventDefault()
 
-        if ( !formData.title || !formData.message || !rating || !formData.category ) {
-          toast.info( "Missing Information")
-          return
-        }
-        setIsSubmitting(true)
-        formData.rating = rating;
-        console.log(formData)
-        // Simulate API call
-        const res = await fetch("/api/feedback",
-          {
-            method : "POST",
-            headers: {
-              'Content-Type': 'application/json'  // Tell the server you're sending JSON
-            },
-            body: JSON.stringify(formData)   
-          }
-        )
-        const data = await res.json()
-        if (!res.ok) {
-          throw new Error(`${data.message}`)
-        }
-        // Reset form
-        setFormData({
-          title: "",
-          message: "",
-          category: "",
-          rating : 0,
-        })
-        setRating(0)
-        setIsSubmitting(false)
+  const handleSubmit = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault()
 
-        toast.success("Feedback Submitted! ✨ Thank you for your feedback. We'll review it shortly.")
-      }catch(e){
-        console.error(e)
-        toast.error(`${e}`)
-        setIsSubmitting(false)
+      if (!formData.title || !formData.message || !rating || !formData.category) {
+        toast.info("Missing Information")
+        return
       }
-    }
+      setIsSubmitting(true)
+      formData.rating = rating;
+      console.log(formData)
+      // Simulate API call
+      const res = await fetch("/api/feedback",
+        {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'  // Tell the server you're sending JSON
+          },
+          body: JSON.stringify(formData)
+        }
+      )
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(`${data.message}`)
+      }
+      // Reset form
+      setFormData({
+        title: "",
+        message: "",
+        category: "",
+        rating: 0,
+      })
+      setRating(0)
+      setIsSubmitting(false)
 
-    const handleInputChange = (field: string, value: string) => {
-      setFormData((prev) => ({ ...prev, [field]: value }))
+      toast.success("Feedback Submitted! ✨ Thank you for your feedback. We'll review it shortly.")
+    } catch (e) {
+      console.error(e)
+      toast.error(`${e}`)
+      setIsSubmitting(false)
     }
+  }
 
-    const getRatingText = (rating: number) => {
-      const texts = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"]
-      return texts[rating]
-    }
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const getRatingText = (rating: number) => {
+    const texts = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"]
+    return texts[rating]
+  }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-white/80 backdrop-blur-sm border border-white/20 shadow-2xl">
+    <Card className="w-full  mx-auto bg-white/80 backdrop-blur-sm border border-white/20 shadow-2xl">
       <CardHeader className="text-center pb-8">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-cyan-500 rounded-full mx-auto mb-4">
           <Sparkles className="w-8 h-8 text-white" />
@@ -124,15 +124,15 @@ export default function FeedbackForm() {
                     onMouseLeave={() => setHoveredRating(0)}
                     onClick={() => {
                       console.log(star)
-                       setRating(star)}
-                      }
+                      setRating(star)
+                    }
+                    }
                   >
                     <Star
-                      className={`w-8 h-8 transition-all duration-200 ${
-                        star <= (hoveredRating || rating)
-                          ? "fill-yellow-400 text-yellow-400 drop-shadow-sm"
-                          : "text-gray-300 hover:text-gray-400"
-                      }`}
+                      className={`w-8 h-8 transition-all duration-200 ${star <= (hoveredRating || rating)
+                        ? "fill-yellow-400 text-yellow-400 drop-shadow-sm"
+                        : "text-gray-300 hover:text-gray-400"
+                        }`}
                     />
                   </button>
                 ))}

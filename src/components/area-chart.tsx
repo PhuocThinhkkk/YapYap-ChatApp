@@ -19,13 +19,13 @@ import { toast } from "sonner";
 interface roomMessageChartData {
   date: string;
   dayInWeek:
-    | "Monday"
-    | "Tuesday"
-    | "Wednesday"
-    | "Thursday"
-    | "Friday"
-    | "Saturday"
-    | "Sunday";
+  | "Monday"
+  | "Tuesday"
+  | "Wednesday"
+  | "Thursday"
+  | "Friday"
+  | "Saturday"
+  | "Sunday";
   yourRoom: number;
   orthersRoom: number;
 }
@@ -67,7 +67,7 @@ export function Area_Chart() {
   }, []);
 
   return (
-    <Card key={key}>
+    <Card key={key} className="h-full">
       <CardHeader>
         <CardTitle>Your messages in rooms </CardTitle>
         <CardDescription>

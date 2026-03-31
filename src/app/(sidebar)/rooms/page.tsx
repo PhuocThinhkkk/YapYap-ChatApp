@@ -26,19 +26,19 @@ const Page = () => {
       <div className="px-3 sm:px-6 py-4 sm:py-6">
         {/* Toolbar Section */}
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4 mb-6 sm:mb-8 bg-white p-4 rounded-2xl border border-brand-100/30 shadow-sm">
-          <div className="w-full lg:w-1/2 xl:w-1/3">
+          <div className="w-full flex-1">
             <SearchRoom />
           </div>
-          
+
           <div className="hidden lg:block w-px h-10 bg-slate-200"></div>
-          
+
           <div className="w-full lg:w-auto flex items-center justify-between lg:justify-end gap-4">
             <div className="text-left lg:text-right">
               <h3 className="font-semibold text-slate-800 text-sm sm:text-base">Start Your Own Room</h3>
-              <p className="text-xs text-slate-500 hidden sm:block">Create a space for your community</p>
+              <p className="text-xs text-center text-slate-500 hidden sm:block">Create a space for your community</p>
             </div>
             <div className="flex-shrink-0">
-               <ButtonCreateRoom />
+              <ButtonCreateRoom />
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@ const Page = () => {
                 </div>
               </div>
             </div>
-   
+
             <FriendsList />
 
           </CardContent>

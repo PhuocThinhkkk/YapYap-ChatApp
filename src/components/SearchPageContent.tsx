@@ -73,14 +73,14 @@ export default function SearchPageContent() {
     <div className="min-h-screen bg-gradient-to-br from-brand-100/30 via-white to-brand-100/10 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-brand-400/20 to-brand-200/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-brand-900/20 to-brand-700/20 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-emerald-400/10 to-teal-400/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto p-6">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-6 shadow-lg">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center mb-8 mt-2">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-900 rounded-xl mb-3 shadow-md">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -89,10 +89,10 @@ export default function SearchPageContent() {
               />
             </svg>
           </div>
-          <h1 className="text-5xl font-bold bg-sky-500 bg-clip-text text-transparent mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-brand-900 to-brand-700 bg-clip-text text-transparent mb-3">
             Discover People
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto leading-relaxed">
             Connect with amazing people from around the world. Find your next collaborator, friend, or mentor.
           </p>
         </div>

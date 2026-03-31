@@ -89,7 +89,7 @@ export function Component() {
               ))}
             </Pie>
             <Tooltip />
-            <Legend />
+            <Legend width={360} />
           </PieChart>
         ) : null}
       </CardContent>
