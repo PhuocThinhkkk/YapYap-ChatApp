@@ -29,9 +29,20 @@ export default async function LandingPage() {
   const initialFeedbacks: FeedbackDb[] = await get4FiveStarFeedbacks();
   const stats = await getPlatformStats();
   return (
-    <div className="min-h-screen bg-gradient-to-b from-brand-100/30 to-white text-gray-800">
+    <div className="min-h-screen relative bg-transparent from-brand-100/30 to-white text-gray-800">
+      {/* BACKGROUND IMAGE */}
+      <div className="absolute h-screen w-screen inset-0 -z-10 opacity-40">
+        <Image
+          src="/blob-transparent-bg.png"
+          alt="blob background"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+
       {/* Navigation */}
-      <header className="container mx-auto py-6 px-20 flex items-center justify-between">
+      <header className="container bg-transparent mx-auto py-6 px-20 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <MessageCircle className="size-8 text-brand-900" />
           <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-900 to-brand-700">
@@ -74,10 +85,6 @@ export default async function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative bg-transparent overflow-hidden">
-        {/* Animated Background decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-full -z-10 flex items-center justify-center opacity-40">
-           <Image src="/blob-transparent-bg.png" alt="blob background" fill className="object-cover" priority />
-        </div>
 
         <div className="container mx-auto px-8 lg:px-12 py-20 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-16">
@@ -96,7 +103,7 @@ export default async function LandingPage() {
                 Connect with friends, create private rooms, and express yourself
                 with in our beautiful, intuitive chat platform.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up animation-delay-600">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center lg:justify-start animate-fade-in-up animation-delay-600">
                 <Link href="/sign-in">
                   <Button
                     size="lg"
@@ -150,9 +157,9 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
-      
+
       {/* Stats Section */}
-      <section className="py-12 bg-white relative z-20 shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.05)] border-y border-brand-100/50">
+      <section className="bg-transparent py-6 relative z-20 border-bottom border-brand-100/50">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="grid grid-cols-2 gap-8 text-center divide-x divide-brand-100">
             <div className="flex flex-col items-center animate-fade-in-up">
@@ -165,7 +172,7 @@ export default async function LandingPage() {
               </div>
               <p className="text-gray-600 mt-2 font-medium">Active YapYappers</p>
             </div>
-            
+
             <div className="flex flex-col items-center animate-fade-in-up animation-delay-200">
               <div className="p-4 bg-brand-100/30 rounded-full mb-4">
                 <MessageCircle className="size-8 text-brand-900" />
