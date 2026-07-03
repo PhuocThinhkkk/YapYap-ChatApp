@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { get4FiveStarFeedbacks } from "@/lib/db/feedback";
 import { getPlatformStats } from "@/lib/db/stats";
 import type { FeedbackDb } from "@/type";
-import image1 from "./images/image1.jpg";
+import image1 from "./images/image1.png";
 import image2 from "./images/image2.png";
 import image3 from "./images/image3.png";
 import image4 from "./images/image4.png";
@@ -134,20 +134,23 @@ export default async function LandingPage() {
 
             {/* Animated Image - Hidden on small screens, visible on large screens */}
             <div className="hidden lg:block lg:w-2/3 relative animate-fade-in-right animation-delay-300">
-              <div
-                className="relative z-10 rounded-2xl overflow-hidden bg-white aspect-[3/2] w-full 
-              transition-all duration-500 hover:scale-105 hover:rotate-1 hover:shadow-2xl group
-              image-blur-edges border-4 border-brand-100/50"
-              >
+            <div className="relative z-10 rounded-2xl  aspect-[3/2] w-full">
                 <Image
-                  height={783}
-                  width={1175}
                   src={image1}
                   alt="YapYap App Interface"
-                  className="w-full h-full object-cover scale-[1.05] transition-transform duration-700 group-hover:scale-110"
+                  width={1175}
+                  height={800}
+                  className="
+                    w-full
+                    h-full
+                    object-cover
+                    scale-125
+                    transition-transform
+                    duration-700
+                    hover:scale-130
+                    hover:rotate-1
+                  "
                 />
-                {/* Animated overlay */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-brand-900/10 to-brand-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
 
               {/* Animated Decorative background elements */}
