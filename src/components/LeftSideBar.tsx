@@ -15,6 +15,7 @@ import type { Conversations, FriendType, RoomDb } from "@/type"
 import { useQuery } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { AvatarImage } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
 
 
 type ParamsType = {
@@ -187,31 +188,23 @@ const LeftSideBar = ({ isOpen }: { isOpen: boolean }) => {
               ) : (
               
               <ScrollArea className="flex-1 h-[calc(100vh-200px)] w-full rounded-2xl border-slate-200">
-                {filteredConversations?.map((conversation) => {
-                  if (conversation.type === "room") {
-                    const temp = conversation as RoomDb
-                    const temp2 = activeConversation as RoomDb
-                    return (
-                      <div key={conversation._id.toString()}>
-                        <RoomConversation conversation={temp} searchTerm={searchTerm} activeConversation={temp2} />
-                      </div>
-                    )
-                  }
-                  if (conversation.type === "friend") {
-                    const temp = conversation as FriendType
-                    const temp2 = activeConversation as FriendType
-                    return (
-                      <div key={conversation._id.toString()}>
-                        <FriendConversation
-                          conversation={temp}
-                          searchTerm={searchTerm}
-                          activeConversation={temp2}
-                          currentUserId={userId}
-                        />
-                      </div>
-                    )
-                  }
-                })}
+                {filteredConversations?.map((conversation, index) => {
+                  const item = toConversationItem(
+                    conversation,
+                    userId,
+                    activeConversation
+                  )
+
+                  return (
+                    <ConversationItem
+                    key={index}
+                      item={item}
+                      searchTerm={searchTerm}
+                    />
+                  )
+                }
+                 )
+                }
               </ScrollArea>
             )}
           </div>
@@ -248,92 +241,77 @@ const HighlightText = ({ text, highlight }: { text: string; highlight: string })
 
 export default LeftSideBar
 
+function toConversationItem(
+  conversation: Conversations,
+  currentUserId: string | null,
+  activeConversation?: FriendType | RoomDb
+): ConversationItemData {
+  if (conversation?.type === "room") {
+    const con = conversation as RoomDb
+    return {
+      id: con._id,
+      name: con.roomName,
+      fallback: con.roomName[0].toUpperCase(),
+      href: `/chatrooms/${con._id}`,
+      active: activeConversation?._id === con._id,
+    }
+  }
 
-function RoomConversation ({
-  conversation,
-  activeConversation,
-  searchTerm,
-}: {
-  conversation : RoomDb, 
-  activeConversation : RoomDb,
-  searchTerm : string,
-}) {
-  const route = useRouter()
-  return (
-    <button
-      key={conversation._id.toString()}
-      className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 transition-colors ${
-        activeConversation?._id.toString() === conversation?._id.toString()
-          ? "bg-brand-100/50 text-brand-900 border border-brand-200"
-          : "hover:bg-brand-100/20 text-gray-700"
-      }`}
-      onClick={() => route.push(`/chatrooms/${conversation._id}`)}
-    >
-      <div className="w-10 h-10 flex justify-center items-center rounded-full font-bold hover:cursor-pointer bg-brand-100/30 text-brand-900">
-      
-        <Avatar>
-          <AvatarFallback>{conversation.roomName.charAt(0).toUpperCase()}</AvatarFallback>
-        </Avatar>
-      </div>
-      <div className="flex-1 overflow-hidden">
-        <div className="flex items-center justify-between">
-          <span className="font-medium">
-            {searchTerm ? (
-              <HighlightText text={conversation.roomName} highlight={searchTerm} />
-            ) : (
-              conversation.roomName
-            )}
-          </span>
-        </div>
-      </div>
-    </button>
-  )
+  const con = conversation as FriendType
+  const user =
+    con.user1._id === currentUserId
+      ? con.user2
+      : con.user1
+
+  return {
+    id: con._id,
+    name: user.name,
+    avatarUrl: user.avatarUrl,
+    fallback: user.name[0].toUpperCase(),
+    href: `/chatfriends/${con._id}`,
+    active: activeConversation?._id === con._id,
+  }
 }
 
 
+type ConversationItemData = {
+  id: string
+  name: string
+  avatarUrl?: string
+  fallback: string
+  href: string
+  active: boolean
+}
 
-function FriendConversation ({
-  conversation,
-  activeConversation,
+function ConversationItem({
+  item,
   searchTerm,
-  currentUserId,
 }: {
-  conversation : FriendType, 
-  activeConversation : FriendType,
-  searchTerm : string,
-  currentUserId : string | null
+  item: ConversationItemData
+  searchTerm: string
 }) {
-  const route = useRouter()
-  const user = conversation.user1._id === currentUserId ? conversation.user2 : conversation.user1
+  const router = useRouter()
 
   return (
     <button
-      key={conversation._id.toString()}
-      className={`flex w-full items-center gap-3 rounded-lg p-2 text-left hover:cursor-pointer h-15 transition-colors ${
-        activeConversation?._id.toString() === conversation?._id.toString()
-          ? "bg-brand-100/50 text-brand-900 border border-brand-200"
-          : "hover:bg-brand-100/20 text-gray-700"
-      }`}
-      onClick={() => route.push(`/chatfriends/${conversation._id}`)}
+      onClick={() => router.push(item.href)}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-lg p-2 h-15 transition-colors",
+        item.active
+          ? "bg-brand-100/50 border border-brand-200"
+          : "hover:bg-brand-100/20"
+      )}
     >
-      <div className="w-10 h-10 flex justify-center items-center rounded-full font-bold hover:cursor-pointer bg-brand-100/30 text-brand-900 border border-brand-200">
-      
-        <Avatar className="rounded-full">
-          <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
-          <AvatarImage className="rounded-full" src={user.avatarUrl}/>
-        </Avatar>
-      </div>
-      <div className="flex-1 overflow-hidden">
-        <div className="flex items-center justify-between">
-          <span className="font-medium">
-            {searchTerm ? (
-              <HighlightText text={user.name} highlight={searchTerm} />
-            ) : (
-             user.name 
-            )}
-          </span>
-        </div>
-      </div>
+      <Avatar className="h-10 w-10">
+        <AvatarImage src={item.avatarUrl} />
+        <AvatarFallback>{item.fallback}</AvatarFallback>
+      </Avatar>
+
+      <span className="font-medium">
+        {searchTerm
+          ? <HighlightText text={item.name} highlight={searchTerm} />
+          : item.name}
+      </span>
     </button>
   )
 }

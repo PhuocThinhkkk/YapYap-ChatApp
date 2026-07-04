@@ -24,7 +24,7 @@ const Page = () => {
 
       <div className="px-3 sm:px-6 py-4 sm:py-6">
         {/* Toolbar Section */}
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-4 mb-6 sm:mb-8 bg-white p-4 rounded-2xl border border-brand-100/30 shadow-sm">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-4 p-1 rounded-2xl ">
           <div className="w-full flex-1">
             <SearchRoom />
           </div>
@@ -41,6 +41,7 @@ const Page = () => {
             </div>
           </div>
         </div>
+
         <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-brand-100/10">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4 sm:mb-6">

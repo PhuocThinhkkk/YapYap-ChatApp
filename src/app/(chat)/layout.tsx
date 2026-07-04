@@ -17,7 +17,7 @@ export default function RootLayout({
     const queryClient = new QueryClient()
   return (
     <SocketProvider>
-     `<div className="flex h-[calc(100vh-1rem)] w-screen border-4 ">
+     <div className="flex h-[calc(100vh-1rem)] w-screen  ">
         <div className="fixed top-8 left-4 z-30 lg:hidden border rounded-sm">
           <Button className="bg-white hover:bg-slate-100 hover:cursor-pointer text-black text-sm" onClick={()=> setIsOpen(!isOpen)}>
             <SidebarOpenIcon/>

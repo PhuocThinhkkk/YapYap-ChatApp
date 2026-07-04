@@ -25,7 +25,7 @@ const items = [
     icon: MessageCircle,
   },
   {
-    title: "Pricing & Roles",
+    title: "Pricing",
     url: "/role",
     icon: Star,
   },
@@ -51,7 +51,7 @@ export function AppSidebar() {
     <Sidebar className="border-r border-brand-100/50 bg-brand-100/10">
       <SidebarHeader className="h-16 flex flex-row items-center gap-2 border-b border-brand-100/30 px-6">
         <MessageCircle className="size-6 text-brand-900" />
-        <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-900 to-brand-700">
+        <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-900 to-brand-700">
           YapYap
         </span>
       </SidebarHeader>
@@ -62,10 +62,10 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="hover:bg-brand-100/30 hover:text-brand-900 transition-colors">
-                    <a href={item.url} className="flex items-center gap-3 py-2">
-                      <item.icon className="size-5 text-brand-700" />
-                      <span className="font-medium">{item.title}</span>
+                  <SidebarMenuButton asChild className="flex items-center p-4 font-medium hover:bg-gray-200 transition-colors">
+                    <a href={item.url} className="flex items-center gap-0 py-6">
+                      <item.icon className="font-bold size-15 text-black" />
+                      <span className="text-[1rem]">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
