@@ -29,7 +29,7 @@ export default async function LandingPage() {
   const initialFeedbacks: FeedbackDb[] = await get4FiveStarFeedbacks();
   const stats = await getPlatformStats();
   return (
-    <div className="min-h-screen relative bg-transparent from-brand-100/30 to-white text-gray-800">
+    <div className="font-display min-h-screen relative bg-transparent from-brand-100/30 to-white text-gray-800">
       {/* BACKGROUND IMAGE */}
       <div className="absolute w-full h-screen inset-0 -z-10 opacity-40 overflow-visible">
         <Image
@@ -84,22 +84,21 @@ export default async function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-transparent overflow-hidden">
+      <section className="relative bg-transparent ">
 
         <div className="container mx-auto px-8 lg:px-12 py-20 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             {/* Animated Text Content */}
             <div className="lg:w-1/3 text-center lg:text-left animate-fade-in-up">
-              <h1 className="font-bold mb-6">
-                <span className="text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-brand-900 to-brand-700 bg-clip-text text-transparent animate-gradient-x">
+              <div className="font-bold mb-6 overflow-visible">
+                <div className="font-display text-nowrap mb-8 text-3xl md:text-4xl lg:text-8xl font-bold italic leading-none text-brand-900 ">
                   YapYap
-                </span>
-                <br />
-                <span className="mt-8 text-gray-800 text-sm md:text-xl lg:text-2xl font-medium animate-fade-in-up animation-delay-200">
+                </div>
+                <span className="font-display mt-8 text-gray-800 text-sm md:text-xl lg:text-2xl font-medium animate-fade-in-up animation-delay-200">
                   For those who just cant stop yapping.
                 </span>
-              </h1>
-              <p className="text-base md:text-sm lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed animate-fade-in-up animation-delay-400">
+              </div>
+              <p className="font-display text-base md:text-sm lg:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed animate-fade-in-up animation-delay-400">
                 Connect with friends, create private rooms, and express yourself
                 with in our beautiful, intuitive chat platform.
               </p>
@@ -461,20 +460,17 @@ function InterfaceCard({
   image: StaticImageData;
 }) {
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       <div className="relative">
         <Image
           src={image}
           alt={title}
           height={250}
           width={300}
-          className="w-full h-full object-cove r"
+          className="w-full h-full object-cover rounded-xl"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-          <div className="p-6">
-            <h3 className="text-xl font-bold text-white mb-1">{title}</h3>
-          </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent flex items-end">
         </div>
       </div>
       <div className="p-6">
