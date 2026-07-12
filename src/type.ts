@@ -147,3 +147,25 @@ export type UserSearchingType = UserDB & {
 export type Conversations = (RoomDb | FriendType) & {
   type: "room" | "friend";
 }
+
+export type HomeTopInteraction = {
+  _id: string
+  name: string
+  count: number
+  type: "room" | "friend"
+}
+
+export type HomeRecentMessage = {
+  _id: string
+  info: string
+  createdAt: Date
+  context: string
+}
+
+export type UserHomeStats = {
+  friendCount: number
+  roomCount: number
+  messagesSent: number
+  topInteractions: HomeTopInteraction[]
+  recentMessages: HomeRecentMessage[]
+}

@@ -162,8 +162,8 @@ export function CardFeature(
     return
   }
   return (
-    <Card onClick={handleOnclick} className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1 cursor-pointer border-2 hover:border-blue-200 dark:hover:border-blue-800">
-      <CardHeader className="pb-3">
+    <Card onClick={handleOnclick} className="shadow-none border-none group hover:shadow-lg transition-all duration-200  cursor-pointer">
+      <CardHeader className="">
         <div className="flex items-center justify-between">
           <div className={`p-3 rounded-lg ${color} text-white`}>
             <Icon className="h-6 w-6" >

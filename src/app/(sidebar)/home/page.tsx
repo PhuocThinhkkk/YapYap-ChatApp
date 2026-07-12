@@ -1,73 +1,65 @@
 export const dynamic = 'force-dynamic'
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import UserInformation from "@/components/UserInformation";
-import { Button } from "@/components/ui/button"
-import { Card, CardContent,} from "@/components/ui/card"
-import {
-  CreditCard,
-} from "lucide-react"
-import { getUserIdInSession } from "@/lib/session";
-import Link from "next/link";
-import AllCardFeature from "@/components/CardLink";
 
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import UserInformation from "@/components/UserInformation"
+import { getUserIdInSession } from "@/lib/session"
+import { getUserById } from "@/lib/db/userdb"
+import { getUserHomeStats } from "@/lib/db/stats"
+import PremiumSection from "@/components/home/PremiumSection"
+import MetricsSection from "@/components/home/MetricsSection"
+import ProfileCard from "@/components/home/ProfileCard"
+import QuickLinks from "@/components/home/QuickLinks"
 
 export default async function Home() {
-  
   const userId = await getUserIdInSession()
-  
+
+  const [user, stats] = await Promise.all([
+    userId ? getUserById(userId).catch(() => null) : Promise.resolve(null),
+    userId ? getUserHomeStats(userId) : Promise.resolve({
+      friendCount: 0,
+      roomCount: 0,
+      messagesSent: 0,
+      topInteractions: [],
+      recentMessages: [],
+    }),
+  ])
 
   return (
-    <> 
-    {/* Header with trigger for mobile */}
+    <>
       <header className="flex h-14 items-center border-b px-4">
         <SidebarTrigger className="md:hidden" />
         <h1 className="ml-2 text-lg font-semibold">Home</h1>
         <div className="absolute right-8">
-            <UserInformation/>
-          </div>
-      </header>
-      
-      {/* Main content */}
-      <div className="min-h-screen bg-gradient-to-br from-brand-100/30 to-brand-100/10">
-        <main className="container mx-auto px-4 py-8">
-        {/* Welcome Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">Welcome back 👋</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-            Ready to connect and chat? Choose what youd like to do today.
-          </p>
+          <UserInformation />
         </div>
+      </header>
 
-        {/* Quick Actions Grid */}
-       <AllCardFeature userId={userId}/>
-
-        {/* Premium Section */}
-        <Card className="bg-gradient-to-r from-brand-900 to-brand-700 text-white border-0 mt-8">
-          <CardContent className="p-8">
-            <div className="flex items-center justify-between">
+      <div className="min-h-screen bg-gradient-to-br from-brand-100/30 to-brand-100/10">
+        <main className="container mx-auto p-4 lg:p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3 space-y-6">
               <div>
-                <h3 className="text-2xl font-bold mb-2">Upgrade to Premium</h3>
-                <p className="text-brand-100 mb-4">Unlock unlimited rooms, advanced search, and exclusive features</p>
-                <Link href="/role">
-                  <Button variant="secondary" className="bg-white text-brand-900 hover:bg-brand-100/30 border border-transparent shadow-sm">
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    View Pricing
-                  </Button>
-                </Link>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                  Welcome back
+                </h1>
+                <p className="text-sm text-slate-600 dark:text-slate-300 max-w-2xl mt-1">
+                  {user
+                    ? `Good to see you, ${user.name}. Here's what's happening in your chats.`
+                    : "Ready to connect and chat? Sign in to see your stats and activity."}
+                </p>
               </div>
-              <div className="hidden md:block">
-                <div className="text-6xl opacity-20">⭐</div>
-              </div>
+
+              <PremiumSection />
+              <MetricsSection stats={stats} isSignedIn={!!userId} />
             </div>
-          </CardContent>
-        </Card>
-        
-      </main>
+
+            <aside className="space-y-6">
+              <ProfileCard user={user} />
+              <QuickLinks />
+            </aside>
+          </div>
+        </main>
       </div>
     </>
-
-       
-
-  
-  );
+  )
 }
