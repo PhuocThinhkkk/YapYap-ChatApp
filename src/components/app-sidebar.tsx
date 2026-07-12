@@ -64,7 +64,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className="flex items-center p-4 font-medium hover:bg-gray-200 transition-colors">
                     <a href={item.url} className="flex items-center gap-0 py-6">
-                      <item.icon className="font-bold size-15 text-black" />
+                      <item.icon className="font-black !size-5 text-black" />
                       <span className="text-[1rem]">{item.title}</span>
                     </a>
                   </SidebarMenuButton>

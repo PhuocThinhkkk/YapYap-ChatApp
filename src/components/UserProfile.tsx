@@ -53,9 +53,9 @@ export default function ProfileComponent() {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
-      <Card className="border shadow-2xs ">
+      <Card className="pt-0 border-none shadow-2xs ">
         {/* Cover Image */}
-        <div className="h-48 bg-amber-200 rounded-t-lg relative">
+        <div className="h-80 bg-amber-200 rounded-t-lg relative">
           {user.backgroundUrl ? (
             <Image
               src={user.backgroundUrl }
@@ -70,8 +70,8 @@ export default function ProfileComponent() {
 
         {/* Profile Header */}
         <div className="py-4 px-6">
-          <div className="flex flex-col sm:flex-row gap-6 -mt-12 sm:-mt-16">
-            <Avatar className="relative bottom-5 h-24 w-24 sm:h-32 sm:w-32 rounded-full border-4 border-background bg-blue-100">
+          <div className="flex relative flex-row gap-6 -mt-12 sm:-mt-16">
+            <Avatar className="absolute left-1 bottom-6 size-28 sm:size-32 rounded-full border-4 border-background">
               <AvatarImage
               src={user.avatarUrl}
               alt="user avt"
@@ -79,6 +79,7 @@ export default function ProfileComponent() {
               />
               <AvatarFallback className="w-full h-full flex justify-center items-center text-3xl">{user.name.charAt(0)}</AvatarFallback>
             </Avatar>
+            <div className="size-28 sm:size-32"/>
             <div className="flex-1 pt-4 sm:pt-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div >
@@ -100,31 +101,31 @@ export default function ProfileComponent() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>Share Profile</DropdownMenuItem>
-                      <DropdownMenuItem>Report User</DropdownMenuItem>
-                      <DropdownMenuItem>Block User</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4">
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <MapPin className="mr-1 h-4 w-4" />
-                  Location: 
-                        { " " + ( user.location ?? "Unknown") }
-                </div>
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <Mail className="mr-1 h-4 w-4" />
-                    Email: 
-                        {" "+user.email}
-                  
-                </div>
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <CalendarDays className="mr-1 h-4 w-4" />
-                    Day create account: 
-                        {" "+user.joinAt}
-                </div>
-              </div>
+           
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-x-6 gap-y-2 mt-1">
+            <div className="flex items-center text-sm text-muted-foreground">
+              <MapPin className="mr-1 h-4 w-4" />
+              Location: 
+                    { " " + ( user.location ?? "Unknown") }
+            </div>
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Mail className="mr-1 h-4 w-4" />
+                Email: 
+                    {" "+user.email}
+              
+            </div>
+            <div className="flex items-center text-sm text-muted-foreground">
+              <CalendarDays className="mr-1 h-4 w-4" />
+                Day create account: 
+                    {" "+user.joinAt}
             </div>
           </div>
 
@@ -136,16 +137,16 @@ export default function ProfileComponent() {
 
           <div className="flex justify-between my-10 border-b w-full">
             <div className="text-center">
-              <p className="font-bold text-2xl">{user.roomsLen.toLocaleString()}</p>
-              <p className="text-xl text-muted-foreground">Rooms joining</p>
+              <p className="font-bold text-sm sm:text-xl">{user.roomsLen.toLocaleString()}</p>
+              <p className="text-sm sm:text-xl text-muted-foreground">Rooms joining</p>
             </div>
             <div className="text-center">
-              <p className="font-bold text-2xl">{user.roomsOwnLen.toLocaleString()}</p>
-              <p className="text-xl text-muted-foreground">Rooms Owning</p>
+              <p className="font-bold text-sm sm:text-xl">{user.roomsOwnLen.toLocaleString()}</p>
+              <p className="text-sm sm:text-xl text-muted-foreground">Rooms Owning</p>
             </div>
             <div className="text-center">
-              <p className="font-bold text-2xl">{user.messagesSent}</p>
-              <p className="text-xl text-muted-foreground">Total Messages Sent</p>
+              <p className="font-bold text-sm sm:text-xl">{user.messagesSent}</p>
+              <p className="text-sm sm:text-xl text-muted-foreground">Total Messages Sent</p>
             </div>
           </div>
         </div>
