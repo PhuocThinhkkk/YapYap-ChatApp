@@ -42,7 +42,7 @@ export default function FriendsList() {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 mx-auto">
       {data?.map((friend) => (
         <div
           key={friend._id}
@@ -51,10 +51,9 @@ export default function FriendsList() {
           flex 
           items-start 
           justify-between 
-          p-4 rounded-lg 
-          bg-white border
-          border-brand-100/30
-          hover:border-brand-200
+          p-4 
+          bg-white 
+          shadow-sm
           hover:bg-brand-100/5 
           transition-colors"
         >

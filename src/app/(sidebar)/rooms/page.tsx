@@ -42,30 +42,42 @@ const Page = () => {
           </div>
         </div>
 
-        <Card className="w-full mb-6 sm:mb-8 border-0 shadow-lg sm:shadow-xl bg-gradient-to-r from-white to-brand-100/10">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <div className="flex items-center">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-brand-700 to-brand-400 rounded-full flex items-center justify-center mr-3">
-                  <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Friends</h2>
-                  <p className="text-xs sm:text-sm text-slate-600">Connect with your friends</p>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 sm:gap-3">
+        {/* Friends - first on mobile, right on desktop */}
+        <div className="order-1 lg:order-2">
+          <Card className="border-none shadow-none ">
+            <CardContent className="p-4 sm:p-6 lg:p-2">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-brand-700 to-brand-400 rounded-full flex items-center justify-center mr-3">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
+                      Friends
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-600">
+                      Connect with your friends
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <FriendsList />
-
-          </CardContent>
-        </Card>
-
-        <div className="space-y-6 sm:space-y-8">
-          <Suspense fallback={<RoomsLoadingSkeleton />}>
-            <AllRooms />
-          </Suspense>
+              <FriendsList />
+            </CardContent>
+          </Card>
         </div>
+
+        {/* Rooms - second on mobile, left on desktop */}
+        <div className="order-2 lg:order-1 lg:col-span-3">
+          <div className="space-y-6 sm:space-y-8">
+            <Suspense fallback={<RoomsLoadingSkeleton />}>
+              <AllRooms />
+            </Suspense>
+          </div>
+        </div>
+      </div>
+     
       </div>
     </>
   )

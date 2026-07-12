@@ -14,7 +14,7 @@ const RoomCard = ({
   const memberPercentage = (room.users.length / room.maxPeople) * 100
 
   return (
-    <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-200 border-slate-200 hover:border-slate-300">
+    <Card className="h-full gap-2 border-none flex flex-col hover:shadow-lg transition-all duration-200 ">
       <CardHeader className="pb-1">
         {/* Room Header with Avatar and Name */}
         <div className="flex items-start gap-3">
@@ -87,7 +87,7 @@ const RoomCard = ({
         </div>
       </CardContent>
 
-      <div className="pl-4 pr-40">
+      <div className="pl-5 pr-18">
         <ButtonJoinRoom roomId={room._id} className="w-full hover:cursor-pointer duration-300 bg-brand-900 text-white hover:bg-brand-900/90" />
       </div>
     </Card>

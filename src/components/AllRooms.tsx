@@ -101,7 +101,7 @@ async function RoomsStats({ rooms, userId }: { rooms: RoomDb[]; userId: string }
 
   return (
     <div className="mb-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-0">
         {stats.map((stat, i) => {
           const Icon = stat.icon
           return (
